@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Bot, Cpu, Sparkles } from "lucide-react"
+import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Bot, Cpu, Sparkles, Folder } from "lucide-react"
 import Link from "next/link"
 import { Vortex } from "@/components/ui/vortex"
 
@@ -100,6 +100,13 @@ export default function NavadaRoboticsApp() {
                 >
                   About
                 </Link>
+                <a
+                  href="#active-projects"
+                  className="text-white hover:text-purple-400 transition-all duration-200 hover:translate-x-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Active Projects
+                </a>
                 <Link
                   href="/contact"
                   className="text-white hover:text-purple-400 transition-all duration-200 hover:translate-x-2"
@@ -282,6 +289,84 @@ export default function NavadaRoboticsApp() {
                   Research Platform
                 </h4>
                 <p className="text-gray-400 text-sm">Empowering the next generation of innovators</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Active Projects Section */}
+      <section id="active-projects" className="py-16 px-4 bg-black">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h3
+              className={`text-3xl font-bold text-purple-400 mb-4 transition-all duration-700 delay-300 ${
+                isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
+              }`}
+            >
+              Active Projects
+            </h3>
+            <p
+              className={`text-gray-300 max-w-2xl mx-auto transition-all duration-700 delay-500 ${
+                isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
+              }`}
+            >
+              Current development initiatives pushing the boundaries of AI and robotics technology
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div
+              className={`group cursor-pointer transition-all duration-700 delay-700 hover:scale-105 h-full ${
+                isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
+              }`}
+            >
+              <div className="bg-gray-900 rounded-lg p-8 border border-gray-800 hover:border-purple-500/50 transition-all duration-300 text-center h-full flex flex-col">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                  <Folder className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors duration-300" />
+                </div>
+                <h4 className="text-xl font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors duration-300">
+                  Robotics
+                </h4>
+                <p className="text-gray-400 text-sm flex-grow">
+                  Advanced robotic systems and automation projects
+                </p>
+              </div>
+            </div>
+
+            <div
+              className={`group cursor-pointer transition-all duration-700 delay-900 hover:scale-105 h-full ${
+                isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
+              }`}
+            >
+              <div className="bg-gray-900 rounded-lg p-8 border border-gray-800 hover:border-purple-500/50 transition-all duration-300 text-center h-full flex flex-col">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                  <Folder className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors duration-300" />
+                </div>
+                <h4 className="text-xl font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors duration-300">
+                  AI Agent Development
+                </h4>
+                <p className="text-gray-400 text-sm flex-grow">
+                  Intelligent agent systems and conversational AI
+                </p>
+              </div>
+            </div>
+
+            <div
+              className={`group cursor-pointer transition-all duration-700 delay-1100 hover:scale-105 h-full ${
+                isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
+              }`}
+            >
+              <div className="bg-gray-900 rounded-lg p-8 border border-gray-800 hover:border-purple-500/50 transition-all duration-300 text-center h-full flex flex-col">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                  <Folder className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors duration-300" />
+                </div>
+                <h4 className="text-xl font-semibold text-white mb-2 group-hover:text-purple-300 transition-colors duration-300">
+                  Computer Vision
+                </h4>
+                <p className="text-gray-400 text-sm flex-grow">
+                  Image processing and visual recognition systems
+                </p>
               </div>
             </div>
           </div>
