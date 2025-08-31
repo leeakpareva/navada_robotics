@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { BeamsBackground } from "@/components/ui/beams-background"
 import { Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Bot } from "lucide-react"
 import Link from "next/link"
 
@@ -115,11 +116,14 @@ export default function ServicesPage() {
       </header>
 
       {/* Services Section */}
-      <section className="py-16 px-4">
+      <BeamsBackground 
+        intensity="subtle" 
+        className="py-16 px-4"
+      >
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">My Services</h2>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">My Services</h2>
+            <p className="text-lg text-gray-100 max-w-2xl mx-auto">
               Comprehensive support for Raspberry Pi robotics research and development
             </p>
           </div>
@@ -128,7 +132,7 @@ export default function ServicesPage() {
             {services.map((service, index) => (
               <Card
                 key={index}
-                className="group hover:shadow-lg transition-all duration-300 hover:border-purple-500 bg-gray-800 border-gray-700 overflow-hidden"
+                className="group hover:shadow-lg transition-all duration-300 hover:border-purple-400/50 bg-black/30 border-white/20 overflow-hidden backdrop-blur-sm hover:bg-black/40"
               >
                 <div className="relative overflow-hidden">
                   <img
@@ -138,17 +142,17 @@ export default function ServicesPage() {
                     alt={service.title}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-800/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
                 <CardContent className="pt-6">
-                  <h4 className="font-semibold text-lg mb-3 text-purple-300">{service.title}</h4>
-                  <p className="text-gray-300 text-sm leading-relaxed">{service.description}</p>
+                  <h4 className="font-semibold text-lg mb-3 text-white group-hover:text-purple-200 transition-colors duration-300">{service.title}</h4>
+                  <p className="text-gray-200 text-sm leading-relaxed">{service.description}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
         </div>
-      </section>
+      </BeamsBackground>
 
       {/* Bottom Navigation for Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">
