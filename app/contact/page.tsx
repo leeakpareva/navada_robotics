@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { BeamsBackground } from "@/components/ui/beams-background"
 import { ArrowRight, Menu, X, Phone, Mail, MapPin, Cog, Microscope as Microchip, Wrench, Shield } from "lucide-react"
 import Link from "next/link"
 
@@ -70,11 +71,14 @@ export default function ContactPage() {
       </header>
 
       {/* Contact Section */}
-      <section className="py-16 px-4">
+      <BeamsBackground 
+        intensity="subtle" 
+        className="py-16 px-4"
+      >
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">Get In Touch</h2>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Get In Touch</h2>
+            <p className="text-lg text-gray-100 max-w-2xl mx-auto">
               Ready to collaborate on robotics research or need consultation for your next project? I'm here to
               help advance your robotics initiatives with Raspberry Pi technology.
             </p>
@@ -84,63 +88,63 @@ export default function ContactPage() {
             <img
               src="/placeholder.svg?height=300&width=800&text=NAVADA+Office+Building"
               alt="NAVADA Robotics Office"
-              className="w-full max-w-4xl mx-auto rounded-lg border border-purple-500"
+              className="w-full max-w-4xl mx-auto rounded-lg border border-purple-400/50 backdrop-blur-sm"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <Card className="text-center hover:border-purple-500 transition-colors bg-gray-800 border-gray-700">
+            <Card className="text-center hover:border-purple-400/50 transition-colors bg-black/30 border-white/20 backdrop-blur-sm hover:bg-black/40">
               <CardContent className="pt-6">
-                <Phone className="h-8 w-8 text-purple-400 mx-auto mb-4" />
+                <Phone className="h-8 w-8 text-purple-300 mx-auto mb-4" />
                 <h4 className="font-semibold mb-2 text-white">Phone</h4>
-                <p className="text-gray-300">+44 79535237704</p>
-                <p className="text-gray-400 text-sm mt-1">Mon-Fri 9AM-6PM GMT</p>
+                <p className="text-gray-200">+44 79535237704</p>
+                <p className="text-gray-300 text-sm mt-1">Mon-Fri 9AM-6PM GMT</p>
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:border-purple-500 transition-colors bg-gray-800 border-gray-700">
+            <Card className="text-center hover:border-purple-400/50 transition-colors bg-black/30 border-white/20 backdrop-blur-sm hover:bg-black/40">
               <CardContent className="pt-6">
-                <Mail className="h-8 w-8 text-purple-400 mx-auto mb-4" />
+                <Mail className="h-8 w-8 text-purple-300 mx-auto mb-4" />
                 <h4 className="font-semibold mb-2 text-white">Email</h4>
-                <p className="text-gray-300">leekapareva@hmail.com</p>
-                <p className="text-gray-400 text-sm mt-1">Response within 24 hours</p>
+                <p className="text-gray-200">leekapareva@hmail.com</p>
+                <p className="text-gray-300 text-sm mt-1">Response within 24 hours</p>
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:border-purple-500 transition-colors bg-gray-800 border-gray-700">
+            <Card className="text-center hover:border-purple-400/50 transition-colors bg-black/30 border-white/20 backdrop-blur-sm hover:bg-black/40">
               <CardContent className="pt-6">
-                <MapPin className="h-8 w-8 text-purple-400 mx-auto mb-4" />
+                <MapPin className="h-8 w-8 text-purple-300 mx-auto mb-4" />
                 <h4 className="font-semibold mb-2 text-white">Location</h4>
-                <p className="text-gray-300">London, UK</p>
-                <p className="text-gray-400 text-sm mt-1">Research & Development Hub</p>
+                <p className="text-gray-200">London, UK</p>
+                <p className="text-gray-300 text-sm mt-1">Research & Development Hub</p>
               </CardContent>
             </Card>
           </div>
 
           <div className="mt-12 mb-8">
-            <h3 className="text-2xl font-semibold text-purple-400 mb-6 text-center">My Workspace Environment</h3>
+            <h3 className="text-2xl font-semibold text-white mb-6 text-center">My Workspace Environment</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               <img
                 src="/placeholder.svg?height=250&width=400&text=Consultation+Room"
                 alt="NAVADA Consultation Room"
-                className="w-full rounded-lg border border-gray-700"
+                className="w-full rounded-lg border border-white/20 backdrop-blur-sm"
               />
               <img
                 src="/placeholder.svg?height=250&width=400&text=Research+Collaboration+Space"
                 alt="Research Collaboration Space"
-                className="w-full rounded-lg border border-gray-700"
+                className="w-full rounded-lg border border-white/20 backdrop-blur-sm"
               />
             </div>
           </div>
 
           <div className="text-center mt-12">
-            <Button size="lg" className="text-lg px-8 bg-purple-600 hover:bg-purple-700">
+            <Button size="lg" className="text-lg px-8 bg-purple-500/20 hover:bg-purple-500/30 backdrop-blur-sm border border-purple-400/50 text-white hover:text-purple-200">
               Schedule Research Meeting
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
         </div>
-      </section>
+      </BeamsBackground>
 
       {/* Bottom Navigation for Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">

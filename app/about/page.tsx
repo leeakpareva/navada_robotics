@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { BeamsBackground } from "@/components/ui/beams-background"
 import { Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone } from "lucide-react"
 import Link from "next/link"
 
@@ -69,46 +70,49 @@ export default function AboutPage() {
       </header>
 
       {/* About Section */}
-      <section className="py-16 px-4">
+      <BeamsBackground 
+        intensity="subtle" 
+        className="py-16 px-4"
+      >
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-6">About NAVADA</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">About NAVADA</h2>
 
             <div className="mb-8">
               <img
                 src="/placeholder.svg?height=300&width=600&text=NAVADA+Robotics+Laboratory"
                 alt="NAVADA Robotics Laboratory"
-                className="w-full max-w-2xl mx-auto rounded-lg border border-purple-500"
+                className="w-full max-w-2xl mx-auto rounded-lg border border-purple-400/50 backdrop-blur-sm"
               />
             </div>
 
-            <p className="text-lg text-gray-300 mb-8 text-pretty">
+            <p className="text-lg text-gray-100 mb-8 text-pretty">
               Founded by Lee Akpareva MBA, MA, NAVADA Robotics is a cutting-edge startup at the forefront of Raspberry
               Pi-based robotics research. I specialize in developing accessible, cost-effective robotic solutions that
               bridge the gap between academic research and practical applications. My expertise combines deep technical
               expertise with educational innovation to advance the field of robotics through open-source platforms.
             </p>
 
-            <div className="bg-gray-800 rounded-lg p-8 mb-8 border border-purple-500">
-              <h3 className="text-2xl font-semibold text-purple-400 mb-6">Leadership</h3>
+            <div className="bg-black/30 backdrop-blur-sm rounded-lg p-8 mb-8 border border-purple-400/50 hover:bg-black/40 transition-all duration-300">
+              <h3 className="text-2xl font-semibold text-white mb-6">Leadership</h3>
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="flex-shrink-0">
                   <img
                     src="/placeholder.svg?height=128&width=128&text=Lee+Akpareva+CEO"
                     alt="Lee Akpareva, Founder & CEO"
-                    className="w-32 h-32 rounded-full border-2 border-purple-400"
+                    className="w-32 h-32 rounded-full border-2 border-purple-400/70"
                   />
                 </div>
                 <div className="text-center md:text-left">
                   <p className="text-xl font-medium text-white mb-2">Lee Akpareva MBA, MA</p>
-                  <p className="text-purple-300 font-medium mb-3">Founder & CEO | Designer & Developer</p>
-                  <p className="text-gray-300 text-sm mb-3">
+                  <p className="text-purple-200 font-medium mb-3">Founder & CEO | Designer & Developer</p>
+                  <p className="text-gray-200 text-sm mb-3">
                     Lee Akpareva designed and developed this entire application, bringing together his passion for AI, robotics, 
                     and full-stack development. With advanced degrees in business and academia, Lee combines deep technical 
                     expertise in Next.js, TypeScript, and AI integration with strategic vision to make robotics education 
                     accessible worldwide.
                   </p>
-                  <p className="text-gray-300 text-sm mb-3">
+                  <p className="text-gray-200 text-sm mb-3">
                     His expertise spans modern web development, OpenAI API integration, voice synthesis, and creating 
                     intuitive user experiences. This project represents his commitment to bridging the gap between 
                     cutting-edge technology and practical educational applications.
@@ -117,7 +121,7 @@ export default function AboutPage() {
                     href="https://www.linkedin.com/feed/" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-block text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm font-medium"
+                    className="inline-block text-purple-300 hover:text-purple-200 transition-colors duration-200 text-sm font-medium"
                   >
                     Connect on LinkedIn →
                   </a>
@@ -126,38 +130,38 @@ export default function AboutPage() {
             </div>
 
             <div className="mb-12">
-              <h3 className="text-2xl font-semibold text-purple-400 mb-6">My Workspace</h3>
+              <h3 className="text-2xl font-semibold text-white mb-6">My Workspace</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <img
                   src="/placeholder.svg?height=200&width=300&text=NAVADA+Research+Lab"
                   alt="NAVADA Research Laboratory"
-                  className="w-full rounded-lg border border-gray-700"
+                  className="w-full rounded-lg border border-white/20 backdrop-blur-sm"
                 />
                 <img
                   src="/placeholder.svg?height=200&width=300&text=Development+Workshop"
                   alt="Development Workshop"
-                  className="w-full rounded-lg border border-gray-700"
+                  className="w-full rounded-lg border border-white/20 backdrop-blur-sm"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-400 mb-2">50+</div>
-                <div className="text-gray-300">Research Projects Completed</div>
+              <div className="text-center bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                <div className="text-3xl font-bold text-purple-300 mb-2">50+</div>
+                <div className="text-gray-200">Research Projects Completed</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-400 mb-2">15+</div>
-                <div className="text-gray-300">University Partnerships</div>
+              <div className="text-center bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                <div className="text-3xl font-bold text-purple-300 mb-2">15+</div>
+                <div className="text-gray-200">University Partnerships</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-400 mb-2">200+</div>
-                <div className="text-gray-300">Students & Researchers Trained</div>
+              <div className="text-center bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                <div className="text-3xl font-bold text-purple-300 mb-2">200+</div>
+                <div className="text-gray-200">Students & Researchers Trained</div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </BeamsBackground>
 
       {/* Bottom Navigation for Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">
