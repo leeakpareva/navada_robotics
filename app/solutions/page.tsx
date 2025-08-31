@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { BGPattern } from "@/components/ui/bg-pattern"
 import {
   Cpu,
   Zap,
@@ -118,8 +119,14 @@ export default function SolutionsPage() {
       </header>
 
       {/* Solutions Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto">
+      <section className="py-16 px-4 relative">
+        <BGPattern 
+          variant="grid" 
+          mask="fade-edges" 
+          size={32} 
+          fill="rgba(139, 92, 246, 0.1)"
+        />
+        <div className="container mx-auto relative z-10">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">My Research Areas</h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
@@ -131,7 +138,7 @@ export default function SolutionsPage() {
             {roboticSolutions.map((solution, index) => (
               <Card
                 key={index}
-                className="group hover:shadow-lg transition-all duration-300 bg-gray-800 border-gray-700 hover:border-purple-500"
+                className="group hover:shadow-lg transition-all duration-300 bg-gray-800 border-gray-700 hover:border-purple-500 relative z-20"
               >
                 <div className="relative overflow-hidden">
                   <img
