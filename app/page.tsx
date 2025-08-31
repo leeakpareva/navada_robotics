@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Bot } from "lucide-react"
+import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Bot, Cpu, Sparkles } from "lucide-react"
 import Link from "next/link"
+import { Vortex } from "@/components/ui/vortex"
 
 export default function NavadaRoboticsApp() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -118,8 +119,15 @@ export default function NavadaRoboticsApp() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto text-center">
+      <section className="relative min-h-screen">
+        <Vortex
+          backgroundColor="#000000"
+          rangeY={800}
+          particleCount={500}
+          baseHue={280}
+          className="flex items-center justify-center px-4 py-16 min-h-screen"
+        >
+          <div className="container mx-auto text-center">
           <Badge
             variant="secondary"
             className={`mb-4 bg-purple-900 text-purple-200 border-purple-700 transition-all duration-700 ${
@@ -144,6 +152,33 @@ export default function NavadaRoboticsApp() {
             innovation. I support the growth and adoption of AI tools focused on pioneering research and products in
             robotics and automation for the next generation.
           </p>
+          
+          {/* Value Props Row */}
+          <div
+            className={`flex flex-col md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-2xl mx-auto mb-8 transition-all duration-1000 delay-600 ${
+              isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
+            }`}
+          >
+            <div className="flex items-center justify-center md:flex-col gap-3">
+              <div className="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
+                <Cpu className="w-6 h-6 text-purple-400" />
+              </div>
+              <span className="text-gray-300 font-medium">AI Processing</span>
+            </div>
+            <div className="flex items-center justify-center md:flex-col gap-3">
+              <div className="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
+                <Bot className="w-6 h-6 text-purple-400" />
+              </div>
+              <span className="text-gray-300 font-medium">Robotics</span>
+            </div>
+            <div className="flex items-center justify-center md:flex-col gap-3">
+              <div className="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-purple-400" />
+              </div>
+              <span className="text-gray-300 font-medium">Innovation</span>
+            </div>
+          </div>
+          
           <div
             className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-700 ${
               isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
@@ -169,6 +204,7 @@ export default function NavadaRoboticsApp() {
             </Link>
           </div>
         </div>
+        </Vortex>
       </section>
 
       {/* Image Gallery Section */}
