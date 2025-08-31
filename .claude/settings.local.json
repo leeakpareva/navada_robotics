@@ -4,7 +4,8 @@
       "Bash(git commit:*)",
       "Bash(npm ls:*)",
       "WebSearch",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []

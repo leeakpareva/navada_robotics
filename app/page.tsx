@@ -128,81 +128,81 @@ export default function NavadaRoboticsApp() {
           className="flex items-center justify-center px-4 py-16 min-h-screen"
         >
           <div className="container mx-auto text-center">
-          <Badge
+            <Badge
             variant="secondary"
             className={`mb-4 bg-purple-900 text-purple-200 border-purple-700 transition-all duration-700 ${
               isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
             }`}
-          >
-            AI • Robotics • Digital Innovation
-          </Badge>
-          <h2
-            className={`text-4xl md:text-6xl font-bold text-white mb-6 text-balance transition-all duration-1000 delay-200 ${
-              isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
-            }`}
-          >
-            <span className="text-purple-400">Navigating Artistic Vision</span> with Advanced Digital Assistance
-          </h2>
-          <p
-            className={`text-xl text-gray-300 mb-8 max-w-3xl mx-auto text-pretty transition-all duration-1000 delay-500 ${
-              isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
-            }`}
-          >
-            NAVADA explores how technology advances our future through the intersection of AI, robotics, and creative
-            innovation. I support the growth and adoption of AI tools focused on pioneering research and products in
-            robotics and automation for the next generation.
-          </p>
-          
-          {/* Value Props Row */}
-          <div
-            className={`flex flex-col md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-2xl mx-auto mb-8 transition-all duration-1000 delay-600 ${
-              isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
-            }`}
-          >
-            <div className="flex items-center justify-center md:flex-col gap-3">
-              <div className="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
-                <Cpu className="w-6 h-6 text-purple-400" />
+            >
+              AI • Robotics • Digital Innovation
+            </Badge>
+            <h2
+              className={`text-4xl md:text-6xl font-bold text-white mb-6 text-balance transition-all duration-1000 delay-200 ${
+                isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
+              }`}
+            >
+              <span className="text-purple-400">Navigating Artistic Vision</span> with Advanced Digital Assistance
+            </h2>
+            <p
+              className={`text-xl text-gray-300 mb-8 max-w-3xl mx-auto text-pretty transition-all duration-1000 delay-500 ${
+                isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
+              }`}
+            >
+              NAVADA explores how technology advances our future through the intersection of AI, robotics, and creative
+              innovation. I support the growth and adoption of AI tools focused on pioneering research and products in
+              robotics and automation for the next generation.
+            </p>
+            
+            {/* Value Props Row */}
+            <div
+              className={`flex flex-col md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-2xl mx-auto mb-8 transition-all duration-1000 delay-600 ${
+                isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
+              }`}
+            >
+              <div className="flex items-center justify-center md:flex-col gap-3">
+                <div className="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
+                  <Cpu className="w-6 h-6 text-purple-400" />
+                </div>
+                <span className="text-gray-300 font-medium">AI Processing</span>
               </div>
-              <span className="text-gray-300 font-medium">AI Processing</span>
-            </div>
-            <div className="flex items-center justify-center md:flex-col gap-3">
-              <div className="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
-                <Bot className="w-6 h-6 text-purple-400" />
+              <div className="flex items-center justify-center md:flex-col gap-3">
+                <div className="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
+                  <Bot className="w-6 h-6 text-purple-400" />
+                </div>
+                <span className="text-gray-300 font-medium">Robotics</span>
               </div>
-              <span className="text-gray-300 font-medium">Robotics</span>
-            </div>
-            <div className="flex items-center justify-center md:flex-col gap-3">
-              <div className="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-purple-400" />
+              <div className="flex items-center justify-center md:flex-col gap-3">
+                <div className="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-purple-400" />
+                </div>
+                <span className="text-gray-300 font-medium">Innovation</span>
               </div>
-              <span className="text-gray-300 font-medium">Innovation</span>
             </div>
-          </div>
-          
-          <div
-            className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-700 ${
-              isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
-            }`}
-          >
-            <Link href="/solutions">
-              <Button
-                size="lg"
-                className="text-lg px-8 bg-purple-600 hover:bg-purple-700 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
-              >
-                Explore Innovation
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
-              </Button>
-            </Link>
-            <Link href="/about">
-              <Button
-                variant="outline"
-                size="lg"
-                className="text-lg px-8 bg-transparent border-purple-400 text-purple-400 hover:bg-purple-900 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
-              >
-                My Vision
-              </Button>
-            </Link>
-          </div>
+            
+            <div
+              className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-700 ${
+                isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
+              }`}
+            >
+              <Link href="/solutions">
+                <Button
+                  size="lg"
+                  className="text-lg px-8 bg-purple-600 hover:bg-purple-700 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
+                >
+                  Explore Innovation
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-lg px-8 bg-transparent border-purple-400 text-purple-400 hover:bg-purple-900 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
+                >
+                  My Vision
+                </Button>
+              </Link>
+            </div>
         </div>
         </Vortex>
       </section>
