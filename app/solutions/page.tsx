@@ -121,9 +121,9 @@ export default function SolutionsPage() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">Our Research Areas</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">My Research Areas</h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Discover our innovative Raspberry Pi-based robotics research and development projects
+              Discover my innovative Raspberry Pi-based robotics research and development projects
             </p>
           </div>
 

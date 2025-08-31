@@ -84,8 +84,8 @@ export default function AboutPage() {
 
             <p className="text-lg text-gray-300 mb-8 text-pretty">
               Founded by Lee Akpareva MBA, MA, NAVADA Robotics is a cutting-edge startup at the forefront of Raspberry
-              Pi-based robotics research. We specialize in developing accessible, cost-effective robotic solutions that
-              bridge the gap between academic research and practical applications. Our team combines deep technical
+              Pi-based robotics research. I specialize in developing accessible, cost-effective robotic solutions that
+              bridge the gap between academic research and practical applications. My expertise combines deep technical
               expertise with educational innovation to advance the field of robotics through open-source platforms.
             </p>
 
@@ -101,18 +101,32 @@ export default function AboutPage() {
                 </div>
                 <div className="text-center md:text-left">
                   <p className="text-xl font-medium text-white mb-2">Lee Akpareva MBA, MA</p>
-                  <p className="text-purple-300 font-medium mb-3">Founder & CEO</p>
-                  <p className="text-gray-300 text-sm">
-                    With advanced degrees in business and academia, Lee brings a unique perspective to robotics
-                    research, combining technical innovation with strategic business acumen to make robotics education
+                  <p className="text-purple-300 font-medium mb-3">Founder & CEO | Designer & Developer</p>
+                  <p className="text-gray-300 text-sm mb-3">
+                    Lee Akpareva designed and developed this entire application, bringing together his passion for AI, robotics, 
+                    and full-stack development. With advanced degrees in business and academia, Lee combines deep technical 
+                    expertise in Next.js, TypeScript, and AI integration with strategic vision to make robotics education 
                     accessible worldwide.
                   </p>
+                  <p className="text-gray-300 text-sm mb-3">
+                    His expertise spans modern web development, OpenAI API integration, voice synthesis, and creating 
+                    intuitive user experiences. This project represents his commitment to bridging the gap between 
+                    cutting-edge technology and practical educational applications.
+                  </p>
+                  <a 
+                    href="https://www.linkedin.com/feed/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm font-medium"
+                  >
+                    Connect on LinkedIn →
+                  </a>
                 </div>
               </div>
             </div>
 
             <div className="mb-12">
-              <h3 className="text-2xl font-semibold text-purple-400 mb-6">Our Workspace</h3>
+              <h3 className="text-2xl font-semibold text-purple-400 mb-6">My Workspace</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <img
                   src="/placeholder.svg?height=200&width=300&text=NAVADA+Research+Lab"

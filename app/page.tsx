@@ -141,7 +141,7 @@ export default function NavadaRoboticsApp() {
             }`}
           >
             NAVADA explores how technology advances our future through the intersection of AI, robotics, and creative
-            innovation. We support the growth and adoption of AI tools focused on pioneering research and products in
+            innovation. I support the growth and adoption of AI tools focused on pioneering research and products in
             robotics and automation for the next generation.
           </p>
           <div
@@ -164,7 +164,7 @@ export default function NavadaRoboticsApp() {
                 size="lg"
                 className="text-lg px-8 bg-transparent border-purple-400 text-purple-400 hover:bg-purple-900 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
               >
-                Our Vision
+                My Vision
               </Button>
             </Link>
           </div>
@@ -187,7 +187,7 @@ export default function NavadaRoboticsApp() {
                 isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
               }`}
             >
-              Discover our latest breakthroughs in AI-powered robotics, creative technology, and digital assistance
+              Discover my latest breakthroughs in AI-powered robotics, creative technology, and digital assistance
               platforms
             </p>
           </div>

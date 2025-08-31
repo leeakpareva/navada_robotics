@@ -218,8 +218,9 @@ export async function POST(request: NextRequest) {
     } else {
       console.log("[v0] Run failed with status:", runStatus.status)
       if (runStatus.last_error) {
-        console.log("[v0] Run error details:", runStatus.last_error)
+        console.log("[v0] Run error details:", JSON.stringify(runStatus.last_error, null, 2))
       }
+      console.log("[v0] Full run status object:", JSON.stringify(runStatus, null, 2))
       return NextResponse.json(
         {
           error: `Assistant processing failed with status: ${runStatus.status}`,

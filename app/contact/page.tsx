@@ -75,7 +75,7 @@ export default function ContactPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">Get In Touch</h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Ready to collaborate on robotics research or need consultation for your next project? Our team is here to
+              Ready to collaborate on robotics research or need consultation for your next project? I'm here to
               help advance your robotics initiatives with Raspberry Pi technology.
             </p>
           </div>
@@ -93,8 +93,8 @@ export default function ContactPage() {
               <CardContent className="pt-6">
                 <Phone className="h-8 w-8 text-purple-400 mx-auto mb-4" />
                 <h4 className="font-semibold mb-2 text-white">Phone</h4>
-                <p className="text-gray-300">+1 (555) NAVADA-1</p>
-                <p className="text-gray-400 text-sm mt-1">Mon-Fri 9AM-6PM PST</p>
+                <p className="text-gray-300">+44 79535237704</p>
+                <p className="text-gray-400 text-sm mt-1">Mon-Fri 9AM-6PM GMT</p>
               </CardContent>
             </Card>
 
@@ -102,7 +102,7 @@ export default function ContactPage() {
               <CardContent className="pt-6">
                 <Mail className="h-8 w-8 text-purple-400 mx-auto mb-4" />
                 <h4 className="font-semibold mb-2 text-white">Email</h4>
-                <p className="text-gray-300">research@navada.com</p>
+                <p className="text-gray-300">leekapareva@hmail.com</p>
                 <p className="text-gray-400 text-sm mt-1">Response within 24 hours</p>
               </CardContent>
             </Card>
@@ -111,18 +111,18 @@ export default function ContactPage() {
               <CardContent className="pt-6">
                 <MapPin className="h-8 w-8 text-purple-400 mx-auto mb-4" />
                 <h4 className="font-semibold mb-2 text-white">Location</h4>
-                <p className="text-gray-300">Silicon Valley, CA</p>
+                <p className="text-gray-300">London, UK</p>
                 <p className="text-gray-400 text-sm mt-1">Research & Development Hub</p>
               </CardContent>
             </Card>
           </div>
 
           <div className="mt-12 mb-8">
-            <h3 className="text-2xl font-semibold text-purple-400 mb-6 text-center">Our Collaborative Environment</h3>
+            <h3 className="text-2xl font-semibold text-purple-400 mb-6 text-center">My Workspace Environment</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               <img
-                src="/placeholder.svg?height=250&width=400&text=Team+Meeting+Room"
-                alt="NAVADA Team Meeting Room"
+                src="/placeholder.svg?height=250&width=400&text=Consultation+Room"
+                alt="NAVADA Consultation Room"
                 className="w-full rounded-lg border border-gray-700"
               />
               <img

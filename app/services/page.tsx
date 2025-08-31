@@ -118,7 +118,7 @@ export default function ServicesPage() {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">Our Services</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">My Services</h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
               Comprehensive support for Raspberry Pi robotics research and development
             </p>
