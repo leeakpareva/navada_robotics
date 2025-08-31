@@ -1,0 +1,58 @@
+# NAVADA Robotics - Requirements
+
+## System Requirements
+node>=18.0.0
+npm>=9.0.0
+
+## Core Dependencies
+next==14.2.32
+react==18.x
+react-dom==18.x
+typescript==5.x
+
+## UI/UX Libraries
+@radix-ui/react-*==latest
+tailwindcss==4.1.9
+tailwindcss-animate==1.0.7
+tailwind-merge==2.5.5
+class-variance-authority==0.7.1
+clsx==2.1.1
+lucide-react==0.454.0
+
+## Form & Validation
+react-hook-form==7.60.0
+@hookform/resolvers==3.10.0
+zod==3.25.67
+
+## AI/API Integration
+openai==latest
+
+## Analytics & Monitoring
+@vercel/analytics==1.3.2
+
+## Build Tools
+autoprefixer==10.4.20
+postcss==8.5
+@tailwindcss/postcss==4.1.9
+
+## Development Dependencies
+@types/node==22.x
+@types/react==18.x
+@types/react-dom==18.x
+
+## Additional Features
+next-themes==0.4.6
+date-fns==4.1.0
+sonner==1.7.4
+cmdk==1.0.4
+vaul==0.9.9
+embla-carousel-react==8.5.1
+react-day-picker==9.8.0
+react-resizable-panels==2.1.7
+recharts==2.15.4
+input-otp==1.4.1
+
+## Environment Variables Required
+# OPENAI_API_KEY=<your-api-key>
+# OPENAI_ASSISTANT_ID=<your-assistant-id>
+# VOICE_PROMPT_ID=<your-voice-prompt-id>
