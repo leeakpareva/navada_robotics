@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { BeamsBackground } from "@/components/ui/beams-background"
 import {
   Cpu,
   Zap,
@@ -118,11 +119,14 @@ export default function SolutionsPage() {
       </header>
 
       {/* Solutions Section */}
-      <section className="py-16 px-4">
+      <BeamsBackground 
+        intensity="subtle" 
+        className="py-16 px-4"
+      >
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-purple-300 mb-4">My Research Areas</h2>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">My Research Areas</h2>
+            <p className="text-lg text-gray-100 max-w-2xl mx-auto">
               Discover my innovative Raspberry Pi-based robotics research and development projects
             </p>
           </div>
@@ -131,7 +135,7 @@ export default function SolutionsPage() {
             {roboticSolutions.map((solution, index) => (
               <Card
                 key={index}
-                className="group hover:shadow-lg transition-all duration-300 bg-gray-800 border-gray-700 hover:border-purple-500"
+                className="group hover:shadow-lg transition-all duration-300 bg-black/30 border-white/20 hover:border-purple-400/50 backdrop-blur-sm hover:bg-black/40"
               >
                 <div className="relative overflow-hidden">
                   <img
@@ -142,17 +146,17 @@ export default function SolutionsPage() {
                     alt={solution.title}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-800/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
 
                 <CardHeader>
                   <div className="flex items-center space-x-3 mb-3">
-                    <div className="p-2 bg-purple-900 rounded-lg text-purple-400 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                    <div className="p-2 bg-purple-500/20 rounded-lg text-purple-300 group-hover:bg-purple-500/30 group-hover:text-purple-200 transition-colors backdrop-blur-sm">
                       {solution.icon}
                     </div>
-                    <CardTitle className="text-xl text-white">{solution.title}</CardTitle>
+                    <CardTitle className="text-xl text-white group-hover:text-purple-200 transition-colors duration-300">{solution.title}</CardTitle>
                   </div>
-                  <CardDescription className="text-base text-gray-300">{solution.description}</CardDescription>
+                  <CardDescription className="text-base text-gray-200">{solution.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -160,7 +164,7 @@ export default function SolutionsPage() {
                       <Badge
                         key={featureIndex}
                         variant="outline"
-                        className="text-xs border-purple-500 text-purple-300 bg-purple-900"
+                        className="text-xs border-purple-400/50 text-purple-200 bg-purple-500/20 backdrop-blur-sm"
                       >
                         {feature}
                       </Badge>
@@ -168,7 +172,7 @@ export default function SolutionsPage() {
                   </div>
                   <Button
                     variant="ghost"
-                    className="w-full justify-between text-white hover:bg-purple-600 hover:text-white"
+                    className="w-full justify-between text-white hover:bg-purple-500/20 hover:text-purple-200 backdrop-blur-sm"
                   >
                     Learn More
                     <ChevronRight className="h-4 w-4" />
@@ -178,7 +182,7 @@ export default function SolutionsPage() {
             ))}
           </div>
         </div>
-      </section>
+      </BeamsBackground>
 
       {/* Bottom Navigation for Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">
