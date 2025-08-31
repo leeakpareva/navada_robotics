@@ -122,9 +122,11 @@ export default function NavadaRoboticsApp() {
       <section className="relative min-h-screen">
         <Vortex
           backgroundColor="#000000"
-          rangeY={800}
-          particleCount={500}
+          rangeY={400}
+          particleCount={300}
           baseHue={280}
+          baseSpeed={0.5}
+          rangeSpeed={1.0}
           className="flex items-center justify-center px-4 py-16 min-h-screen"
         >
           <div className="container mx-auto text-center">
