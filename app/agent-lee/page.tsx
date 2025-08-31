@@ -51,6 +51,7 @@ export default function AgentLeePage() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const recognitionRef = useRef<any>(null)
   const currentAudioRef = useRef<HTMLAudioElement | null>(null)
+  const isPlayingRef = useRef<boolean>(false)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -102,13 +103,16 @@ export default function AgentLeePage() {
   }
 
   const speakText = async (text: string) => {
-    if (!speechSupported || isMuted) {
-      console.log("[v0] Speech not supported or muted, cannot speak text")
+    if (!speechSupported || isMuted || isPlayingRef.current) {
+      console.log("[v0] Speech not supported, muted, or already playing")
       return
     }
 
     // Stop any currently playing audio/speech before starting new one
     stopSpeaking()
+    
+    // Set flag to prevent duplicate calls
+    isPlayingRef.current = true
 
     try {
       console.log("[v0] Starting speakText function")
@@ -146,6 +150,7 @@ export default function AgentLeePage() {
             setIsSpeaking(false)
             URL.revokeObjectURL(audioUrl)
             currentAudioRef.current = null
+            isPlayingRef.current = false
           }
 
           audio.onerror = (error) => {
@@ -153,6 +158,7 @@ export default function AgentLeePage() {
             setIsSpeaking(false)
             URL.revokeObjectURL(audioUrl)
             currentAudioRef.current = null
+            isPlayingRef.current = false
             fallbackToBrowserTTS(text)
           }
 
@@ -163,16 +169,24 @@ export default function AgentLeePage() {
         }
       } else {
         console.log("[v0] TTS API failed, using browser TTS fallback")
+        isPlayingRef.current = false
         fallbackToBrowserTTS(text)
       }
     } catch (error) {
       console.error("[v0] TTS error, using browser TTS fallback:", error)
+      isPlayingRef.current = false
       fallbackToBrowserTTS(text)
     }
   }
 
   const fallbackToBrowserTTS = (text: string) => {
     try {
+      // Stop any current audio first
+      if (currentAudioRef.current) {
+        currentAudioRef.current.pause()
+        currentAudioRef.current = null
+      }
+      
       if (window.speechSynthesis.speaking) {
         window.speechSynthesis.cancel()
       }
@@ -190,11 +204,13 @@ export default function AgentLeePage() {
       utterance.onend = () => {
         console.log("[v0] Browser TTS ended")
         setIsSpeaking(false)
+        isPlayingRef.current = false
       }
 
       utterance.onerror = (event) => {
         console.log("[v0] Browser TTS error:", event.error)
         setIsSpeaking(false)
+        isPlayingRef.current = false
       }
 
       setTimeout(() => {
@@ -234,6 +250,7 @@ export default function AgentLeePage() {
     }
 
     setIsSpeaking(false)
+    isPlayingRef.current = false
   }
 
   const toggleMute = () => {
