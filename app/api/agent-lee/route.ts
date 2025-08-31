@@ -167,12 +167,17 @@ export async function POST(request: NextRequest) {
         throw new Error(`Invalid parameters: threadId=${currentThreadId}, runId=${run.id}`)
       }
 
-      runStatus = await openai.beta.threads.runs.retrieve(currentThreadId, run.id)
+      // The OpenAI SDK expects: retrieve(runID, { thread_id })
+      runStatus = await openai.beta.threads.runs.retrieve(run.id, { 
+        thread_id: currentThreadId 
+      })
       console.log("[v0] Initial run status:", runStatus.status)
 
       while ((runStatus.status === "queued" || runStatus.status === "in_progress") && attempts < maxAttempts) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        runStatus = await openai.beta.threads.runs.retrieve(currentThreadId, run.id)
+        runStatus = await openai.beta.threads.runs.retrieve(run.id, { 
+          thread_id: currentThreadId 
+        })
         attempts++
         console.log("[v0] Run status check", attempts, ":", runStatus.status)
       }
