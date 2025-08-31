@@ -7,6 +7,7 @@ import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phon
 import Link from "next/link"
 import { Vortex } from "@/components/ui/vortex"
 import { GradientBackground } from "@/components/ui/gradient-background"
+import { ShootingStars } from "@/components/ui/shooting-stars"
 
 export default function NavadaRoboticsApp() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -217,19 +218,51 @@ export default function NavadaRoboticsApp() {
         </Vortex>
       </section>
 
-      {/* Image Gallery Section */}
-      <section className="py-16 px-4 bg-gray-900">
-        <div className="container mx-auto">
+      {/* Innovation Showcase Section */}
+      <section className="py-16 px-4 bg-black relative overflow-hidden">
+        {/* Background with shooting stars */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.1)_0%,rgba(0,0,0,0.8)_80%)]" />
+          <div className="stars absolute inset-0" />
+        </div>
+
+        {/* Multiple shooting star layers with NAVADA colors */}
+        <ShootingStars
+          starColor="#a855f7"
+          trailColor="#06b6d4"
+          minSpeed={15}
+          maxSpeed={35}
+          minDelay={1000}
+          maxDelay={3000}
+        />
+        <ShootingStars
+          starColor="#06b6d4"
+          trailColor="#8b5cf6"
+          minSpeed={10}
+          maxSpeed={25}
+          minDelay={2000}
+          maxDelay={4000}
+        />
+        <ShootingStars
+          starColor="#8b5cf6"
+          trailColor="#a855f7"
+          minSpeed={20}
+          maxSpeed={40}
+          minDelay={1500}
+          maxDelay={3500}
+        />
+
+        <div className="container mx-auto relative z-10">
           <div className="text-center mb-12">
             <h3
-              className={`text-3xl font-bold text-purple-400 mb-4 transition-all duration-700 delay-300 ${
+              className={`text-3xl font-bold text-white mb-4 transition-all duration-700 delay-300 ${
                 isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
               }`}
             >
               Innovation Showcase
             </h3>
             <p
-              className={`text-gray-300 max-w-2xl mx-auto transition-all duration-700 delay-500 ${
+              className={`text-gray-100 max-w-2xl mx-auto transition-all duration-700 delay-500 ${
                 isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
               }`}
             >
@@ -240,7 +273,7 @@ export default function NavadaRoboticsApp() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
-              className={`bg-black rounded-lg overflow-hidden border border-gray-800 transition-all duration-700 delay-700 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group ${
+              className={`bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 transition-all duration-700 delay-700 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 ${
                 isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
               }`}
             >
@@ -250,15 +283,15 @@ export default function NavadaRoboticsApp() {
                 className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
               />
               <div className="p-4">
-                <h4 className="text-purple-300 font-semibold mb-2 transition-colors duration-200 group-hover:text-purple-200">
+                <h4 className="text-purple-200 font-semibold mb-2 transition-colors duration-200 group-hover:text-white">
                   AI Creative Assistant
                 </h4>
-                <p className="text-gray-400 text-sm">Artistic vision meets robotic precision</p>
+                <p className="text-gray-200 text-sm">Artistic vision meets robotic precision</p>
               </div>
             </div>
 
             <div
-              className={`bg-black rounded-lg overflow-hidden border border-gray-800 transition-all duration-700 delay-900 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group ${
+              className={`bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 transition-all duration-700 delay-900 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 ${
                 isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
               }`}
             >
@@ -268,15 +301,15 @@ export default function NavadaRoboticsApp() {
                 className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
               />
               <div className="p-4">
-                <h4 className="text-purple-300 font-semibold mb-2 transition-colors duration-200 group-hover:text-purple-200">
+                <h4 className="text-purple-200 font-semibold mb-2 transition-colors duration-200 group-hover:text-white">
                   Next-Gen Automation
                 </h4>
-                <p className="text-gray-400 text-sm">Advanced digital assistance for the future</p>
+                <p className="text-gray-200 text-sm">Advanced digital assistance for the future</p>
               </div>
             </div>
 
             <div
-              className={`bg-black rounded-lg overflow-hidden border border-gray-800 transition-all duration-700 delay-1000 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group ${
+              className={`bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 transition-all duration-700 delay-1000 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 ${
                 isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
               }`}
             >
@@ -286,14 +319,36 @@ export default function NavadaRoboticsApp() {
                 className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
               />
               <div className="p-4">
-                <h4 className="text-purple-300 font-semibold mb-2 transition-colors duration-200 group-hover:text-purple-200">
+                <h4 className="text-purple-200 font-semibold mb-2 transition-colors duration-200 group-hover:text-white">
                   Research Platform
                 </h4>
-                <p className="text-gray-400 text-sm">Empowering the next generation of innovators</p>
+                <p className="text-gray-200 text-sm">Empowering the next generation of innovators</p>
               </div>
             </div>
           </div>
         </div>
+
+        <style jsx>{`
+          .stars {
+            background-image: 
+              radial-gradient(2px 2px at 20px 30px, rgba(168,85,247,0.8), rgba(0,0,0,0)),
+              radial-gradient(2px 2px at 40px 70px, rgba(6,182,212,0.8), rgba(0,0,0,0)),
+              radial-gradient(2px 2px at 50px 160px, rgba(139,92,246,0.6), rgba(0,0,0,0)),
+              radial-gradient(2px 2px at 90px 40px, rgba(168,85,247,0.8), rgba(0,0,0,0)),
+              radial-gradient(2px 2px at 130px 80px, rgba(6,182,212,0.8), rgba(0,0,0,0)),
+              radial-gradient(2px 2px at 160px 120px, rgba(139,92,246,0.6), rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 5s ease-in-out infinite;
+            opacity: 0.6;
+          }
+
+          @keyframes twinkle {
+            0% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.4; }
+          }
+        `}</style>
       </section>
 
       {/* Active Projects Section */}
