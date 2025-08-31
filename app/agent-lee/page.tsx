@@ -50,6 +50,7 @@ export default function AgentLeePage() {
   const [isMuted, setIsMuted] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const recognitionRef = useRef<any>(null)
+  const currentAudioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -106,10 +107,12 @@ export default function AgentLeePage() {
       return
     }
 
+    // Stop any currently playing audio/speech before starting new one
+    stopSpeaking()
+
     try {
       console.log("[v0] Starting speakText function")
-      setIsSpeaking(false)
-
+      
       await new Promise((resolve) => setTimeout(resolve, 100))
 
       setIsSpeaking(true)
@@ -134,17 +137,22 @@ export default function AgentLeePage() {
           const audioBlob = await response.blob()
           const audioUrl = URL.createObjectURL(audioBlob)
           const audio = new Audio(audioUrl)
+          
+          // Store reference to current audio for stopping
+          currentAudioRef.current = audio
 
           audio.onended = () => {
             console.log("[v0] OpenAI TTS audio ended")
             setIsSpeaking(false)
             URL.revokeObjectURL(audioUrl)
+            currentAudioRef.current = null
           }
 
           audio.onerror = (error) => {
             console.log("[v0] OpenAI TTS audio error, falling back to browser TTS:", error)
             setIsSpeaking(false)
             URL.revokeObjectURL(audioUrl)
+            currentAudioRef.current = null
             fallbackToBrowserTTS(text)
           }
 
@@ -204,12 +212,23 @@ export default function AgentLeePage() {
   }
 
   const stopSpeaking = () => {
+    console.log("[v0] Stopping all speech and audio")
+    
+    // Stop current audio if it exists
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause()
+      currentAudioRef.current.currentTime = 0
+      currentAudioRef.current = null
+    }
+
+    // Stop any other audio elements as backup
     const audioElements = document.querySelectorAll("audio")
     audioElements.forEach((audio) => {
       audio.pause()
       audio.currentTime = 0
     })
 
+    // Cancel browser speech synthesis
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel()
     }
