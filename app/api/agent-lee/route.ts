@@ -197,7 +197,9 @@ export async function POST(request: NextRequest) {
         const lastMessage = messages.data[0]
 
         if (lastMessage.role === "assistant" && lastMessage.content[0].type === "text") {
-          const response = lastMessage.content[0].text.value
+          const rawResponse = lastMessage.content[0].text.value
+          // Remove markdown bold formatting (**text**)
+          const response = rawResponse.replace(/\*\*(.*?)\*\*/g, '$1')
           console.log("[v0] Generated response:", response.substring(0, 100) + "...")
 
           return NextResponse.json({
