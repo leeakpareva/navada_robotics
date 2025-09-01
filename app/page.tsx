@@ -9,7 +9,6 @@ import { Vortex } from "@/components/ui/vortex"
 import { GradientBackground } from "@/components/ui/gradient-background"
 import { ShootingStars } from "@/components/ui/shooting-stars"
 import { OptimizedImage } from "@/components/ui/optimized-image"
-import { OptimizedVideo } from "@/components/ui/optimized-video"
 
 export default function NavadaRoboticsApp() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
