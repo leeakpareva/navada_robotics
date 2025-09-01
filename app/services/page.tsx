@@ -15,13 +15,14 @@ export default function ServicesPage() {
       title: "Raspberry Pi Robot Development",
       description:
         "Custom robot design and development using Raspberry Pi platforms, from concept to prototype to production-ready systems.",
-      image: "/placeholder.svg?height=200&width=300&text=Robot+Development",
+      image: "/MyServiceRaspberryPi.mp4",
+      isVideo: true,
     },
     {
       title: "Research Consultation",
       description:
         "Expert guidance on robotics research projects, grant applications, and academic collaboration opportunities.",
-      image: "/placeholder.svg?height=200&width=300&text=Research+Consultation",
+      image: "/ResearchConsultation.png",
     },
     {
       title: "Educational Workshops",
@@ -134,13 +135,24 @@ export default function ServicesPage() {
                 className="group hover:shadow-lg transition-all duration-300 hover:border-purple-400/50 bg-black/30 border-white/20 overflow-hidden backdrop-blur-sm hover:bg-black/40"
               >
                 <div className="relative overflow-hidden">
-                  <img
-                    src={
-                      service.image || `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(service.title)}`
-                    }
-                    alt={service.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                  {service.isVideo ? (
+                    <video
+                      src={service.image}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <img
+                      src={
+                        service.image || `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(service.title)}`
+                      }
+                      alt={service.title}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
                 <CardContent className="pt-6">

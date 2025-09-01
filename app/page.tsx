@@ -277,8 +277,8 @@ export default function NavadaRoboticsApp() {
               }`}
             >
               <img
-                src="/placeholder.svg?height=192&width=400&text=AI+Powered+Creative+Robot"
-                alt="AI Powered Creative Robot"
+                src="/AiCreative.png"
+                alt="Artistic vision meets robotic precision"
                 className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
               />
               <div className="p-4">
@@ -294,10 +294,13 @@ export default function NavadaRoboticsApp() {
                 isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
               }`}
             >
-              <img
-                src="/placeholder.svg?height=192&width=400&text=Next+Gen+Automation+Platform"
-                alt="Next Generation Automation Platform"
+              <video
+                src="/NextGen.mp4"
                 className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                autoPlay
+                loop
+                muted
+                playsInline
               />
               <div className="p-4">
                 <h4 className="text-purple-200 font-semibold mb-2 transition-colors duration-200 group-hover:text-white">
@@ -313,8 +316,8 @@ export default function NavadaRoboticsApp() {
               }`}
             >
               <img
-                src="/placeholder.svg?height=192&width=400&text=Educational+AI+Research+Platform"
-                alt="Educational AI Research Platform"
+                src="/ManvsMachine.png"
+                alt="Empowering the next generation of innovators"
                 className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
               />
               <div className="p-4">

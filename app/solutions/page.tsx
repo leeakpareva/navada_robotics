@@ -30,7 +30,7 @@ export default function SolutionsPage() {
         "Build intelligent automation systems using Raspberry Pi 4 and 5. Perfect for industrial IoT, home automation, and research applications with GPIO control, sensor integration, and real-time processing.",
       icon: <CircuitBoard className="h-8 w-8" />,
       features: ["Cost-Effective", "Open Source", "Modular Design"],
-      image: "/raspberry-pi-automation-system-with-sensors-and-ci.png",
+      image: "/InnovavtionShowCase.png",
     },
     {
       title: "AI Research Platforms",
@@ -38,7 +38,7 @@ export default function SolutionsPage() {
         "Deploy machine learning models on edge devices using Raspberry Pi clusters. Supports TensorFlow Lite, OpenCV, and custom neural networks for computer vision and autonomous robotics research.",
       icon: <Cpu className="h-8 w-8" />,
       features: ["Edge Computing", "Neural Networks", "Computer Vision"],
-      image: "/raspberry-pi-cluster-for-ai-machine-learning-resea.png",
+      image: "/AiResearchPlatform.png",
     },
     {
       title: "Educational Robotics",
@@ -46,7 +46,8 @@ export default function SolutionsPage() {
         "Comprehensive robotics education kits designed for universities and research institutions. Includes curriculum, hardware kits, and software tools for hands-on learning in robotics and AI.",
       icon: <Zap className="h-8 w-8" />,
       features: ["STEM Education", "Research Tools", "Prototyping"],
-      image: "/educational-robotics-kit-with-raspberry-pi-for-stu.png",
+      image: "/EducationinRobotics.mp4",
+      isVideo: true,
     },
     {
       title: "IoT Integration",
@@ -54,7 +55,7 @@ export default function SolutionsPage() {
         "Connect robotic systems to cloud platforms and mobile apps. Features MQTT protocols, REST APIs, and real-time data visualization for remote monitoring and control of robotic fleets.",
       icon: <Shield className="h-8 w-8" />,
       features: ["Sensor Networks", "Remote Monitoring", "Data Analytics"],
-      image: "/iot-raspberry-pi-sensors-connected-to-cloud-dashbo.png",
+      image: "/IoTIntegration.png",
     },
   ]
 
@@ -143,14 +144,25 @@ export default function SolutionsPage() {
                 className="group hover:shadow-lg transition-all duration-300 bg-black/30 border-white/20 hover:border-purple-400/50 backdrop-blur-sm hover:bg-black/40"
               >
                 <div className="relative overflow-hidden">
-                  <img
-                    src={
-                      solution.image ||
-                      `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(solution.title)}`
-                    }
-                    alt={solution.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                  {solution.isVideo ? (
+                    <video
+                      src={solution.image}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <img
+                      src={
+                        solution.image ||
+                        `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(solution.title)}`
+                      }
+                      alt={solution.title}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
 
