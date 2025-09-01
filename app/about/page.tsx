@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { BeamsBackground } from "@/components/ui/beams-background"
 import { Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone } from "lucide-react"
 import Link from "next/link"
+import { OptimizedImage } from "@/components/ui/optimized-image"
 
 export default function AboutPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -84,11 +85,16 @@ export default function AboutPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">About NAVADA</h2>
 
             <div className="mb-8">
-              <img
-                src="/AboutNavada.png"
-                alt="NAVADA Robotics Laboratory"
-                className="w-full max-w-2xl mx-auto rounded-lg border border-purple-400/50 backdrop-blur-sm"
-              />
+              <div className="w-full max-w-2xl mx-auto h-64 md:h-80 relative rounded-lg overflow-hidden border border-purple-400/50">
+                <OptimizedImage
+                  src="/AboutNavada.png"
+                  alt="NAVADA Robotics Laboratory"
+                  fill
+                  quality={90}
+                  priority
+                  className="backdrop-blur-sm"
+                />
+              </div>
             </div>
 
             <p className="text-lg text-gray-100 mb-8 text-pretty">
@@ -102,11 +108,15 @@ export default function AboutPage() {
               <h3 className="text-2xl font-semibold text-white mb-6">Leadership</h3>
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="flex-shrink-0">
-                  <img
-                    src="/Profileimage.png"
-                    alt="Lee Akpareva, Founder & CEO"
-                    className="w-32 h-32 rounded-full border-2 border-purple-400/70"
-                  />
+                  <div className="w-32 h-32 relative rounded-full border-2 border-purple-400/70 overflow-hidden">
+                    <OptimizedImage
+                      src="/Profileimage.png"
+                      alt="Lee Akpareva, Founder & CEO"
+                      fill
+                      quality={95}
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
                 <div className="text-center md:text-left">
                   <p className="text-xl font-medium text-white mb-2">Lee Akpareva MBA, MA</p>

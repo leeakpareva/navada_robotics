@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { BeamsBackground } from "@/components/ui/beams-background"
 import { ArrowRight, Menu, X, Phone, Mail, MapPin, Cog, Microscope as Microchip, Wrench, Shield } from "lucide-react"
 import Link from "next/link"
+import { OptimizedVideo } from "@/components/ui/optimized-video"
 
 export default function ContactPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -90,14 +91,17 @@ export default function ContactPage() {
           </div>
 
           <div className="mb-12">
-            <video
-              src="/GetinTouch.mp4"
-              className="w-full max-w-4xl mx-auto rounded-lg border border-purple-400/50 backdrop-blur-sm"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
+            <div className="w-full max-w-4xl mx-auto h-64 md:h-80 rounded-lg overflow-hidden border border-purple-400/50">
+              <OptimizedVideo
+                src="/GetinTouch.mp4"
+                className="w-full h-full"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">

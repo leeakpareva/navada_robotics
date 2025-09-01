@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { BeamsBackground } from "@/components/ui/beams-background"
 import { Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Brain } from "lucide-react"
 import Link from "next/link"
+import { OptimizedImage } from "@/components/ui/optimized-image"
+import { OptimizedVideo } from "@/components/ui/optimized-video"
 
 export default function ServicesPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -137,22 +139,24 @@ export default function ServicesPage() {
               >
                 <div className="relative overflow-hidden">
                   {service.isVideo ? (
-                    <video
+                    <OptimizedVideo
                       src={service.image}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-48"
                       autoPlay
                       loop
                       muted
                       playsInline
                     />
                   ) : (
-                    <img
-                      src={
-                        service.image || `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(service.title)}`
-                      }
-                      alt={service.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                    <div className="w-full h-48 relative">
+                      <OptimizedImage
+                        src={service.image || `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(service.title)}`}
+                        alt={service.title}
+                        fill
+                        quality={85}
+                        className="group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>

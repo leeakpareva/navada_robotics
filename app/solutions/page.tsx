@@ -19,6 +19,8 @@ import {
   Phone,
 } from "lucide-react"
 import Link from "next/link"
+import { OptimizedImage } from "@/components/ui/optimized-image"
+import { OptimizedVideo } from "@/components/ui/optimized-video"
 
 export default function SolutionsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -145,23 +147,27 @@ export default function SolutionsPage() {
               >
                 <div className="relative overflow-hidden">
                   {solution.isVideo ? (
-                    <video
+                    <OptimizedVideo
                       src={solution.image}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-48"
                       autoPlay
                       loop
                       muted
                       playsInline
                     />
                   ) : (
-                    <img
-                      src={
-                        solution.image ||
-                        `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(solution.title)}`
-                      }
-                      alt={solution.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                    <div className="w-full h-48 relative">
+                      <OptimizedImage
+                        src={
+                          solution.image ||
+                          `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(solution.title)}`
+                        }
+                        alt={solution.title}
+                        fill
+                        quality={85}
+                        className="group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
