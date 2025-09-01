@@ -7,7 +7,10 @@ const VOICE_PROMPT_ID = process.env.VOICE_PROMPT_ID
 
 console.log("[v0] Environment debug:")
 console.log("[v0] OPENAI_API_KEY exists:", !!API_KEY)
+console.log("[v0] OPENAI_API_KEY starts with sk-:", API_KEY ? API_KEY.startsWith('sk-') : false)
+console.log("[v0] OPENAI_API_KEY length:", API_KEY ? API_KEY.length : 0)
 console.log("[v0] OPENAI_ASSISTANT_ID exists:", !!ASSISTANT_ID)
+console.log("[v0] OPENAI_ASSISTANT_ID value:", ASSISTANT_ID || "Not set")
 console.log("[v0] VOICE_PROMPT_ID exists:", !!VOICE_PROMPT_ID)
 console.log(
   "[v0] All env vars:",
