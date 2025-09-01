@@ -3,13 +3,16 @@ import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
+  title: "NAVADA Robotics | AI & Robotics Innovation",
+  description: "Navigating Artistic Vision with Advanced Digital Assistance. Cutting-edge robotics research, AI development, and educational solutions using Raspberry Pi technology.",
+  generator: "Next.js",
+  keywords: "robotics, AI, Raspberry Pi, automation, computer vision, deep learning, robotics education",
+  authors: [{ name: "Lee Akpareva" }],
 }
 
 export default function RootLayout({
@@ -22,6 +25,7 @@ export default function RootLayout({
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} pb-16 md:pb-0`}>
         <Suspense fallback={null}>{children}</Suspense>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
