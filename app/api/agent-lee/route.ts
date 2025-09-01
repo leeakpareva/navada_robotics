@@ -114,41 +114,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Message is required and must be a string" }, { status: 400 })
     }
 
-    // Validate API key format
-    if (API_KEY && !API_KEY.startsWith('sk-')) {
-      console.error("[v0] Invalid API key format detected")
-      console.log("[v0] Using mock response due to invalid API key format")
-      
-      await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000))
-      const mockResponse = generateMockResponse(message)
-      const mockThreadId = threadId || `mock_thread_${Date.now()}`
+    // Validate configuration
+    if (!openai || !ASSISTANT_ID || !API_KEY) {
+      console.error("[v0] OpenAI configuration missing:")
+      console.error("[v0] - API Key exists:", !!API_KEY)
+      console.error("[v0] - Assistant ID exists:", !!ASSISTANT_ID)
+      console.error("[v0] - OpenAI client initialized:", !!openai)
       
       return NextResponse.json({
-        message: mockResponse,
-        threadId: mockThreadId,
-        timestamp: new Date().toISOString(),
-        source: "mock",
-      })
-    }
-
-    if (!openai || !ASSISTANT_ID) {
-      console.log("[v0] Using mock response - OpenAI not configured")
-      console.log("[v0] OpenAI client exists:", !!openai)
-      console.log("[v0] Assistant ID exists:", !!ASSISTANT_ID)
-      console.log("[v0] Assistant ID value:", ASSISTANT_ID ? "Hidden for security" : "Not set")
-
-      // Simulate processing delay
-      await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000))
-
-      const mockResponse = generateMockResponse(message)
-      const mockThreadId = threadId || `mock_thread_${Date.now()}`
-
-      return NextResponse.json({
-        message: mockResponse,
-        threadId: mockThreadId,
-        timestamp: new Date().toISOString(),
-        source: "mock", // Indicate this is a mock response
-      })
+        error: "OpenAI configuration missing. Please check environment variables.",
+        details: {
+          hasApiKey: !!API_KEY,
+          hasAssistantId: !!ASSISTANT_ID,
+          clientInitialized: !!openai
+        }
+      }, { status: 500 })
     }
 
     let currentThreadId = threadId
@@ -164,25 +144,11 @@ export async function POST(request: NextRequest) {
           status: threadError?.status,
           type: threadError?.type,
           code: threadError?.code,
-          response: threadError?.response,
-          data: threadError?.response?.data,
         })
-        
-        // Always fallback to mock response on any OpenAI error
-        console.log("[v0] Thread creation failed, falling back to mock response")
-        await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000))
-        const mockResponse = generateMockResponse(message)
-        const mockThreadId = `mock_thread_${Date.now()}`
-        return NextResponse.json({
-          message: mockResponse,
-          threadId: mockThreadId,
-          timestamp: new Date().toISOString(),
-          source: "mock",
-          debug: process.env.NODE_ENV === 'development' ? {
-            error: threadError?.message,
-            type: 'thread_creation_error'
-          } : undefined
-        })
+        return NextResponse.json({ 
+          error: "Failed to create conversation thread",
+          details: threadError?.message 
+        }, { status: 500 })
       }
     }
 
@@ -201,17 +167,10 @@ export async function POST(request: NextRequest) {
         status: messageError?.status,
         type: messageError?.type,
       })
-      
-      // Fallback to mock on message creation error
-      console.log("[v0] Message creation failed, falling back to mock response")
-      await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000))
-      const mockResponse = generateMockResponse(message)
-      return NextResponse.json({
-        message: mockResponse,
-        threadId: currentThreadId || `mock_thread_${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        source: "mock",
-      })
+      return NextResponse.json({ 
+        error: "Failed to add message to conversation",
+        details: messageError?.message 
+      }, { status: 500 })
     }
 
     let run
@@ -227,25 +186,11 @@ export async function POST(request: NextRequest) {
         status: runError?.status,
         type: runError?.type,
         code: runError?.code,
-        errorDetails: runError?.error,
-        response: runError?.response,
-        data: runError?.response?.data,
       })
-      
-      // Always fallback to mock response on any OpenAI error
-      console.log("[v0] OpenAI error detected, falling back to mock response")
-      await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000))
-      const mockResponse = generateMockResponse(message)
-      return NextResponse.json({
-        message: mockResponse,
-        threadId: currentThreadId || `mock_thread_${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        source: "mock",
-        debug: process.env.NODE_ENV === 'development' ? {
-          error: runError?.message,
-          type: 'openai_error'
-        } : undefined
-      })
+      return NextResponse.json({ 
+        error: "Failed to start assistant processing",
+        details: runError?.message 
+      }, { status: 500 })
     }
 
     let runStatus
@@ -337,26 +282,12 @@ export async function POST(request: NextRequest) {
       console.error("[v0] Error message:", error.message)
       console.error("[v0] Error stack:", error.stack)
     }
-    
-    // Final fallback - always return a mock response instead of error
-    console.log("[v0] Final fallback to mock response due to unexpected error")
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 1000))
-      const mockResponse = generateMockResponse(message || "hello")
-      return NextResponse.json({
-        message: mockResponse,
-        threadId: `mock_thread_${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        source: "mock",
-      })
-    } catch (mockError) {
-      // If even mock fails, return a basic response
-      return NextResponse.json({
-        message: "Hello! I'm Agent Lee. I'm currently experiencing technical difficulties but I'm still here to help with robotics and programming questions. What would you like to learn about?",
-        threadId: `fallback_thread_${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        source: "fallback",
-      })
-    }
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    )
   }
 }
