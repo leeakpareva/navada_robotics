@@ -51,6 +51,8 @@ OPENAI_ASSISTANT_ID=your_assistant_id
 VOICE_PROMPT_ID=your_voice_prompt_id
 ```
 
+**Note**: For production deployment on Vercel, ensure these environment variables are set in your Vercel project settings.
+
 4. Run the development server:
 ```bash
 npm run dev
