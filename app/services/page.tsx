@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { BeamsBackground } from "@/components/ui/beams-background"
-import { Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Bot } from "lucide-react"
+import { Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Brain } from "lucide-react"
 import Link from "next/link"
 
 export default function ServicesPage() {
@@ -28,25 +28,26 @@ export default function ServicesPage() {
       title: "Educational Workshops",
       description:
         "Hands-on training sessions for students and faculty on Raspberry Pi robotics, programming, and system integration.",
-      image: "/placeholder.svg?height=200&width=300&text=Educational+Workshops",
+      image: "/EducationnalWorkshops.png",
     },
     {
       title: "Python Programming for Robotics",
       description:
         "Comprehensive Python training focused on robotics applications, including OpenCV for computer vision, TensorFlow for AI, and GPIO programming for hardware control. From beginner to advanced levels.",
-      image: "/placeholder.svg?height=200&width=300&text=Python+Programming",
+      image: "/Python.mp4",
+      isVideo: true,
     },
     {
       title: "Prototype Development",
       description:
         "Rapid prototyping services for robotics concepts, including 3D printing, PCB design, and software development.",
-      image: "/placeholder.svg?height=200&width=300&text=Prototype+Development",
+      image: "/PrototypeDev.png",
     },
     {
       title: "Technical Documentation",
       description:
         "Comprehensive documentation services including research papers, technical manuals, and educational materials.",
-      image: "/placeholder.svg?height=200&width=300&text=Technical+Documentation",
+      image: "/TechnicalDocs.png",
     },
   ]
 
@@ -181,7 +182,7 @@ export default function ServicesPage() {
             <span className="text-gray-400">About</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Bot className="h-5 w-5 text-gray-400 mb-1" />
+            <Brain className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Agent Lee</span>
           </Link>
           <Link href="/contact" className="flex flex-col items-center py-2 px-3 text-xs">

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Bot, Cpu, Sparkles, Folder } from "lucide-react"
+import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Brain, Cpu, Sparkles, Folder } from "lucide-react"
 import Link from "next/link"
 import { Vortex } from "@/components/ui/vortex"
 import { GradientBackground } from "@/components/ui/gradient-background"
@@ -177,7 +177,7 @@ export default function NavadaRoboticsApp() {
               </div>
               <div className="flex flex-col items-center justify-center gap-2 md:gap-3">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
-                  <Bot className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
+                  <Cog className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
                 </div>
                 <span className="text-gray-300 font-medium text-sm md:text-base text-center">Robotics</span>
               </div>
@@ -479,7 +479,7 @@ export default function NavadaRoboticsApp() {
             href="/agent-lee"
             className="flex flex-col items-center py-2 px-2 text-xs transition-all duration-200 hover:scale-110 active:scale-95"
           >
-            <Bot className="h-5 w-5 text-gray-400 mb-1 transition-colors duration-200 hover:text-purple-400" />
+            <Brain className="h-5 w-5 text-gray-400 mb-1 transition-colors duration-200 hover:text-purple-400" />
             <span className="text-gray-400 transition-colors duration-200 hover:text-purple-400">Agent Lee</span>
           </Link>
           <Link

@@ -85,7 +85,7 @@ export default function AboutPage() {
 
             <div className="mb-8">
               <img
-                src="/placeholder.svg?height=300&width=600&text=NAVADA+Robotics+Laboratory"
+                src="/AboutNavada.png"
                 alt="NAVADA Robotics Laboratory"
                 className="w-full max-w-2xl mx-auto rounded-lg border border-purple-400/50 backdrop-blur-sm"
               />
@@ -103,7 +103,7 @@ export default function AboutPage() {
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="flex-shrink-0">
                   <img
-                    src="/placeholder.svg?height=128&width=128&text=Lee+Akpareva+CEO"
+                    src="/Profileimage.png"
                     alt="Lee Akpareva, Founder & CEO"
                     className="w-32 h-32 rounded-full border-2 border-purple-400/70"
                   />
@@ -137,22 +137,6 @@ export default function AboutPage() {
                     Connect on LinkedIn →
                   </a>
                 </div>
-              </div>
-            </div>
-
-            <div className="mb-12">
-              <h3 className="text-2xl font-semibold text-white mb-6">My Workspace</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <img
-                  src="/placeholder.svg?height=200&width=300&text=NAVADA+Research+Lab"
-                  alt="NAVADA Research Laboratory"
-                  className="w-full rounded-lg border border-white/20 backdrop-blur-sm"
-                />
-                <img
-                  src="/placeholder.svg?height=200&width=300&text=Development+Workshop"
-                  alt="Development Workshop"
-                  className="w-full rounded-lg border border-white/20 backdrop-blur-sm"
-                />
               </div>
             </div>
 

@@ -90,10 +90,13 @@ export default function ContactPage() {
           </div>
 
           <div className="mb-12">
-            <img
-              src="/placeholder.svg?height=300&width=800&text=NAVADA+Office+Building"
-              alt="NAVADA Robotics Office"
+            <video
+              src="/GetinTouch.mp4"
               className="w-full max-w-4xl mx-auto rounded-lg border border-purple-400/50 backdrop-blur-sm"
+              autoPlay
+              loop
+              muted
+              playsInline
             />
           </div>
 
@@ -102,7 +105,9 @@ export default function ContactPage() {
               <CardContent className="pt-6">
                 <Phone className="h-8 w-8 text-purple-300 mx-auto mb-4" />
                 <h4 className="font-semibold mb-2 text-white">Phone</h4>
-                <p className="text-gray-200">+44 79535237704</p>
+                <a href="tel:+447953523704" className="text-gray-200 hover:text-purple-400 transition-colors block">
+                  +44 7953 523704
+                </a>
                 <p className="text-gray-300 text-sm mt-1">Mon-Fri 9AM-6PM GMT</p>
               </CardContent>
             </Card>
@@ -111,7 +116,9 @@ export default function ContactPage() {
               <CardContent className="pt-6">
                 <Mail className="h-8 w-8 text-purple-300 mx-auto mb-4" />
                 <h4 className="font-semibold mb-2 text-white">Email</h4>
-                <p className="text-gray-200">leekapareva@hmail.com</p>
+                <a href="mailto:leekapareva@gmail.com" className="text-gray-200 hover:text-purple-400 transition-colors block">
+                  leekapareva@gmail.com
+                </a>
                 <p className="text-gray-300 text-sm mt-1">Response within 24 hours</p>
               </CardContent>
             </Card>
@@ -126,27 +133,16 @@ export default function ContactPage() {
             </Card>
           </div>
 
-          <div className="mt-12 mb-8">
-            <h3 className="text-2xl font-semibold text-white mb-6 text-center">My Workspace Environment</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              <img
-                src="/placeholder.svg?height=250&width=400&text=Consultation+Room"
-                alt="NAVADA Consultation Room"
-                className="w-full rounded-lg border border-white/20 backdrop-blur-sm"
-              />
-              <img
-                src="/placeholder.svg?height=250&width=400&text=Research+Collaboration+Space"
-                alt="Research Collaboration Space"
-                className="w-full rounded-lg border border-white/20 backdrop-blur-sm"
-              />
-            </div>
-          </div>
-
           <div className="text-center mt-12">
-            <Button size="lg" className="text-lg px-8 bg-purple-500/20 hover:bg-purple-500/30 backdrop-blur-sm border border-purple-400/50 text-white hover:text-purple-200">
-              Schedule Research Meeting
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <a 
+              href="mailto:leekapareva@gmail.com?subject=Research%20Meeting%20Inquiry&body=Hello%20Lee,%0A%0AI%20would%20like%20to%20schedule%20a%20research%20meeting%20to%20discuss%20robotics%20and%20AI%20projects.%0A%0APlease%20let%20me%20know%20your%20availability.%0A%0ABest%20regards,"
+              className="inline-block"
+            >
+              <Button size="lg" className="text-lg px-8 bg-purple-500/20 hover:bg-purple-500/30 backdrop-blur-sm border border-purple-400/50 text-white hover:text-purple-200">
+                Schedule Research Meeting
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
           </div>
         </div>
       </BeamsBackground>

@@ -15,15 +15,16 @@ import {
   Wrench,
   Shield,
   Phone,
-  Bot,
   Send,
   User,
   Mic,
   MicOff,
   Volume2,
   VolumeX,
+  Brain,
 } from "lucide-react"
 import Link from "next/link"
+
 
 interface Message {
   id: number
@@ -430,7 +431,7 @@ export default function AgentLeePage() {
           <div className="text-center mb-6">
             <div className="flex items-center justify-center mb-4">
               <div className="bg-purple-600/20 backdrop-blur-sm p-4 rounded-full border border-purple-400/50">
-                <Bot className="h-8 w-8 text-purple-300" />
+                <Brain className="h-8 w-8 text-purple-300" />
               </div>
             </div>
             <h2 className="text-3xl font-bold text-white mb-2">Agent Lee</h2>
@@ -473,7 +474,7 @@ export default function AgentLeePage() {
                   <div className={`flex items-start space-x-2 max-w-xs lg:max-w-md`}>
                     {message.sender === "agent" && (
                       <div className="bg-purple-600 p-2 rounded-full flex-shrink-0">
-                        <Bot className="h-4 w-4 text-white" />
+                        <Brain className="h-4 w-4 text-white" />
                       </div>
                     )}
                     <div
@@ -510,7 +511,7 @@ export default function AgentLeePage() {
                 <div className="flex justify-start">
                   <div className="flex items-start space-x-2">
                     <div className="bg-purple-600 p-2 rounded-full">
-                      <Bot className="h-4 w-4 text-white" />
+                      <Brain className="h-4 w-4 text-white" />
                     </div>
                     <div className="bg-gray-800 p-3 rounded-lg">
                       <div className="flex space-x-1">
@@ -594,7 +595,7 @@ export default function AgentLeePage() {
             <span className="text-gray-400">About</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Bot className="h-5 w-5 text-purple-400 mb-1" />
+            <Brain className="h-5 w-5 text-purple-400 mb-1" />
             <span className="text-purple-400">Agent Lee</span>
           </Link>
           <Link href="/contact" className="flex flex-col items-center py-2 px-3 text-xs">
