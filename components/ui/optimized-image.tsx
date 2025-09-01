@@ -28,22 +28,18 @@ export function OptimizedImage({
   const [isLoading, setIsLoading] = useState(true)
 
   return (
-    <div className={cn("relative overflow-hidden", className)}>
+    <div className={cn("relative overflow-hidden w-full h-full", className)}>
       {isLoading && (
-        <div 
-          className="absolute inset-0 bg-gray-900 animate-pulse rounded-lg" 
-          style={{ width, height }}
-        />
+        <div className="absolute inset-0 bg-gray-900 animate-pulse" />
       )}
       <Image
         src={src}
         alt={alt}
-        width={width}
-        height={height}
+        fill
         quality={quality}
         sizes={sizes || "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
         className={cn(
-          "duration-700 ease-in-out transition-all object-cover w-full h-full",
+          "duration-700 ease-in-out transition-all object-cover",
           isLoading ? "scale-110 blur-sm grayscale" : "scale-100 blur-0 grayscale-0"
         )}
         onLoad={() => setIsLoading(false)}

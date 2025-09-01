@@ -76,11 +76,11 @@ export default function AIAnalyticsPage() {
               <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
                 Learning
               </Link>
-              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
-                Agent Lee
-              </Link>
               <Link href="/ai-analytics" className="text-purple-400 font-medium">
                 AI Analytics
+              </Link>
+              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
+                Agent Lee
               </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
@@ -104,11 +104,11 @@ export default function AIAnalyticsPage() {
                 <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
                   Learning
                 </Link>
-                <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
-                  Agent Lee
-                </Link>
                 <Link href="/ai-analytics" className="text-purple-400 font-medium">
                   AI Analytics
+                </Link>
+                <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
+                  Agent Lee
                 </Link>
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact

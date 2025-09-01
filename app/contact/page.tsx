@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { BeamsBackground } from "@/components/ui/beams-background"
 import { ArrowRight, Menu, X, Phone, Mail, MapPin, Cog, Microscope as Microchip, Wrench, Shield } from "lucide-react"
 import Link from "next/link"
-import { OptimizedVideo } from "@/components/ui/optimized-video"
+import { OptimizedImage } from "@/components/ui/optimized-image"
 
 export default function ContactPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -104,14 +104,13 @@ export default function ContactPage() {
 
           <div className="mb-12">
             <div className="w-full max-w-4xl mx-auto h-64 md:h-80 rounded-lg overflow-hidden border border-purple-400/50">
-              <OptimizedVideo
-                src="/GetinTouch.mp4"
+              <OptimizedImage
+                src="/Contact.png"
+                alt="Get in Touch - NAVADA Robotics Contact"
+                width={800}
+                height={320}
                 className="w-full h-full"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
+                priority
               />
             </div>
           </div>

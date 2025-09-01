@@ -9,7 +9,6 @@ import { Vortex } from "@/components/ui/vortex"
 import { GradientBackground } from "@/components/ui/gradient-background"
 import { ShootingStars } from "@/components/ui/shooting-stars"
 import { OptimizedImage } from "@/components/ui/optimized-image"
-import { AnimatedText } from "@/components/ui/animated-text"
 
 export default function NavadaRoboticsApp() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -174,12 +173,8 @@ export default function NavadaRoboticsApp() {
             >
               AI • Robotics • Digital Innovation
             </Badge>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance">
-              <AnimatedText 
-                text="Navigating Artistic Vision with Advanced Digital Assistance"
-                className="font-bold tracking-tighter leading-none"
-                delay={0.5}
-              />
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance font-bold tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400">
+              Navigating Artistic Vision with Advanced Digital Assistance
             </h2>
             <p
               className={`text-xl text-gray-300 mb-8 max-w-3xl mx-auto text-pretty transition-all duration-1000 delay-1000 ${
