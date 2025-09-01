@@ -178,12 +178,14 @@ export default function NavadaRoboticsApp() {
               <AnimatedText 
                 text="Navigating Artistic Vision with Advanced Digital Assistance"
                 className="font-bold tracking-tighter leading-none"
+                delay={0.5}
               />
             </h2>
             <p
-              className={`text-xl text-gray-300 mb-8 max-w-3xl mx-auto text-pretty transition-all duration-1000 delay-500 ${
+              className={`text-xl text-gray-300 mb-8 max-w-3xl mx-auto text-pretty transition-all duration-1000 delay-1000 ${
                 isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
               }`}
+              style={{ animationDelay: "1s" }}
             >
               NAVADA explores how technology advances our future through the intersection of AI, robotics, and creative
               innovation. I support the growth and adoption of AI tools focused on pioneering research and products in
@@ -192,9 +194,10 @@ export default function NavadaRoboticsApp() {
             
             {/* Value Props Row */}
             <div
-              className={`flex flex-row justify-center md:grid md:grid-cols-3 gap-4 md:gap-8 max-w-2xl mx-auto mb-8 transition-all duration-1000 delay-600 ${
+              className={`flex flex-row justify-center md:grid md:grid-cols-3 gap-4 md:gap-8 max-w-2xl mx-auto mb-8 transition-all duration-1000 ${
                 isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
               }`}
+              style={{ animationDelay: "1.2s" }}
             >
               <div className="flex flex-col items-center justify-center gap-2 md:gap-3">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
@@ -217,9 +220,10 @@ export default function NavadaRoboticsApp() {
             </div>
             
             <div
-              className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-700 ${
+              className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 ${
                 isVisible ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
               }`}
+              style={{ animationDelay: "1.5s" }}
             >
               <Link href="/solutions">
                 <Button
