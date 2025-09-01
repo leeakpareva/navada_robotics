@@ -9,6 +9,7 @@ import { Vortex } from "@/components/ui/vortex"
 import { GradientBackground } from "@/components/ui/gradient-background"
 import { ShootingStars } from "@/components/ui/shooting-stars"
 import { OptimizedImage } from "@/components/ui/optimized-image"
+import { AnimatedText } from "@/components/ui/animated-text"
 
 export default function NavadaRoboticsApp() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -71,10 +72,10 @@ export default function NavadaRoboticsApp() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <Link
-                href="/contact"
+                href="/learning"
                 className="text-white hover:text-purple-400 transition-all duration-200 hover:scale-105 relative group"
               >
-                Contact
+                Learning
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <Link
@@ -82,6 +83,13 @@ export default function NavadaRoboticsApp() {
                 className="text-white hover:text-purple-400 transition-all duration-200 hover:scale-105 relative group"
               >
                 Agent Lee
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
+              </Link>
+              <Link
+                href="/contact"
+                className="text-white hover:text-purple-400 transition-all duration-200 hover:scale-105 relative group"
+              >
+                Contact
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
             </nav>
@@ -115,6 +123,18 @@ export default function NavadaRoboticsApp() {
                 >
                   AI Analytics
                 </Link>
+                <Link
+                  href="/learning"
+                  className="text-white hover:text-purple-400 transition-all duration-200 hover:translate-x-2"
+                >
+                  Learning
+                </Link>
+                <Link
+                  href="/agent-lee"
+                  className="text-white hover:text-purple-400 transition-all duration-200 hover:translate-x-2"
+                >
+                  Agent Lee
+                </Link>
                 <a
                   href="#active-projects"
                   className="text-white hover:text-purple-400 transition-all duration-200 hover:translate-x-2"
@@ -127,12 +147,6 @@ export default function NavadaRoboticsApp() {
                   className="text-white hover:text-purple-400 transition-all duration-200 hover:translate-x-2"
                 >
                   Contact
-                </Link>
-                <Link
-                  href="/agent-lee"
-                  className="text-white hover:text-purple-400 transition-all duration-200 hover:translate-x-2"
-                >
-                  Agent Lee
                 </Link>
               </div>
             </nav>
@@ -160,12 +174,11 @@ export default function NavadaRoboticsApp() {
             >
               AI • Robotics • Digital Innovation
             </Badge>
-            <h2
-              className={`text-4xl md:text-6xl font-bold text-white mb-6 text-balance transition-all duration-1000 delay-200 ${
-                isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
-              }`}
-            >
-              <span className="text-purple-400">Navigating Artistic Vision</span> with Advanced Digital Assistance
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance">
+              <AnimatedText 
+                text="Navigating Artistic Vision with Advanced Digital Assistance"
+                className="font-bold tracking-tighter leading-none"
+              />
             </h2>
             <p
               className={`text-xl text-gray-300 mb-8 max-w-3xl mx-auto text-pretty transition-all duration-1000 delay-500 ${

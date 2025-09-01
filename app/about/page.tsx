@@ -44,6 +44,9 @@ export default function AboutPage() {
               <Link href="/ai-analytics" className="text-white hover:text-purple-400 transition-colors">
                 AI Analytics
               </Link>
+              <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                Learning
+              </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                 Agent Lee
               </Link>
@@ -68,6 +71,9 @@ export default function AboutPage() {
                 </Link>
                 <Link href="/ai-analytics" className="text-white hover:text-purple-400 transition-colors">
                   AI Analytics
+                </Link>
+                <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                  Learning
                 </Link>
                 <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                   Agent Lee
