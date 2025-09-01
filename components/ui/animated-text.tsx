@@ -24,8 +24,8 @@ export function AnimatedText({ text, className = "", delay = 0 }: AnimatedTextPr
     ${isVisible ? 'opacity-100' : 'opacity-0'}`
 
   return (
-    <div className={`${className} ${textClasses} transition-opacity duration-800 ease-out`}>
+    <span className={`${className} ${textClasses} transition-opacity duration-800 ease-out`}>
       {text}
-    </div>
+    </span>
   )
 }
