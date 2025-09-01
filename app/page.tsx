@@ -64,6 +64,13 @@ export default function NavadaRoboticsApp() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <Link
+                href="/ai-analytics"
+                className="text-white hover:text-purple-400 transition-all duration-200 hover:scale-105 relative group"
+              >
+                AI Analytics
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
+              </Link>
+              <Link
                 href="/contact"
                 className="text-white hover:text-purple-400 transition-all duration-200 hover:scale-105 relative group"
               >
@@ -101,6 +108,12 @@ export default function NavadaRoboticsApp() {
                   className="text-white hover:text-purple-400 transition-all duration-200 hover:translate-x-2"
                 >
                   About
+                </Link>
+                <Link
+                  href="/ai-analytics"
+                  className="text-white hover:text-purple-400 transition-all duration-200 hover:translate-x-2"
+                >
+                  AI Analytics
                 </Link>
                 <a
                   href="#active-projects"

@@ -82,6 +82,9 @@ export default function ServicesPage() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
+              <Link href="/ai-analytics" className="text-white hover:text-purple-400 transition-colors">
+                AI Analytics
+              </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                 Agent Lee
               </Link>
@@ -103,6 +106,9 @@ export default function ServicesPage() {
                 </Link>
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
+                </Link>
+                <Link href="/ai-analytics" className="text-white hover:text-purple-400 transition-colors">
+                  AI Analytics
                 </Link>
                 <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                   Agent Lee
