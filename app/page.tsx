@@ -298,13 +298,12 @@ export default function NavadaRoboticsApp() {
                 isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
               }`}
             >
-              <OptimizedVideo
-                src="/NextGen.mp4"
+              <OptimizedImage
+                src="/NextGenAuto.png"
+                alt="Advanced digital assistance for the future"
+                width={400}
+                height={192}
                 className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
-                autoPlay
-                loop
-                muted
-                playsInline
               />
               <div className="p-4">
                 <h4 className="text-purple-200 font-semibold mb-2 transition-colors duration-200 group-hover:text-white">
