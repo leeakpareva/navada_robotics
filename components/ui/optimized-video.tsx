@@ -63,13 +63,6 @@ export function OptimizedVideo({
     }
   }, [isInView, autoPlay])
 
-  // Preload video metadata when in view
-  useEffect(() => {
-    if (isInView && videoRef.current && !videoRef.current.src) {
-      videoRef.current.src = src
-    }
-  }, [isInView, src])
-
   return (
     <div 
       ref={containerRef}
@@ -94,13 +87,15 @@ export function OptimizedVideo({
       )}
       <video
         ref={videoRef}
+        src={src}
         poster={poster}
         loop={loop}
         muted={muted}
         playsInline={playsInline}
         preload={preload}
         onLoadedData={() => setIsLoading(false)}
-        onError={() => {
+        onError={(e) => {
+          console.error("Video failed to load:", src, e)
           setHasError(true)
           setIsLoading(false)
         }}
