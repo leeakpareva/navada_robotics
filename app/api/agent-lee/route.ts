@@ -105,6 +105,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Message is required and must be a string" }, { status: 400 })
     }
 
+    // Validate API key format
+    if (API_KEY && !API_KEY.startsWith('sk-')) {
+      console.error("[v0] Invalid API key format detected")
+      console.log("[v0] Using mock response due to invalid API key format")
+      
+      await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000))
+      const mockResponse = generateMockResponse(message)
+      const mockThreadId = threadId || `mock_thread_${Date.now()}`
+      
+      return NextResponse.json({
+        message: mockResponse,
+        threadId: mockThreadId,
+        timestamp: new Date().toISOString(),
+        source: "mock",
+      })
+    }
+
     if (!openai || !ASSISTANT_ID) {
       console.log("[v0] Using mock response - OpenAI not configured")
 
@@ -128,8 +145,29 @@ export async function POST(request: NextRequest) {
         const thread = await openai.beta.threads.create()
         currentThreadId = thread.id
         console.log("[v0] Created new thread:", currentThreadId)
-      } catch (threadError) {
+      } catch (threadError: any) {
         console.error("[v0] Failed to create thread:", threadError)
+        console.error("[v0] Thread error details:", {
+          message: threadError?.message,
+          status: threadError?.status,
+          type: threadError?.type,
+          code: threadError?.code,
+        })
+        
+        // Fallback to mock response if thread creation fails
+        if (threadError?.status === 401 || threadError?.status === 403 || threadError?.code === 'invalid_api_key') {
+          console.log("[v0] API key issue detected during thread creation, falling back to mock response")
+          await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000))
+          const mockResponse = generateMockResponse(message)
+          const mockThreadId = `mock_thread_${Date.now()}`
+          return NextResponse.json({
+            message: mockResponse,
+            threadId: mockThreadId,
+            timestamp: new Date().toISOString(),
+            source: "mock",
+          })
+        }
+        
         return NextResponse.json({ error: "Failed to create conversation thread" }, { status: 500 })
       }
     }
@@ -153,8 +191,29 @@ export async function POST(request: NextRequest) {
         assistant_id: ASSISTANT_ID,
       })
       console.log("[v0] Created run:", run.id, "for thread:", currentThreadId)
-    } catch (runError) {
+    } catch (runError: any) {
       console.error("[v0] Failed to create run:", runError)
+      console.error("[v0] Run error details:", {
+        message: runError?.message,
+        status: runError?.status,
+        type: runError?.type,
+        code: runError?.code,
+        errorDetails: runError?.error,
+      })
+      
+      // Fallback to mock response if OpenAI fails
+      if (runError?.status === 401 || runError?.status === 403 || runError?.code === 'invalid_api_key') {
+        console.log("[v0] API key issue detected, falling back to mock response")
+        await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000))
+        const mockResponse = generateMockResponse(message)
+        return NextResponse.json({
+          message: mockResponse,
+          threadId: currentThreadId,
+          timestamp: new Date().toISOString(),
+          source: "mock",
+        })
+      }
+      
       return NextResponse.json({ error: "Failed to start assistant processing" }, { status: 500 })
     }
 
