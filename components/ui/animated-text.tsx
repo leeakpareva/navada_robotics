@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import dynamic from "next/dynamic"
 
 interface AnimatedTextProps {
   text: string
@@ -8,7 +9,7 @@ interface AnimatedTextProps {
   delay?: number
 }
 
-export function AnimatedText({ text, className = "", delay = 0 }: AnimatedTextProps) {
+function AnimatedTextComponent({ text, className = "", delay = 0 }: AnimatedTextProps) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -29,3 +30,18 @@ export function AnimatedText({ text, className = "", delay = 0 }: AnimatedTextPr
     </span>
   )
 }
+
+// Fallback component for SSR
+function AnimatedTextFallback({ text, className = "" }: AnimatedTextProps) {
+  return (
+    <span className={`${className} text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400`}>
+      {text}
+    </span>
+  )
+}
+
+// Export with no SSR to prevent hydration issues
+export const AnimatedText = dynamic(() => Promise.resolve(AnimatedTextComponent), {
+  ssr: false,
+  loading: ({ text, className }: AnimatedTextProps) => <AnimatedTextFallback text={text!} className={className} />
+})

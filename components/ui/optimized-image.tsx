@@ -43,7 +43,7 @@ export function OptimizedImage({
         quality={quality}
         sizes={sizes || "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
         className={cn(
-          "duration-700 ease-in-out transition-all",
+          "duration-700 ease-in-out transition-all object-cover w-full h-full",
           isLoading ? "scale-110 blur-sm grayscale" : "scale-100 blur-0 grayscale-0"
         )}
         onLoad={() => setIsLoading(false)}
