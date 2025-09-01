@@ -278,14 +278,13 @@ export default function NavadaRoboticsApp() {
                 isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
               }`}
             >
-              <div className="w-full h-48 relative">
-                <OptimizedImage
-                  src="/AiCreative.png"
-                  alt="Artistic vision meets robotic precision"
-                  fill
-                  className="group-hover:scale-110 transition-transform duration-300"
-                />
-              </div>
+              <OptimizedImage
+                src="/AiCreative.png"
+                alt="Artistic vision meets robotic precision"
+                width={400}
+                height={192}
+                className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
+              />
               <div className="p-4">
                 <h4 className="text-purple-200 font-semibold mb-2 transition-colors duration-200 group-hover:text-white">
                   AI Creative Assistant
@@ -320,14 +319,13 @@ export default function NavadaRoboticsApp() {
                 isVisible ? "animate-in fade-in slide-in-from-bottom-8" : "opacity-0"
               }`}
             >
-              <div className="w-full h-48 relative">
-                <OptimizedImage
-                  src="/ManvsMachine.png"
-                  alt="Empowering the next generation of innovators"
-                  fill
-                  className="group-hover:scale-110 transition-transform duration-300"
-                />
-              </div>
+              <OptimizedImage
+                src="/ManvsMachine.png"
+                alt="Empowering the next generation of innovators"
+                width={400}
+                height={192}
+                className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
+              />
               <div className="p-4">
                 <h4 className="text-purple-200 font-semibold mb-2 transition-colors duration-200 group-hover:text-white">
                   Research Platform

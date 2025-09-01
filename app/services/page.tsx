@@ -148,15 +148,14 @@ export default function ServicesPage() {
                       playsInline
                     />
                   ) : (
-                    <div className="w-full h-48 relative">
-                      <OptimizedImage
-                        src={service.image || `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(service.title)}`}
-                        alt={service.title}
-                        fill
-                        quality={85}
-                        className="group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
+                    <OptimizedImage
+                      src={service.image || `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(service.title)}`}
+                      alt={service.title}
+                      width={400}
+                      height={192}
+                      quality={85}
+                      className="w-full h-48 group-hover:scale-105 transition-transform duration-300"
+                    />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
