@@ -24,7 +24,6 @@ export default function NavadaRoboticsApp() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2 group">
-              <Cog className="h-8 w-8 text-purple-400 transition-transform duration-300 group-hover:rotate-45" />
               <h1 className="text-2xl font-bold text-white">NAVADA</h1>
             </Link>
 
@@ -448,11 +447,11 @@ export default function NavadaRoboticsApp() {
       <footer className="bg-gray-900 py-8 px-4 border-t border-gray-800">
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center space-x-2 mb-4 group">
-            <Cog className="h-6 w-6 text-purple-400 transition-transform duration-500 group-hover:rotate-180" />
             <span className="text-xl font-bold text-white">NAVADA</span>
           </div>
           <p className="text-gray-300 mb-2">© 2024 NAVADA. All rights reserved.</p>
-          <p className="text-gray-400 text-sm">Navigating Artistic Vision with Advanced Digital Assistance</p>
+          <p className="text-gray-400 text-sm mb-2">Navigating Artistic Vision with Advanced Digital Assistance</p>
+          <p className="text-purple-400 text-sm">Designed & Developed by Lee Akpareva MBA, MA</p>
         </div>
       </footer>
 

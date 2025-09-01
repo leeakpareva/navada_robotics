@@ -16,7 +16,6 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
-              <Cog className="h-8 w-8 text-purple-400" />
               <h1 className="text-2xl font-bold text-white">NAVADA</h1>
             </Link>
 
@@ -41,6 +40,9 @@ export default function AboutPage() {
               <Link href="/about" className="text-purple-400 font-medium">
                 About
               </Link>
+              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
+                Agent Lee
+              </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
@@ -59,6 +61,9 @@ export default function AboutPage() {
                 </Link>
                 <Link href="/about" className="text-purple-400 font-medium">
                   About
+                </Link>
+                <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
+                  Agent Lee
                 </Link>
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
@@ -107,15 +112,21 @@ export default function AboutPage() {
                   <p className="text-xl font-medium text-white mb-2">Lee Akpareva MBA, MA</p>
                   <p className="text-purple-200 font-medium mb-3">Founder & CEO | Designer & Developer</p>
                   <p className="text-gray-200 text-sm mb-3">
-                    Lee Akpareva designed and developed this entire application, bringing together his passion for AI, robotics, 
-                    and full-stack development. With advanced degrees in business and academia, Lee combines deep technical 
-                    expertise in Next.js, TypeScript, and AI integration with strategic vision to make robotics education 
-                    accessible worldwide.
+                    I designed and developed this entire application, weaving together my passions for AI, robotics, 
+                    and full-stack development into a transformative digital experience. With advanced degrees in business 
+                    and academia, I combine deep technical expertise in Next.js, TypeScript, and AI integration with 
+                    strategic vision to democratize robotics education worldwide.
                   </p>
                   <p className="text-gray-200 text-sm mb-3">
-                    His expertise spans modern web development, OpenAI API integration, voice synthesis, and creating 
-                    intuitive user experiences. This project represents his commitment to bridging the gap between 
-                    cutting-edge technology and practical educational applications.
+                    My expertise spans the full spectrum of modern innovation - from crafting elegant code and integrating 
+                    OpenAI APIs to synthesizing voice experiences and designing intuitive user journeys. Beyond technology, 
+                    I'm a passionate Fashion Designer and Shoe Maker, finding inspiration in the intersection of form and function. 
+                    When I need to clear my mind and spark creativity, you'll find me roller blading through the streets of London.
+                  </p>
+                  <p className="text-gray-200 text-sm mb-3">
+                    This project embodies my commitment to breaking down barriers between cutting-edge technology and practical 
+                    education. I believe in making the complex accessible, the innovative approachable, and the future tangible 
+                    for the next generation of creators and innovators.
                   </p>
                   <a 
                     href="https://www.linkedin.com/feed/" 

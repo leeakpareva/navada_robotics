@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { BeamsBackground } from "@/components/ui/beams-background"
 import {
   Menu,
   X,
@@ -361,7 +362,6 @@ export default function AgentLeePage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
-              <Cog className="h-8 w-8 text-purple-400" />
               <h1 className="text-2xl font-bold text-white">NAVADA</h1>
             </Link>
 
@@ -421,16 +421,20 @@ export default function AgentLeePage() {
       </header>
 
       {/* Chat Interface */}
-      <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full px-4 py-6">
-        {/* Agent Lee Header */}
-        <div className="text-center mb-6">
-          <div className="flex items-center justify-center mb-4">
-            <div className="bg-purple-600 p-4 rounded-full">
-              <Bot className="h-8 w-8 text-white" />
+      <BeamsBackground 
+        intensity="subtle" 
+        className="flex-1 flex flex-col"
+      >
+        <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full px-4 py-6">
+          {/* Agent Lee Header */}
+          <div className="text-center mb-6">
+            <div className="flex items-center justify-center mb-4">
+              <div className="bg-purple-600/20 backdrop-blur-sm p-4 rounded-full border border-purple-400/50">
+                <Bot className="h-8 w-8 text-purple-300" />
+              </div>
             </div>
-          </div>
-          <h2 className="text-3xl font-bold text-purple-300 mb-2">Agent Lee</h2>
-          <p className="text-gray-300">Your AI assistant for Robotics, Deep Learning & Computer Vision</p>
+            <h2 className="text-3xl font-bold text-white mb-2">Agent Lee</h2>
+            <p className="text-gray-100">Your AI assistant for Robotics, Deep Learning & Computer Vision</p>
           {speechSupported && (
             <div className="flex items-center justify-center mt-2 space-x-2">
               <p className="text-sm text-purple-400">🎤 Voice enabled</p>
@@ -461,7 +465,7 @@ export default function AgentLeePage() {
         </div>
 
         {/* Messages */}
-        <Card className="flex-1 bg-gray-900 border-gray-700 mb-4">
+        <Card className="flex-1 bg-black/30 backdrop-blur-sm border-white/20 mb-4 hover:bg-black/40 transition-all duration-300">
           <CardContent className="p-4 h-96 overflow-y-auto">
             <div className="space-y-4">
               {messages.map((message) => (
@@ -536,7 +540,7 @@ export default function AgentLeePage() {
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask me about robotics, deep learning, or computer vision..."
-            className="flex-1 bg-gray-800 border-gray-600 text-white placeholder-gray-400"
+            className="flex-1 bg-black/30 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
           />
           {speechSupported && (
             <Button
@@ -571,7 +575,8 @@ export default function AgentLeePage() {
             <Send className="h-4 w-4" />
           </Button>
         </div>
-      </div>
+        </div>
+      </BeamsBackground>
 
       {/* Bottom Navigation for Mobile */}
       <nav className="bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">

@@ -65,7 +65,6 @@ export default function SolutionsPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
-              <Cog className="h-8 w-8 text-purple-400" />
               <h1 className="text-2xl font-bold text-white">NAVADA</h1>
             </Link>
 
@@ -90,6 +89,9 @@ export default function SolutionsPage() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
+              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
+                Agent Lee
+              </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
@@ -108,6 +110,9 @@ export default function SolutionsPage() {
                 </Link>
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
+                </Link>
+                <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
+                  Agent Lee
                 </Link>
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
