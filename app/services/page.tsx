@@ -17,8 +17,7 @@ export default function ServicesPage() {
       title: "Raspberry Pi Robot Development",
       description:
         "Custom robot design and development using Raspberry Pi platforms, from concept to prototype to production-ready systems.",
-      image: "/MyServiceRaspberryPi.mp4",
-      isVideo: true,
+      image: "/Robcop.png",
     },
     {
       title: "Research Consultation",
@@ -36,8 +35,7 @@ export default function ServicesPage() {
       title: "Python Programming for Robotics",
       description:
         "Comprehensive Python training focused on robotics applications, including OpenCV for computer vision, TensorFlow for AI, and GPIO programming for hardware control. From beginner to advanced levels.",
-      image: "/Python.mp4",
-      isVideo: true,
+      image: "/Pythonsnake.png",
     },
     {
       title: "Prototype Development",

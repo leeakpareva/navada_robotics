@@ -48,8 +48,7 @@ export default function SolutionsPage() {
         "Comprehensive robotics education kits designed for universities and research institutions. Includes curriculum, hardware kits, and software tools for hands-on learning in robotics and AI.",
       icon: <Zap className="h-8 w-8" />,
       features: ["STEM Education", "Research Tools", "Prototyping"],
-      image: "/EducationinRobotics.mp4",
-      isVideo: true,
+      image: "/Educa.png",
     },
     {
       title: "IoT Integration",
