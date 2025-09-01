@@ -30,31 +30,8 @@ export function OptimizedImage({
   placeholder = "blur",
 }: OptimizedImageProps) {
   const [isLoading, setIsLoading] = useState(true)
-  const [isInView, setIsInView] = useState(priority)
+  const [isInView, setIsInView] = useState(true) // Always load images immediately
   const imgRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (priority) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-          observer.disconnect()
-        }
-      },
-      { 
-        threshold: 0.1,
-        rootMargin: '50px' // Start loading 50px before entering viewport
-      }
-    )
-
-    if (imgRef.current) {
-      observer.observe(imgRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [priority])
 
   // Generate blur data URL for placeholder
   const shimmer = (w: number, h: number) => `
@@ -100,6 +77,7 @@ export function OptimizedImage({
             isLoading ? "scale-110 blur-sm grayscale" : "scale-100 blur-0 grayscale-0"
           )}
           onLoad={() => setIsLoading(false)}
+          onError={(e) => console.error("Image failed to load:", src, e)}
           priority={priority}
           placeholder={placeholder}
           blurDataURL={placeholder === "blur" ? blurDataURL : undefined}
@@ -116,6 +94,7 @@ export function OptimizedImage({
             isLoading ? "scale-110 blur-sm grayscale" : "scale-100 blur-0 grayscale-0"
           )}
           onLoad={() => setIsLoading(false)}
+          onError={(e) => console.error("Image failed to load:", src, e)}
           priority={priority}
           placeholder={placeholder}
           blurDataURL={placeholder === "blur" ? blurDataURL : undefined}
