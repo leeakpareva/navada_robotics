@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
       input: text,
       speed: 1.0,
       response_format: "mp3",
-      voice_prompt_id: VOICE_PROMPT_ID,
     })
 
     const buffer = Buffer.from(await mp3.arrayBuffer())
