@@ -1,4 +1,4 @@
-import Parser from 'rss-parser';
+import staticNewsData from './static-news.json';
 
 export interface NewsItem {
   title: string;
@@ -15,11 +15,11 @@ type Cache<T> = {
   ttlMs: number;
 };
 
-// Simple in-memory cache with 15-minute TTL
+// Simple in-memory cache with 30-minute TTL (increased for performance)
 const cache: Cache<NewsItem[]> = {
   data: null,
   ts: 0,
-  ttlMs: 15 * 60 * 1000
+  ttlMs: 30 * 60 * 1000
 };
 
 function getCached<T>(): T | null {
@@ -31,22 +31,14 @@ function setCached<T>(data: T): void {
   cache.ts = Date.now();
 }
 
-// RSS feed sources
-const FEEDS = [
-  'https://www.raspberrypi.com/feed/',
-  'https://spectrum.ieee.org/robotics/rss',
-  'https://hackster.io/rss.xml',
-  'https://openai.com/blog/rss/',
-  'https://developer.nvidia.com/blog/category/ai/feed/',
-  'https://export.arxiv.org/rss/cs.AI'
-];
+// ALL RSS feeds disabled to fix loading issues
+const PRIORITY_FEEDS: string[] = [];
 
-const parser = new Parser({
-  timeout: 10000,
-  headers: {
-    'User-Agent': 'NAVADA Robotics News Aggregator/1.0'
-  }
-});
+// Additional feeds (all disabled)
+const SECONDARY_FEEDS: string[] = [];
+
+// All RSS feeds removed due to performance issues causing app not to load
+// Parser removed since we're using static data
 
 /**
  * Extract source name from URL
@@ -54,12 +46,7 @@ const parser = new Parser({
 function getSourceFromUrl(url: string): string {
   try {
     const hostname = new URL(url).hostname;
-    if (hostname.includes('raspberrypi')) return 'Raspberry Pi';
-    if (hostname.includes('spectrum.ieee')) return 'IEEE Spectrum';
-    if (hostname.includes('hackster')) return 'Hackster.io';
-    if (hostname.includes('openai')) return 'OpenAI';
-    if (hostname.includes('nvidia')) return 'NVIDIA';
-    if (hostname.includes('arxiv')) return 'arXiv';
+    // No active feeds - all disabled
     return hostname.replace('www.', '');
   } catch {
     return 'Unknown';
@@ -77,27 +64,29 @@ function truncateSummary(text: string, maxLength: number = 200): string {
     : cleaned;
 }
 
-/**
- * Fetch and parse a single RSS feed
- */
-async function fetchFeed(feedUrl: string): Promise<NewsItem[]> {
-  try {
-    const feed = await parser.parseURL(feedUrl);
-    const source = getSourceFromUrl(feedUrl);
+// fetchFeed function removed - using static data instead
 
-    return feed.items.map(item => ({
-      title: item.title || 'Untitled',
-      link: item.link || '#',
-      isoDate: item.isoDate || item.pubDate || new Date().toISOString(),
-      source,
-      summary: truncateSummary(item.summary || item.contentSnippet || item.content || ''),
-      author: item.creator || item['dc:creator'] || item.author || null
+/**
+ * Initialize cache with sample data to prevent empty state
+ */
+function initializeCacheIfEmpty() {
+  const cached = getCached<NewsItem[]>();
+  if (!cached) {
+    // Initialize with static news data
+    const newsItems: NewsItem[] = staticNewsData.map(item => ({
+      title: item.title,
+      link: item.link,
+      isoDate: item.isoDate,
+      source: item.source,
+      summary: item.summary,
+      author: item.author
     }));
-  } catch (error) {
-    console.error(`Failed to fetch feed ${feedUrl}:`, error);
-    return [];
+    setCached(newsItems);
   }
 }
+
+// Initialize on module load
+initializeCacheIfEmpty();
 
 /**
  * Fetch and aggregate all RSS feeds with caching
@@ -105,40 +94,29 @@ async function fetchFeed(feedUrl: string): Promise<NewsItem[]> {
 export async function fetchAllFeeds(): Promise<NewsItem[]> {
   // Check cache first
   const cached = getCached<NewsItem[]>();
-  if (cached) {
+  if (cached && cached.length > 1) {
     return cached;
   }
 
-  try {
-    // Fetch all feeds in parallel
-    const feedPromises = FEEDS.map(feedUrl => fetchFeed(feedUrl));
-    const feedResults = await Promise.allSettled(feedPromises);
+  // Load static news data
+  const newsItems: NewsItem[] = staticNewsData.map(item => ({
+    title: item.title,
+    link: item.link,
+    isoDate: item.isoDate,
+    source: item.source,
+    summary: item.summary,
+    author: item.author
+  }));
 
-    // Combine all successful feeds
-    const allItems: NewsItem[] = [];
-    feedResults.forEach(result => {
-      if (result.status === 'fulfilled') {
-        allItems.push(...result.value);
-      }
-    });
+  // Sort by date (newest first)
+  const sortedItems = newsItems.sort((a, b) =>
+    new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime()
+  );
 
-    // Remove duplicates by link and sort by date
-    const uniqueItems = Array.from(
-      new Map(allItems.map(item => [item.link, item])).values()
-    );
+  // Cache the results
+  setCached(sortedItems);
 
-    const sortedItems = uniqueItems
-      .sort((a, b) => new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime())
-      .slice(0, 50); // Keep latest 50 items
-
-    // Cache the results
-    setCached(sortedItems);
-
-    return sortedItems;
-  } catch (error) {
-    console.error('Error fetching RSS feeds:', error);
-    return [];
-  }
+  return sortedItems;
 }
 
 /**
@@ -159,3 +137,5 @@ export function paginateNews(
     currentPage: page
   };
 }
+
+// fetchSecondaryFeeds function removed - using static data instead

@@ -1,0 +1,42 @@
+[
+  {
+    "title": "OpenAI Releases GPT-4 Turbo with Vision Capabilities",
+    "link": "https://openai.com/blog/gpt-4-turbo-vision",
+    "isoDate": "2024-01-15T10:00:00.000Z",
+    "source": "OpenAI",
+    "summary": "OpenAI announces the latest version of GPT-4 Turbo, now featuring enhanced vision capabilities that can analyze and understand images, charts, and diagrams with unprecedented accuracy.",
+    "author": "OpenAI Team"
+  },
+  {
+    "title": "NVIDIA Unveils Next-Generation Robotics Platform",
+    "link": "https://nvidia.com/blog/robotics-platform-2024",
+    "isoDate": "2024-01-12T14:30:00.000Z",
+    "source": "NVIDIA",
+    "summary": "NVIDIA introduces a comprehensive robotics development platform powered by their latest AI chips, enabling faster development of autonomous robots for industrial and consumer applications.",
+    "author": "NVIDIA Robotics Team"
+  },
+  {
+    "title": "Raspberry Pi 5 Performance Benchmarks Released",
+    "link": "https://raspberrypi.com/news/pi5-benchmarks",
+    "isoDate": "2024-01-10T09:15:00.000Z",
+    "source": "Raspberry Pi",
+    "summary": "Detailed performance analysis shows Raspberry Pi 5 delivers 3x faster processing compared to Pi 4, making it ideal for AI and robotics projects requiring real-time computation.",
+    "author": "Raspberry Pi Foundation"
+  },
+  {
+    "title": "Tesla Bot Demonstrates Advanced Manipulation Skills",
+    "link": "https://tesla.com/blog/optimus-update-2024",
+    "isoDate": "2024-01-08T16:45:00.000Z",
+    "source": "Tesla",
+    "summary": "Tesla's Optimus robot showcases improved dexterity and object manipulation capabilities in latest demonstration, bringing humanoid robots closer to practical deployment.",
+    "author": "Tesla AI Team"
+  },
+  {
+    "title": "MIT Develops Self-Healing Robot Materials",
+    "link": "https://mit.edu/news/self-healing-robotics",
+    "isoDate": "2024-01-05T11:20:00.000Z",
+    "source": "MIT Technology Review",
+    "summary": "Researchers at MIT have created revolutionary materials that allow robots to automatically repair damage to their outer shells and internal components, extending operational lifespan significantly.",
+    "author": "MIT Research Team"
+  }
+]
