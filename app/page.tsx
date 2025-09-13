@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Brain, Cpu, Sparkles, Folder } from "lucide-react"
+import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Brain, Cpu, Sparkles, Folder, Newspaper } from "lucide-react"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/ui/optimized-image"
 
@@ -49,6 +49,10 @@ export default function NavadaRoboticsApp() {
               <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
                 Services
               </Link>
+              <Link href="/news" className="relative text-white hover:text-cyan-400 transition-all duration-200 font-semibold">
+                <span className="relative z-10">News</span>
+                <span className="absolute -top-1 -right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+              </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
               </Link>
@@ -72,6 +76,10 @@ export default function NavadaRoboticsApp() {
               </Link>
               <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
                 Services
+              </Link>
+              <Link href="/news" className="relative text-white hover:text-cyan-400 transition-all duration-200 font-semibold">
+                <span className="relative z-10">News</span>
+                <span className="absolute -top-1 -right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
@@ -334,23 +342,28 @@ export default function NavadaRoboticsApp() {
       {/* Bottom Navigation for Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">
         <div className="flex justify-around py-2">
-          <Link href="/solutions" className="flex flex-col items-center py-2 px-2 text-xs transition-all duration-200">
+          <Link href="/solutions" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Microchip className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
           </Link>
-          <Link href="/services" className="flex flex-col items-center py-2 px-2 text-xs transition-all duration-200">
+          <Link href="/services" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Wrench className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Services</span>
           </Link>
-          <Link href="/agent-lee" className="flex flex-col items-center py-2 px-2 text-xs transition-all duration-200">
+          <Link href="/news" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200 relative">
+            <Newspaper className="h-5 w-5 text-cyan-400 mb-1 animate-pulse" />
+            <span className="text-cyan-400 font-semibold">News</span>
+            <span className="absolute -top-0 -right-0 w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
+          </Link>
+          <Link href="/agent-lee" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Brain className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Agent Lee</span>
           </Link>
-          <Link href="/about" className="flex flex-col items-center py-2 px-2 text-xs transition-all duration-200">
+          <Link href="/about" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Shield className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">About</span>
           </Link>
-          <Link href="/contact" className="flex flex-col items-center py-2 px-2 text-xs transition-all duration-200">
+          <Link href="/contact" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Phone className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Contact</span>
           </Link>

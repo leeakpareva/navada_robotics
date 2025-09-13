@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import OpenAI from "openai"
+import { trackChatSession, updateChatSession } from "@/lib/analytics"
 
 const API_KEY = process.env.OPENAI_API_KEY
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID
@@ -106,11 +107,23 @@ try {
 }
 
 export async function POST(request: NextRequest) {
+  const requestStartTime = Date.now()
+  let sessionId: string | null = null
+
   try {
     console.log("[v0] Agent Lee API called")
 
     const { message, threadId } = await request.json()
     console.log("[v0] Received message:", message, "threadId:", threadId)
+
+    // Track new chat session
+    sessionId = trackChatSession({
+      threadId,
+      startTime: new Date(),
+      messageCount: 1,
+      responseTime: 0,
+      status: 'active'
+    })
 
     if (!message || typeof message !== "string") {
       console.log("[v0] Invalid message format")
@@ -252,10 +265,21 @@ export async function POST(request: NextRequest) {
           const response = rawResponse.replace(/\*\*(.*?)\*\*/g, '$1')
           console.log("[v0] Generated response:", response.substring(0, 100) + "...")
 
+          // Update session with completion data
+          const responseTime = Date.now() - requestStartTime
+          if (sessionId) {
+            updateChatSession(sessionId, {
+              endTime: new Date(),
+              responseTime,
+              status: 'completed'
+            })
+          }
+
           return NextResponse.json({
             message: response,
             threadId: currentThreadId,
             timestamp: new Date().toISOString(),
+            responseTime
           })
         } else {
           console.log("[v0] Unexpected message format:", lastMessage)
@@ -285,6 +309,16 @@ export async function POST(request: NextRequest) {
       console.error("[v0] Error message:", error.message)
       console.error("[v0] Error stack:", error.stack)
     }
+
+    // Update session with error status
+    if (sessionId) {
+      updateChatSession(sessionId, {
+        endTime: new Date(),
+        responseTime: Date.now() - requestStartTime,
+        status: 'error'
+      })
+    }
+
     return NextResponse.json(
       {
         error: "Internal server error",
