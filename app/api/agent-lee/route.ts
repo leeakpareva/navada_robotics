@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
       // Try both method signatures for compatibility
       try {
         // New SDK signature: retrieve(threadId, runId)
-        runStatus = await openai.beta.threads.runs.retrieve(currentThreadId, run.id)
+        runStatus = await openai.beta.threads.runs.retrieve(run.id, currentThreadId)
       } catch (err) {
         // Fallback to alternative signature: retrieve(runId, { thread_id })
         runStatus = await openai.beta.threads.runs.retrieve(run.id as any, { 
@@ -218,7 +218,7 @@ export async function POST(request: NextRequest) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         try {
           // New SDK signature: retrieve(threadId, runId)
-          runStatus = await openai.beta.threads.runs.retrieve(currentThreadId, run.id)
+          runStatus = await openai.beta.threads.runs.retrieve(run.id, currentThreadId)
         } catch (err) {
           // Fallback to alternative signature: retrieve(runId, { thread_id })
           runStatus = await openai.beta.threads.runs.retrieve(run.id as any, { 

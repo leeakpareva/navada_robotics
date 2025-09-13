@@ -57,7 +57,7 @@ export default function AgentLeePage() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
       if (SpeechRecognition && window.speechSynthesis) {
         setSpeechSupported(true)
         recognitionRef.current = new SpeechRecognition()

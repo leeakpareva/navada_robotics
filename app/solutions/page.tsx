@@ -157,28 +157,17 @@ export default function SolutionsPage() {
                 className="group hover:shadow-lg transition-all duration-300 bg-black/30 border-white/20 hover:border-purple-400/50 backdrop-blur-sm hover:bg-black/40"
               >
                 <div className="relative overflow-hidden">
-                  {solution.isVideo ? (
-                    <OptimizedVideo
-                      src={solution.image}
-                      className="w-full h-48"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                    />
-                  ) : (
-                    <OptimizedImage
-                      src={
-                        solution.image ||
-                        `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(solution.title)}`
-                      }
-                      alt={solution.title}
-                      width={400}
-                      height={192}
-                      quality={85}
-                      className="w-full h-48 group-hover:scale-105 transition-transform duration-300"
-                    />
-                  )}
+                  <OptimizedImage
+                    src={
+                      solution.image ||
+                      `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(solution.title)}`
+                    }
+                    alt={solution.title}
+                    width={400}
+                    height={192}
+                    quality={85}
+                    className="w-full h-48 group-hover:scale-105 transition-transform duration-300"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 </div>
 

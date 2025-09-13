@@ -99,7 +99,7 @@ function NeuralPaths() {
     id: `node-${i}`
   }))
 
-  const connections = []
+  const connections: Array<{id: string, d: string, delay: number}> = []
   nodes.forEach((node, i) => {
     const nearbyNodes = nodes.filter((other, j) => {
       if (i === j) return false
