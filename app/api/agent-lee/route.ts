@@ -4,6 +4,7 @@ import OpenAI from "openai"
 const API_KEY = process.env.OPENAI_API_KEY
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID
 const VOICE_PROMPT_ID = process.env.VOICE_PROMPT_ID
+const VECTOR_STORE_ID = process.env.VECTOR_STORE_ID
 
 console.log("[v0] Environment debug:")
 console.log("[v0] OPENAI_API_KEY exists:", !!API_KEY)
@@ -12,6 +13,8 @@ console.log("[v0] OPENAI_API_KEY length:", API_KEY ? API_KEY.length : 0)
 console.log("[v0] OPENAI_ASSISTANT_ID exists:", !!ASSISTANT_ID)
 console.log("[v0] OPENAI_ASSISTANT_ID value:", ASSISTANT_ID || "Not set")
 console.log("[v0] VOICE_PROMPT_ID exists:", !!VOICE_PROMPT_ID)
+console.log("[v0] VECTOR_STORE_ID exists:", !!VECTOR_STORE_ID)
+console.log("[v0] VECTOR_STORE_ID value:", VECTOR_STORE_ID || "Not set")
 console.log(
   "[v0] All env vars:",
   Object.keys(process.env).filter((key) => key.includes("OPENAI")),
