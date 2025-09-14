@@ -10,7 +10,15 @@
       "Bash(git push:*)",
       "Bash(npm run dev:*)",
       "Bash(npm run lint)",
-      "Bash(npx next build:*)"
+      "Bash(npx next build:*)",
+      "Bash(taskkill:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(npm run test:run:*)",
+      "Bash(tasklist)",
+      "Bash(TASKKILL /F /IM node.exe)",
+      "Bash(set)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []
