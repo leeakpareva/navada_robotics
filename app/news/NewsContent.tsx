@@ -102,14 +102,25 @@ export function NewsContent({ initialData, currentPage }: NewsContentProps) {
 
   if (initialData.items.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="text-gray-400 mb-4">
-          <Search className="w-16 h-16 mx-auto mb-4 opacity-50" />
+      <div className="text-center py-16">
+        <div className="text-gray-400 mb-6">
+          <div className="relative">
+            <Search className="w-20 h-20 mx-auto mb-6 opacity-20" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 border-2 border-gray-600 border-t-gray-400 rounded-full animate-spin"></div>
+            </div>
+          </div>
         </div>
-        <h3 className="text-xl font-semibold mb-2">No news available</h3>
-        <p className="text-gray-400">
-          We&apos;re having trouble fetching the latest news. Please try again later.
+        <h3 className="text-2xl font-semibold mb-3 text-gray-200">News Feed Unavailable</h3>
+        <p className="text-gray-400 max-w-md mx-auto mb-6">
+          We&apos;re having trouble fetching the latest news from our sources. Our team is working to resolve this issue.
         </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-medium transition-colors"
+        >
+          Refresh Page
+        </button>
       </div>
     );
   }
