@@ -18,7 +18,9 @@
       "Bash(tasklist)",
       "Bash(TASKKILL /F /IM node.exe)",
       "Bash(set)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)"
     ],
     "deny": [],
     "ask": []
