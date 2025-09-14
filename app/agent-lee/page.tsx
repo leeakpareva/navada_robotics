@@ -31,6 +31,7 @@ interface Message {
   text: string
   sender: "user" | "agent"
   timestamp: Date
+  image?: string // Base64 data URL for images
 }
 
 export default function AgentLeePage() {
@@ -50,6 +51,7 @@ export default function AgentLeePage() {
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
+  const [lastGeneratedImage, setLastGeneratedImage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const recognitionRef = useRef<any>(null)
   const currentAudioRef = useRef<HTMLAudioElement | null>(null)
@@ -288,6 +290,7 @@ export default function AgentLeePage() {
         body: JSON.stringify({
           message: currentMessage,
           threadId: threadId,
+          lastImage: lastGeneratedImage, // Include last generated image for context
         }),
       })
 
@@ -301,6 +304,11 @@ export default function AgentLeePage() {
 
       const data = await response.json()
       console.log("[v0] Agent Lee response:", data)
+      console.log("[v0] Response has image:", !!data.image)
+      if (data.image) {
+        console.log("[v0] Image data length:", data.image.length)
+        console.log("[v0] Image data preview:", data.image.substring(0, 50) + "...")
+      }
 
       if (data.threadId && !threadId) {
         setThreadId(data.threadId)
@@ -311,6 +319,13 @@ export default function AgentLeePage() {
         text: data.message,
         sender: "agent",
         timestamp: new Date(),
+        image: data.image, // Include image data if present
+      }
+
+      // Update the last generated image if a new one was created
+      if (data.image) {
+        console.log("[v0] Updating last generated image for future analysis")
+        setLastGeneratedImage(data.image)
       }
 
       setMessages((prev) => [...prev, agentResponse])
@@ -495,6 +510,18 @@ export default function AgentLeePage() {
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                      {message.image && (
+                        <div className="mt-3">
+                          <img
+                            src={message.image}
+                            alt="Generated image"
+                            className="max-w-full h-auto rounded-lg border border-gray-600"
+                            style={{ maxWidth: '300px', maxHeight: '300px' }}
+                            onLoad={() => console.log("[v0] Image loaded successfully")}
+                            onError={(e) => console.error("[v0] Image failed to load:", e)}
+                          />
+                        </div>
+                      )}
                       <p className="text-xs opacity-70 mt-1">
                         {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                       </p>
