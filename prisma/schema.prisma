@@ -237,3 +237,23 @@ model KnowledgeBase {
   @@index([category])
   @@index([isActive])
 }
+
+// MCP Server Usage Tracking
+model MCPUsage {
+  id              String      @id @default(cuid())
+  sessionId       String?
+  threadId        String?
+  serverId        String      // brave-search, file-system, github, etc.
+  toolName        String      // web_search, news_search, read_file, etc.
+  success         Boolean
+  responseTime    Int         // milliseconds
+  inputData       String?     // JSON input parameters
+  outputData      String?     // JSON output data (truncated)
+  errorDetails    String?
+  timestamp       DateTime    @default(now())
+
+  @@map("mcp_usage")
+  @@index([serverId])
+  @@index([timestamp])
+  @@index([sessionId])
+}

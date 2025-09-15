@@ -28,7 +28,8 @@
       "Bash(pkill:*)",
       "Bash(cmd //c:*)",
       "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"yes\" npx prisma migrate reset --force)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"yes go ahead, although the database should be empty and should not affect Agent Lee as Agent Lee is using Api calls and only using the datase to store data but this should not affect performance the database should be empty but set up and ready\" npx prisma migrate reset --force)"
     ],
     "deny": [],
     "ask": []

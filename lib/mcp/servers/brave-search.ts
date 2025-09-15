@@ -1,4 +1,4 @@
-import { mcpServerManager } from '../server-manager'
+import { DatabaseAnalytics } from '../../database-analytics'
 
 export class BraveSearchMCP {
   private apiKey: string | undefined
@@ -7,7 +7,7 @@ export class BraveSearchMCP {
     this.apiKey = process.env.BRAVE_SEARCH_API_KEY
   }
 
-  async webSearch(query: string): Promise<any> {
+  async webSearch(query: string, sessionId?: string, threadId?: string): Promise<any> {
     const startTime = Date.now()
 
     try {
@@ -29,13 +29,15 @@ export class BraveSearchMCP {
       const data = await response.json()
       const responseTime = Date.now() - startTime
 
-      await mcpServerManager.logCall({
+      await DatabaseAnalytics.trackMCPUsage({
+        sessionId,
+        threadId,
         serverId: 'brave-search',
         toolName: 'web_search',
         success: true,
         responseTime,
-        input: { query },
-        output: data
+        inputData: { query },
+        outputData: { resultCount: data.web?.results?.length || 0 }
       })
 
       return {
@@ -45,20 +47,22 @@ export class BraveSearchMCP {
     } catch (error) {
       const responseTime = Date.now() - startTime
 
-      await mcpServerManager.logCall({
+      await DatabaseAnalytics.trackMCPUsage({
+        sessionId,
+        threadId,
         serverId: 'brave-search',
         toolName: 'web_search',
         success: false,
         responseTime,
-        input: { query },
-        error: error instanceof Error ? error.message : 'Unknown error'
+        inputData: { query },
+        errorDetails: error instanceof Error ? error.message : 'Unknown error'
       })
 
       throw error
     }
   }
 
-  async newsSearch(query: string): Promise<any> {
+  async newsSearch(query: string, sessionId?: string, threadId?: string): Promise<any> {
     const startTime = Date.now()
 
     try {
@@ -80,13 +84,15 @@ export class BraveSearchMCP {
       const data = await response.json()
       const responseTime = Date.now() - startTime
 
-      await mcpServerManager.logCall({
+      await DatabaseAnalytics.trackMCPUsage({
+        sessionId,
+        threadId,
         serverId: 'brave-search',
         toolName: 'news_search',
         success: true,
         responseTime,
-        input: { query },
-        output: data
+        inputData: { query },
+        outputData: { resultCount: data.results?.length || 0 }
       })
 
       return {
@@ -96,13 +102,15 @@ export class BraveSearchMCP {
     } catch (error) {
       const responseTime = Date.now() - startTime
 
-      await mcpServerManager.logCall({
+      await DatabaseAnalytics.trackMCPUsage({
+        sessionId,
+        threadId,
         serverId: 'brave-search',
         toolName: 'news_search',
         success: false,
         responseTime,
-        input: { query },
-        error: error instanceof Error ? error.message : 'Unknown error'
+        inputData: { query },
+        errorDetails: error instanceof Error ? error.message : 'Unknown error'
       })
 
       throw error

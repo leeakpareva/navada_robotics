@@ -61,6 +61,18 @@ export interface ImageGenerationData {
   errorDetails?: string
 }
 
+export interface MCPUsageData {
+  sessionId?: string
+  threadId?: string
+  serverId: string
+  toolName: string
+  success: boolean
+  responseTime: number
+  inputData?: any
+  outputData?: any
+  errorDetails?: string
+}
+
 // Database-backed analytics functions
 export class DatabaseAnalytics {
   // Chat Session Management
@@ -179,6 +191,28 @@ export class DatabaseAnalytics {
     }
   }
 
+  // MCP Server Usage Tracking
+  static async trackMCPUsage(data: MCPUsageData) {
+    try {
+      return await prisma.mCPUsage.create({
+        data: {
+          sessionId: data.sessionId,
+          threadId: data.threadId,
+          serverId: data.serverId,
+          toolName: data.toolName,
+          success: data.success,
+          responseTime: data.responseTime,
+          inputData: data.inputData ? JSON.stringify(data.inputData) : undefined,
+          outputData: data.outputData ? JSON.stringify(data.outputData) : undefined,
+          errorDetails: data.errorDetails
+        }
+      })
+    } catch (error) {
+      console.error('[Database Analytics] Error tracking MCP usage:', error)
+      throw error
+    }
+  }
+
   // Code Generation Tracking
   static async trackCodeGeneration(data: CodeGenerationData) {
     try {
@@ -243,6 +277,11 @@ export class DatabaseAnalytics {
         where: { timestamp: { gte: since } }
       })
 
+      // Get MCP usage
+      const mcpUsage = await prisma.mCPUsage.findMany({
+        where: { timestamp: { gte: since } }
+      })
+
       // Calculate metrics
       const totalSessions = chatSessions.length
       const activeSessions = chatSessions.filter(s => s.status === 'active').length
@@ -296,6 +335,18 @@ export class DatabaseAnalytics {
           filesCreated: codeGenerations.reduce((acc, c) => acc + c.filesCreated, 0),
           hourlyData: this.generateHourlyData(codeGenerations.map(c => c.timestamp), hours),
           topInstructions: this.getTopInstructions(codeGenerations.map(c => c.instruction))
+        },
+        mcpUsage: {
+          totalCalls: mcpUsage.length,
+          successRate: mcpUsage.length > 0
+            ? Math.round((mcpUsage.filter(m => m.success).length / mcpUsage.length) * 100)
+            : 0,
+          avgResponseTime: mcpUsage.length > 0
+            ? Math.round(mcpUsage.reduce((acc, m) => acc + m.responseTime, 0) / mcpUsage.length)
+            : 0,
+          hourlyData: this.generateHourlyData(mcpUsage.map(m => m.timestamp), hours),
+          serverBreakdown: this.getMCPServerBreakdown(mcpUsage),
+          topTools: this.getTopMCPTools(mcpUsage)
         }
       }
     } catch (error) {
@@ -374,6 +425,46 @@ export class DatabaseAnalytics {
       .sort(([,a], [,b]) => b - a)
       .slice(0, 5)
       .map(([instruction, count]) => ({ instruction, count }))
+  }
+
+  private static getMCPServerBreakdown(mcpUsage: any[]) {
+    const serverCounts: { [key: string]: { total: number, success: number } } = {}
+
+    mcpUsage.forEach(usage => {
+      if (!serverCounts[usage.serverId]) {
+        serverCounts[usage.serverId] = { total: 0, success: 0 }
+      }
+      serverCounts[usage.serverId].total++
+      if (usage.success) {
+        serverCounts[usage.serverId].success++
+      }
+    })
+
+    return Object.entries(serverCounts)
+      .sort(([,a], [,b]) => b.total - a.total)
+      .slice(0, 10)
+      .map(([server, counts]) => ({
+        server,
+        calls: counts.total,
+        successRate: counts.total > 0 ? Math.round((counts.success / counts.total) * 100) : 0
+      }))
+  }
+
+  private static getTopMCPTools(mcpUsage: any[]) {
+    const toolCounts: { [key: string]: number } = {}
+
+    mcpUsage.forEach(usage => {
+      const toolKey = `${usage.serverId}:${usage.toolName}`
+      toolCounts[toolKey] = (toolCounts[toolKey] || 0) + 1
+    })
+
+    return Object.entries(toolCounts)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 10)
+      .map(([tool, count]) => {
+        const [server, toolName] = tool.split(':')
+        return { server, tool: toolName, count }
+      })
   }
 
   // Session cleanup

@@ -58,6 +58,14 @@ interface AnalyticsData {
     hourlyData: { time: string; value: number }[];
     topInstructions: { instruction: string; count: number }[];
   };
+  mcpUsage: {
+    totalCalls: number;
+    successRate: number;
+    avgResponseTime: number;
+    hourlyData: { time: string; value: number }[];
+    serverBreakdown: { server: string; calls: number; successRate: number }[];
+    topTools: { server: string; tool: string; count: number }[];
+  };
 }
 
 interface MCPServerStatus {
@@ -681,6 +689,122 @@ export default function AIAnalyticsPage() {
                                 </span>
                               </div>
                               <span className="text-indigo-300 font-medium">{instruction.count}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* MCP Usage Analytics */}
+            <Card className="bg-black/30 border-white/20 hover:border-green-400/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-green-500/20 lg:col-span-3">
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-gradient-to-br from-green-500/30 to-teal-500/30 rounded-lg animate-pulse">
+                    <Server className="h-6 w-6 text-green-300" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-white">MCP Usage Analytics</CardTitle>
+                    <CardDescription className="text-gray-300">Model Context Protocol server usage and performance</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="h-48 flex items-center justify-center">
+                    <div className="text-gray-400">Loading MCP usage data...</div>
+                  </div>
+                ) : error ? (
+                  <div className="h-48 flex items-center justify-center">
+                    <div className="text-red-400">Error loading data</div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* MCP Usage Chart */}
+                    <div className="md:col-span-2">
+                      <h4 className="text-sm font-medium text-gray-300 mb-4">Hourly MCP Calls (24h)</h4>
+                      <div className="h-40 flex items-end space-x-1">
+                        {(analyticsData?.mcpUsage.hourlyData || []).map((data, i) => {
+                          const maxValue = Math.max(...(analyticsData?.mcpUsage.hourlyData || []).map(d => d.value))
+                          const height = maxValue > 0 ? (data.value / maxValue) * 100 : 0
+                          return (
+                            <div
+                              key={i}
+                              className="bg-gradient-to-t from-green-600 via-teal-500 to-cyan-400 rounded-t flex-1 transition-all duration-300 hover:from-green-500 hover:to-cyan-300 hover:scale-105"
+                              style={{
+                                height: `${Math.max(height, 5)}%`,
+                                animationDelay: `${i * 50}ms`,
+                              }}
+                              title={`${data.time}: ${data.value} MCP calls`}
+                            />
+                          )
+                        })}
+                      </div>
+                      <div className="mt-2 flex justify-between text-xs text-gray-400">
+                        {analyticsData?.mcpUsage.hourlyData && analyticsData.mcpUsage.hourlyData.length >= 5 && (
+                          <>
+                            <span>{analyticsData.mcpUsage.hourlyData[0]?.time || '00:00'}</span>
+                            <span>{analyticsData.mcpUsage.hourlyData[Math.floor(analyticsData.mcpUsage.hourlyData.length * 0.25)]?.time || '06:00'}</span>
+                            <span>{analyticsData.mcpUsage.hourlyData[Math.floor(analyticsData.mcpUsage.hourlyData.length * 0.5)]?.time || '12:00'}</span>
+                            <span>{analyticsData.mcpUsage.hourlyData[Math.floor(analyticsData.mcpUsage.hourlyData.length * 0.75)]?.time || '18:00'}</span>
+                            <span>{analyticsData.mcpUsage.hourlyData[analyticsData.mcpUsage.hourlyData.length - 1]?.time || '24:00'}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* MCP Metrics */}
+                    <div className="space-y-4">
+                      <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
+                        <div className="text-2xl font-bold text-green-300">
+                          {analyticsData?.mcpUsage.totalCalls || 0}
+                        </div>
+                        <div className="text-xs text-gray-400">Total MCP Calls</div>
+                      </div>
+                      <div className="bg-teal-500/10 border border-teal-500/20 rounded-lg p-4">
+                        <div className="text-2xl font-bold text-teal-300">
+                          {analyticsData?.mcpUsage.successRate || 0}%
+                        </div>
+                        <div className="text-xs text-gray-400">Success Rate</div>
+                      </div>
+                      <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-4">
+                        <div className="text-2xl font-bold text-cyan-300">
+                          {analyticsData?.mcpUsage.avgResponseTime || 0}ms
+                        </div>
+                        <div className="text-xs text-gray-400">Avg Response Time</div>
+                      </div>
+                    </div>
+
+                    {/* Top MCP Servers */}
+                    <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-300 mb-4">Server Usage</h4>
+                        <div className="space-y-2">
+                          {(analyticsData?.mcpUsage.serverBreakdown || []).slice(0, 5).map((server, i) => (
+                            <div key={i} className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                              <span className="text-white text-sm font-medium">{server.server}</span>
+                              <div className="text-right">
+                                <div className="text-green-300 text-sm">{server.calls} calls</div>
+                                <div className="text-gray-400 text-xs">{server.successRate}% success</div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-300 mb-4">Top Tools</h4>
+                        <div className="space-y-2">
+                          {(analyticsData?.mcpUsage.topTools || []).slice(0, 5).map((tool, i) => (
+                            <div key={i} className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                              <div>
+                                <div className="text-white text-sm font-medium">{tool.tool}</div>
+                                <div className="text-gray-400 text-xs">{tool.server}</div>
+                              </div>
+                              <div className="text-green-300 text-sm">{tool.count}</div>
                             </div>
                           ))}
                         </div>

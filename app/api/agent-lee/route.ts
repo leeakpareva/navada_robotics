@@ -1,24 +1,120 @@
 import { type NextRequest, NextResponse } from "next/server"
 import OpenAI from "openai"
-// Temporarily disable complex imports to fix build
-// import { DatabaseAnalytics } from "@/lib/database-analytics"
-// import { RAGService } from "@/lib/rag-service"
+import { DatabaseAnalytics } from "@/lib/database-analytics"
+import { RAGService } from "@/lib/rag-service"
 import { mcpClient } from "@/lib/mcp/client"
 import { parseUserRequest, formatWebsitePreview } from "@/lib/website-generator/utils"
 import { WebsiteGenerator } from "@/lib/website-generator/generator"
 
-// Simple analytics functions for build compatibility
-function trackChatSession(data: any) {
-  return `session_${Date.now()}`
+// Analytics wrapper functions
+async function trackChatSession(data: any) {
+  try {
+    const session = await DatabaseAnalytics.createOrUpdateChatSession(data)
+    return session.id
+  } catch (error) {
+    console.error('[Analytics] Error tracking chat session:', error)
+    return `session_${Date.now()}`
+  }
 }
 
-function updateChatSession(sessionId: string, data: any) {
-  // Simple logging for now
-  console.log(`[Analytics] Updated session ${sessionId}:`, data)
+async function updateChatSession(sessionId: string, data: any) {
+  try {
+    await DatabaseAnalytics.trackAnalyticsEvent({
+      sessionId,
+      eventType: 'session_update',
+      eventData: data
+    })
+  } catch (error) {
+    console.error('[Analytics] Error updating session:', error)
+  }
 }
 
-function trackImageGeneration(data: any) {
-  console.log(`[Analytics] Image generated:`, data)
+async function trackImageGeneration(data: any) {
+  try {
+    await DatabaseAnalytics.trackImageGeneration(data)
+  } catch (error) {
+    console.error('[Analytics] Error tracking image generation:', error)
+  }
+}
+
+// MCP Integration Functions
+function shouldUseBraveSearch(message: string): boolean {
+  const searchTriggers = [
+    'search for', 'find information about', 'look up', 'what is the latest',
+    'current news', 'recent developments', 'web search', 'search the web',
+    'brave search', 'find latest', 'current information', 'up to date',
+    'recent news', 'latest updates', 'search online', 'find online'
+  ]
+
+  return searchTriggers.some(trigger =>
+    message.toLowerCase().includes(trigger.toLowerCase())
+  )
+}
+
+function shouldUseFileSystem(message: string): boolean {
+  const fileTriggers = [
+    'read file', 'write file', 'create file', 'list files', 'directory',
+    'folder', 'save to file', 'file system', 'local file'
+  ]
+
+  return fileTriggers.some(trigger =>
+    message.toLowerCase().includes(trigger.toLowerCase())
+  )
+}
+
+function shouldUseGitHub(message: string): boolean {
+  const githubTriggers = [
+    'github', 'repository', 'repo', 'create repo', 'list repos',
+    'github issue', 'pull request', 'commit', 'git'
+  ]
+
+  return githubTriggers.some(trigger =>
+    message.toLowerCase().includes(trigger.toLowerCase())
+  )
+}
+
+async function performBraveSearch(query: string, sessionId?: string, threadId?: string): Promise<string> {
+  try {
+    const { braveSearchMCP } = await import('@/lib/mcp/servers/brave-search')
+    const searchResult = await braveSearchMCP.webSearch(query, sessionId, threadId)
+
+    if (searchResult.summary) {
+      return `Here's what I found online:\n\n${searchResult.summary}`
+    } else {
+      return `I searched for "${query}" but didn't find relevant results.`
+    }
+  } catch (error) {
+    console.error('[Agent Lee] Brave Search error:', error)
+    return `I tried to search for "${query}" but encountered an issue with the search service.`
+  }
+}
+
+async function handleMCPRequest(message: string, sessionId?: string, threadId?: string): Promise<string> {
+  try {
+    // Check which MCP services should be used based on the message
+    const mcpResponses: string[] = []
+
+    if (shouldUseBraveSearch(message)) {
+      console.log('[Agent Lee] Using Brave Search MCP...')
+      const searchResponse = await performBraveSearch(message, sessionId, threadId)
+      mcpResponses.push(searchResponse)
+    }
+
+    if (shouldUseFileSystem(message)) {
+      console.log('[Agent Lee] File system operations detected but not implemented yet')
+      mcpResponses.push('File system operations are not yet available.')
+    }
+
+    if (shouldUseGitHub(message)) {
+      console.log('[Agent Lee] GitHub operations detected but not implemented yet')
+      mcpResponses.push('GitHub operations are not yet available.')
+    }
+
+    return mcpResponses.length > 0 ? mcpResponses.join('\n\n') : ''
+  } catch (error) {
+    console.error('[Agent Lee] MCP handler error:', error)
+    return ''
+  }
 }
 
 const API_KEY = process.env.OPENAI_API_KEY
@@ -394,12 +490,9 @@ export async function POST(request: NextRequest) {
     console.log("[v0] Has last image for context:", !!lastImage)
 
     // Track new chat session
-    sessionId = trackChatSession({
+    sessionId = await trackChatSession({
       threadId,
-      startTime: new Date(),
-      messageCount: 1,
-      responseTime: 0,
-      status: 'active'
+      apiProvider
     })
 
     if (!message || typeof message !== "string") {
@@ -409,12 +502,9 @@ export async function POST(request: NextRequest) {
 
     console.log("[v0] Checking if message is image generation request:", message)
 
-    // Check if we need to search for current information
-    let searchResults = ''
-    if (shouldUseWebSearch(message)) {
-      console.log('[v0] Using Brave Search for current information...')
-      searchResults = await searchWithBrave(message)
-    }
+    // Check if we need to use MCP services
+    let mcpResults = ''
+    mcpResults = await handleMCPRequest(message, sessionId, threadId)
 
     // Check if this is an image analysis request first
     if (detectImageAnalysisRequest(message) && lastImage) {
@@ -775,11 +865,17 @@ export async function POST(request: NextRequest) {
     console.log("[v0] Using thread ID:", currentThreadId)
 
     try {
+      // Construct the enhanced message with MCP results
+      let enhancedMessage = message
+      if (mcpResults) {
+        enhancedMessage = `${message}\n\n--- Additional Information ---\n${mcpResults}`
+      }
+
       await openai.beta.threads.messages.create(currentThreadId, {
         role: "user",
-        content: message,
+        content: enhancedMessage,
       })
-      console.log("[v0] Message added to thread")
+      console.log("[v0] Message added to thread", mcpResults ? "(with MCP results)" : "")
     } catch (messageError: any) {
       console.error("[v0] Failed to add message:", messageError)
       console.error("[v0] Message error details:", {
