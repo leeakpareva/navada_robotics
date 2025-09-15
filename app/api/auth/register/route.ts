@@ -54,8 +54,23 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error('Registration error:', error)
+
+    // More detailed error logging for debugging
+    const errorDetails = {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV,
+      vercel: process.env.VERCEL || 'false'
+    }
+
+    console.error('Detailed registration error:', errorDetails)
+
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: 'Internal server error',
+        details: process.env.NODE_ENV === 'development' ? errorDetails : undefined
+      },
       { status: 500 }
     )
   }

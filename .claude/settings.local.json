@@ -44,7 +44,8 @@
       "Bash(TASKKILL /F /IM \"node.exe\")",
       "Bash(TASKKILL /F /PID 35040)",
       "Bash(TASKKILL /F /IM node.exe /T)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(vercel env:*)"
     ],
     "deny": [],
     "ask": []
