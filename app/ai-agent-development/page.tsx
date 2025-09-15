@@ -94,7 +94,7 @@ export default function AIAgentDevelopmentPage() {
       <BeamsBackground />
       
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60 border-b border-gray-800">
+      <header className="sticky top-0 z-50 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2 group">
@@ -216,7 +216,7 @@ export default function AIAgentDevelopmentPage() {
       </section>
 
       {/* Projects Section */}
-      <section className="py-16 px-4 bg-gray-900/50">
+      <section className="py-16 px-4 bg-black">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-4">AI Agent Projects</h2>
@@ -325,7 +325,7 @@ export default function AIAgentDevelopmentPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-gray-900/50">
+      <section className="py-16 px-4 bg-black">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Deploy AI Agents?</h2>
           <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
@@ -349,7 +349,7 @@ export default function AIAgentDevelopmentPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 py-8 px-4 border-t border-gray-800">
+      <footer className="bg-black py-8 px-4">
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <span className="text-xl font-bold text-white">NAVADA</span>

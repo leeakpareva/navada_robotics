@@ -561,9 +561,9 @@ export default function AgentLeePage() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
+    <div className="min-h-screen min-h-[100dvh] bg-black flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60 border-b border-gray-800">
+      <header className="sticky top-0 z-50 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
@@ -691,7 +691,7 @@ export default function AgentLeePage() {
         intensity="subtle"
         className="flex-1 flex flex-col"
       >
-        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-4 py-16">
+        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-4 py-8 pb-safe">
           {/* Agent Lee Header */}
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -758,7 +758,7 @@ export default function AgentLeePage() {
 
           {/* Messages - Enhanced UI */}
           <Card className="flex-1 bg-gradient-to-br from-black/40 via-purple-900/10 to-black/40 backdrop-blur-sm border-white/20 mb-4 shadow-2xl shadow-purple-500/10 hover:shadow-purple-500/20 transition-all duration-300">
-            <CardContent className="p-6 h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-600/50 scrollbar-track-transparent">
+            <CardContent className="p-4 md:p-6 h-[400px] md:h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-600/50 scrollbar-track-transparent">
               <div className="space-y-4">
                 {messages.map((message) => (
                   <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"} animate-fadeIn`}>
@@ -930,24 +930,26 @@ export default function AgentLeePage() {
       </BeamsBackground>
 
       {/* Bottom Navigation for Mobile */}
-      <nav className="bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">
-        <div className="flex justify-around py-2">
+      <nav className="bg-black/95 backdrop-blur md:hidden flex-shrink-0 safe-area-inset-bottom">
+        <div className="flex justify-around py-2 pb-safe">
           <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Dna className="h-5 w-5 text-gray-400 mb-1" />
+            <Dna className="h-4 w-4 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
           </Link>
           <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
-            <ShieldCheck className="h-5 w-5 text-gray-400 mb-1" />
+            <ShieldCheck className="h-4 w-4 text-gray-400 mb-1" />
             <span className="text-gray-400">About</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
-            <span className="text-purple-400">Agent Lee</span>
+            <BrainCircuit className="h-4 w-4 text-purple-400 mb-1" />
+            <span className="text-purple-400 text-xs">Agent Lee</span>
           </Link>
           <Link href="/dashboard" className="flex flex-col items-center py-2 px-3 text-xs">
-            <span className="text-purple-400">Dashboard</span>
+            <Settings2 className="h-4 w-4 text-gray-400 mb-1" />
+            <span className="text-gray-400">Dashboard</span>
           </Link>
           <Link href="/contact" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Satellite className="h-5 w-5 text-gray-400 mb-1" />
+            <Satellite className="h-4 w-4 text-gray-400 mb-1" />
             <span className="text-gray-400">Contact</span>
           </Link>
         </div>
