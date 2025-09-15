@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { BeamsBackground } from "@/components/ui/beams-background"
-import { ArrowRight, Menu, X, Phone, Mail, MapPin, Cog, Microscope as Microchip, Wrench, Shield } from "lucide-react"
+import { ArrowRight, Menu, X, Phone, Mail, MapPin, Cog, Microscope as Microchip, Shield } from "lucide-react"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/ui/optimized-image"
 
@@ -36,9 +36,6 @@ export default function ContactPage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                Services
-              </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
@@ -60,9 +57,6 @@ export default function ContactPage() {
               <div className="flex flex-col space-y-3">
                 <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                   Solutions
-                </Link>
-                <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                  Services
                 </Link>
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
@@ -162,10 +156,6 @@ export default function ContactPage() {
           <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
             <Microchip className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
-          </Link>
-          <Link href="/services" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Wrench className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Services</span>
           </Link>
           <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
             <Shield className="h-5 w-5 text-gray-400 mb-1" />

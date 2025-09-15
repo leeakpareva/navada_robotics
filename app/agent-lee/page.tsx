@@ -79,7 +79,7 @@ export default function AgentLeePage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "🚀 Hello! I'm Agent Lee, your AI powerhouse for robotics, deep learning, and computer vision!\n\n✨ Enhanced Features Now Available:\n• 🤖 Robotics guidance with knowledge base (RAG-powered)\n• 🐍 Python programming instruction with examples\n• 👁️ Computer vision and OpenCV help\n• 🖼️ DALL-E 3 image generation (say \"generate image\")\n• 🌐 NextJS website creation (say \"create website\")\n• 💾 **Persistent chat history** - all conversations saved!\n• 🧠 **Smart context** - I remember our previous discussions\n• 📊 **Real-time analytics** - track your learning progress\n• 🔍 **Knowledge base search** - enhanced with expert robotics content\n\nTry asking: \"What's the best way to start with Raspberry Pi robotics?\" to see the knowledge base in action!\n\nWhat amazing things shall we build today?",
+      text: "Hello! I'm Agent Lee, your AI powerhouse for robotics, deep learning, and computer vision!\n\nEnhanced Features Now Available:\n• Robotics guidance with knowledge base (RAG-powered)\n• Python programming instruction with examples\n• Computer vision and OpenCV help\n• DALL-E 3 image generation (say \"generate image\")\n• NextJS website creation (say \"create website\")\n• Persistent chat history - all conversations saved!\n• Smart context - I remember our previous discussions\n• Real-time analytics - track your learning progress\n• Knowledge base search - enhanced with expert robotics content\n\nTry asking: \"What's the best way to start with Raspberry Pi robotics?\" to see the knowledge base in action!\n\nWhat amazing things shall we build today?",
       sender: "agent",
       timestamp: new Date(),
     },
@@ -358,7 +358,7 @@ export default function AgentLeePage() {
       if (response.ok) {
         setMessages([{
           id: 1,
-          text: "🚀 Chat history cleared! I'm Agent Lee, ready to help you with robotics, AI, and more!\n\nWhat would you like to work on?",
+          text: "Chat history cleared! I'm Agent Lee, ready to help you with robotics, AI, and more!\n\nWhat would you like to work on?",
           sender: "agent",
           timestamp: new Date(),
         }])
@@ -494,12 +494,6 @@ export default function AgentLeePage() {
   }
 
   const quickActions = [
-    { icon: <Orbit className="h-3 w-3" />, text: "How do I start with robotics?", color: "from-purple-500 to-pink-500" },
-    { icon: <ScanFace className="h-3 w-3" />, text: "Explain computer vision basics", color: "from-cyan-500 to-blue-500" },
-    { icon: <Binary className="h-3 w-3" />, text: "Python for deep learning", color: "from-green-500 to-emerald-500" },
-    { icon: <CircuitBoard className="h-3 w-3" />, text: "Raspberry Pi robot projects", color: "from-purple-500 to-violet-500" },
-    { icon: <Wand2 className="h-3 w-3" />, text: "Generate image of a robot", color: "from-pink-500 to-rose-500" },
-    { icon: <Network className="h-3 w-3" />, text: "Create a portfolio website", color: "from-blue-500 to-indigo-500" },
   ]
 
   // Loading state
@@ -536,7 +530,7 @@ export default function AgentLeePage() {
                     <Lock className="h-8 w-8 text-white" />
                   </div>
                 </div>
-                <h2 className="text-3xl font-bold text-white mb-2">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Authentication Required
                 </h2>
                 <p className="text-white/70 text-sm">Please sign in to access Agent Lee</p>
@@ -702,18 +696,10 @@ export default function AgentLeePage() {
         intensity="subtle"
         className="flex-1 flex flex-col"
       >
-        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-4 py-6">
-          {/* Agent Lee Header - More Vibrant */}
-          <div className="text-center mb-6">
-            <div className="flex items-center justify-center mb-4 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-gradient-to-r from-purple-600/40 to-pink-600/40 blur-3xl w-32 h-32 rounded-full animate-pulse"></div>
-              </div>
-              <div className="relative bg-gradient-to-br from-purple-600 via-pink-600 to-cyan-600 p-5 rounded-2xl shadow-2xl shadow-purple-500/50 transform hover:scale-110 transition-all duration-300">
-                <BrainCircuit className="h-10 w-10 text-white" />
-              </div>
-            </div>
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-2 animate-pulse">
+        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-4 py-16">
+          {/* Agent Lee Header */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Agent Lee
             </h2>
             <p className="text-gray-300 text-lg mb-2">Your AI Powerhouse for Innovation</p>
@@ -752,8 +738,6 @@ export default function AgentLeePage() {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Settings2 className="h-4 w-4 text-gray-400" />
-                <span className="text-sm text-gray-400">AI Provider:</span>
               </div>
               <div className="flex gap-2">
                 <Button
@@ -776,34 +760,6 @@ export default function AgentLeePage() {
             </div>
           </div>
 
-          {/* Quick Actions - More Vibrant */}
-          <div className="mb-6">
-            <p className="text-sm text-gray-400 mb-3">
-              Quick actions to get started:
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {quickActions.map((action, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  className={`relative overflow-hidden text-xs bg-black/50 border-white/20 text-white hover:border-purple-400 transition-all duration-300 hover:scale-105 group cursor-pointer active:bg-purple-600/40 active:border-purple-300 active:scale-95`}
-                  onClick={() => {
-                    setInputMessage(action.text)
-                    // Visual feedback for selection
-                    setTimeout(() => {
-                      const button = document.activeElement as HTMLElement
-                      button?.blur()
-                    }, 150)
-                  }}
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-r from-purple-500 to-violet-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
-                  <span className="relative">
-                    {action.text}
-                  </span>
-                </Button>
-              ))}
-            </div>
-          </div>
 
           {/* Messages - Enhanced UI */}
           <Card className="flex-1 bg-gradient-to-br from-black/40 via-purple-900/10 to-black/40 backdrop-blur-sm border-white/20 mb-4 shadow-2xl shadow-purple-500/10 hover:shadow-purple-500/20 transition-all duration-300">
@@ -815,7 +771,6 @@ export default function AgentLeePage() {
                       {message.sender === "agent" && (
                         <div className="relative">
                           <div className="bg-gradient-to-br from-purple-600 to-pink-600 p-2.5 rounded-xl shadow-lg shadow-purple-500/30">
-                            <BrainCircuit className="h-5 w-5 text-white" />
                           </div>
                           <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-black animate-pulse"></div>
                         </div>
@@ -915,7 +870,6 @@ export default function AgentLeePage() {
                   <div className="flex justify-start animate-fadeIn">
                     <div className="flex items-start space-x-3">
                       <div className="bg-gradient-to-br from-purple-600 to-pink-600 p-2.5 rounded-xl shadow-lg shadow-purple-500/30">
-                        <BrainCircuit className="h-5 w-5 text-white" />
                       </div>
                       <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-4 rounded-2xl border border-gray-700 shadow-lg">
                         <div className="flex space-x-2">
@@ -992,7 +946,6 @@ export default function AgentLeePage() {
             <span className="text-gray-400">About</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
-            <BrainCircuit className="h-5 w-5 text-purple-400 mb-1" />
             <span className="text-purple-400">Agent Lee</span>
           </Link>
           <Link href="/dashboard" className="flex flex-col items-center py-2 px-3 text-xs">

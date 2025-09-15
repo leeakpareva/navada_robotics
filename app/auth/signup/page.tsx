@@ -94,7 +94,7 @@ export default function SignUp() {
                   <UserPlus className="h-8 w-8 text-white" />
                 </div>
               </div>
-              <h2 className="text-3xl font-bold text-white mb-2">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 Create Account
               </h2>
               <p className="text-white/70 text-sm">Join NAVADA Robotics today</p>

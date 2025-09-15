@@ -43,7 +43,8 @@
       "Bash(TASKKILL /F /PID 1640)",
       "Bash(TASKKILL /F /IM \"node.exe\")",
       "Bash(TASKKILL /F /PID 35040)",
-      "Bash(TASKKILL /F /IM node.exe /T)"
+      "Bash(TASKKILL /F /IM node.exe /T)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

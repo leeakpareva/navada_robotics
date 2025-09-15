@@ -210,15 +210,7 @@ export default function Dashboard() {
         <div className="container mx-auto">
           {/* Hero Section */}
           <div className="text-center mb-12">
-            <div className="flex items-center justify-center mb-6">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/40 to-pink-600/40 blur-3xl w-32 h-32 rounded-full animate-pulse"></div>
-                <div className="relative bg-gradient-to-br from-purple-600 via-pink-600 to-cyan-600 p-6 rounded-2xl shadow-2xl shadow-purple-500/50">
-                  <BrainCircuit className="h-12 w-12 text-white" />
-                </div>
-              </div>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Dashboard
             </h1>
             <p className="text-xl text-gray-100 max-w-2xl mx-auto">
@@ -399,13 +391,11 @@ export default function Dashboard() {
                   ) : (
                     <div className="text-center py-12">
                       <div className="mb-4">
-                        <BrainCircuit className="h-16 w-16 text-gray-500 mx-auto mb-4" />
                         <p className="text-gray-300 text-lg">No chat history yet</p>
                         <p className="text-gray-500 text-sm">Start your first conversation with Agent Lee!</p>
                       </div>
                       <Link href="/agent-lee">
                         <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
-                          <BrainCircuit className="h-4 w-4 mr-2" />
                           Start Chat
                         </Button>
                       </Link>
@@ -490,7 +480,6 @@ export default function Dashboard() {
             <span className="text-gray-400">Services</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
-            <BrainCircuit className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Agent Lee</span>
           </Link>
           <Link href="/dashboard" className="flex flex-col items-center py-2 px-3 text-xs">

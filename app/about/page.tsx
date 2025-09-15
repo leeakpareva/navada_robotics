@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { BeamsBackground } from "@/components/ui/beams-background"
-import { Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone } from "lucide-react"
+import { Menu, X, Cog, Microscope as Microchip, Shield, Phone } from "lucide-react"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/ui/optimized-image"
 
@@ -35,9 +35,6 @@ export default function AboutPage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                Services
-              </Link>
               <Link href="/about" className="text-purple-400 font-medium">
                 About
               </Link>
@@ -59,9 +56,6 @@ export default function AboutPage() {
               <div className="flex flex-col space-y-3">
                 <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                   Solutions
-                </Link>
-                <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                  Services
                 </Link>
                 <Link href="/about" className="text-purple-400 font-medium">
                   About
@@ -88,7 +82,7 @@ export default function AboutPage() {
       >
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">About NAVADA</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">About NAVADA</h2>
 
             <div className="mb-8">
               <div className="flex justify-center">
@@ -180,10 +174,6 @@ export default function AboutPage() {
           <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
             <Microchip className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
-          </Link>
-          <Link href="/services" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Wrench className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Services</span>
           </Link>
           <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
             <Shield className="h-5 w-5 text-purple-400 mb-1" />

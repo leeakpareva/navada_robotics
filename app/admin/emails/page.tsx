@@ -121,7 +121,7 @@ export default function EmailAdminPage() {
     <div className="min-h-screen bg-black p-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Email Subscribers</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Email Subscribers</h1>
           <p className="text-gray-400">Manage and view email subscriptions</p>
         </div>
 

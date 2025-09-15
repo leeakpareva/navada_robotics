@@ -223,7 +223,7 @@ export default function NavadaRoboticsApp() {
       <section className="py-16 px-4 bg-gray-900">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-white mb-4">Innovation Showcase</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Innovation Showcase</h3>
             <p className="text-gray-100 max-w-2xl mx-auto">
               Discover my latest breakthroughs in AI-powered robotics, creative technology, and digital assistance platforms
             </p>
@@ -279,7 +279,7 @@ export default function NavadaRoboticsApp() {
       <section id="active-projects" className="py-16 px-4 bg-gradient-to-br from-gray-900 to-black">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-white mb-4">Active Projects</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Active Projects</h3>
             <p className="text-gray-100 max-w-2xl mx-auto">
               Current development initiatives pushing the boundaries of AI and robotics technology
             </p>
