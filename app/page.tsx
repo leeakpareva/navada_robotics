@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Menu, X, Cog, Microscope as Microchip, Shield, Phone, Brain, Cpu, Sparkles, Folder, Newspaper } from "lucide-react"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/ui/optimized-image"
-import { PulseBeams } from "@/components/ui/pulse-beams"
+import { AnimatedGridBackground } from "@/components/ui/animated-grid-background"
 import { useSession } from "next-auth/react"
 
 // Dynamic import for Vortex to prevent hydration issues
@@ -20,87 +20,6 @@ export default function NavadaRoboticsApp() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
-  // PulseBeams configuration for Active Projects section
-  const projectBeams = [
-    {
-      path: "M269 220.5H16.5C10.9772 220.5 6.5 224.977 6.5 230.5V398.5",
-      gradientConfig: {
-        initial: { x1: "0%", x2: "0%", y1: "80%", y2: "100%" },
-        animate: {
-          x1: ["0%", "0%", "200%"],
-          x2: ["0%", "0%", "180%"],
-          y1: ["80%", "0%", "0%"],
-          y2: ["100%", "20%", "20%"],
-        },
-        transition: {
-          duration: 2,
-          repeat: Infinity,
-          repeatType: "loop" as const,
-          ease: "linear",
-          repeatDelay: 2,
-          delay: Math.random() * 2,
-        },
-      },
-      connectionPoints: [
-        { cx: 6.5, cy: 398.5, r: 6 },
-        { cx: 269, cy: 220.5, r: 6 }
-      ]
-    },
-    {
-      path: "M568 200H841C846.523 200 851 195.523 851 190V40",
-      gradientConfig: {
-        initial: { x1: "0%", x2: "0%", y1: "80%", y2: "100%" },
-        animate: {
-          x1: ["20%", "100%", "100%"],
-          x2: ["0%", "90%", "90%"],
-          y1: ["80%", "80%", "-20%"],
-          y2: ["100%", "100%", "0%"],
-        },
-        transition: {
-          duration: 2,
-          repeat: Infinity,
-          repeatType: "loop" as const,
-          ease: "linear",
-          repeatDelay: 2,
-          delay: Math.random() * 2,
-        },
-      },
-      connectionPoints: [
-        { cx: 851, cy: 34, r: 6.5 },
-        { cx: 568, cy: 200, r: 6 }
-      ]
-    },
-    {
-      path: "M425.5 274V333C425.5 338.523 421.023 343 415.5 343H152C146.477 343 142 347.477 142 353V426.5",
-      gradientConfig: {
-        initial: { x1: "0%", x2: "0%", y1: "80%", y2: "100%" },
-        animate: {
-          x1: ["20%", "100%", "100%"],
-          x2: ["0%", "90%", "90%"],
-          y1: ["80%", "80%", "-20%"],
-          y2: ["100%", "100%", "0%"],
-        },
-        transition: {
-          duration: 2,
-          repeat: Infinity,
-          repeatType: "loop" as const,
-          ease: "linear",
-          repeatDelay: 2,
-          delay: Math.random() * 2,
-        },
-      },
-      connectionPoints: [
-        { cx: 142, cy: 427, r: 6.5 },
-        { cx: 425.5, cy: 274, r: 6 }
-      ]
-    }
-  ];
-
-  const pulseGradientColors = {
-    start: "#a855f7",  // Purple-500
-    middle: "#ec4899", // Pink-500
-    end: "#06b6d4"     // Cyan-500
-  };
 
   useEffect(() => {
     setIsMounted(true)
@@ -358,17 +277,9 @@ export default function NavadaRoboticsApp() {
         </div>
       </section>
 
-      {/* Active Projects Section with PulseBeams Background */}
+      {/* Active Projects Section with Animated Grid Background */}
       <section id="active-projects" className="relative">
-        <PulseBeams
-          beams={projectBeams}
-          gradientColors={pulseGradientColors}
-          className="h-auto py-16 px-4 bg-gradient-to-br from-gray-900 to-black"
-          width={858}
-          height={434}
-          baseColor="rgb(15 23 42)"
-          accentColor="rgb(100 116 139)"
-        >
+        <AnimatedGridBackground className="py-16 px-4">
           <div className="container mx-auto relative z-20">
             <div className="text-center mb-12">
               <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Active Projects</h3>
@@ -421,7 +332,7 @@ export default function NavadaRoboticsApp() {
               </Link>
             </div>
           </div>
-        </PulseBeams>
+        </AnimatedGridBackground>
       </section>
 
       {/* Footer */}

@@ -1,8 +1,6 @@
 'use client'
 
-import { useSession, signOut } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -41,48 +39,30 @@ interface ChatSession {
 }
 
 export default function Dashboard() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const [chatSessions, setChatSessions] = useState<ChatSession[]>([])
-  const [loading, setLoading] = useState(true)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin')
+  // Mock data for demo purposes
+  const chatSessions = [
+    {
+      id: '1',
+      threadId: 'thread_abc123',
+      messageCount: 15,
+      lastActivity: '2024-01-15',
+      status: 'active'
+    },
+    {
+      id: '2',
+      threadId: 'thread_def456',
+      messageCount: 8,
+      lastActivity: '2024-01-14',
+      status: 'completed'
     }
-  }, [status, router])
+  ]
 
-  useEffect(() => {
-    if (session?.user) {
-      fetchChatSessions()
-    }
-  }, [session])
-
-  const fetchChatSessions = async () => {
-    try {
-      const response = await fetch('/api/user/chat-sessions')
-      if (response.ok) {
-        const sessions = await response.json()
-        setChatSessions(sessions)
-      }
-    } catch (error) {
-      console.error('Failed to fetch chat sessions:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSignOut = () => {
-    signOut({ callbackUrl: '/' })
-  }
-
-  if (status === 'loading') {
-    return <div className="flex items-center justify-center h-screen">Loading...</div>
-  }
-
-  if (!session) {
-    return null
+  const loading = false
+  const mockUser = {
+    name: 'Demo User',
+    email: 'demo@navada.ai'
   }
 
   return (
@@ -126,29 +106,6 @@ export default function Dashboard() {
                 Contact
               </Link>
 
-              {/* User Welcome & Session Management */}
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
-                    <User className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="text-sm">
-                    <p className="text-white font-medium">Welcome back!</p>
-                    <p className="text-purple-300 text-xs">{session?.user?.name || session?.user?.email}</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    onClick={handleSignOut}
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-400 hover:text-purple-400 transition-colors"
-                    title="Sign Out"
-                  >
-                    <LogOut className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
             </nav>
           </div>
 
@@ -175,30 +132,6 @@ export default function Dashboard() {
                   Contact
                 </Link>
 
-                {/* Mobile User Info */}
-                <div className="pt-3 border-t border-gray-700">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
-                      <User className="h-5 w-5 text-white" />
-                    </div>
-                    <div className="text-sm">
-                      <p className="text-white font-medium">Welcome back!</p>
-                      <p className="text-purple-300 text-xs">{session?.user?.name || session?.user?.email}</p>
-                    </div>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      onClick={handleSignOut}
-                      variant="ghost"
-                      size="sm"
-                      className="text-gray-400 hover:text-purple-400 transition-colors"
-                      title="Sign Out"
-                    >
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Sign Out
-                    </Button>
-                  </div>
-                </div>
               </div>
             </nav>
           )}
@@ -214,7 +147,7 @@ export default function Dashboard() {
               Dashboard
             </h1>
             <p className="text-xl text-gray-100 max-w-2xl mx-auto">
-              Welcome back, {session?.user?.name || 'User'}! Manage your AI interactions and explore NAVADA Robotics.
+Welcome back, {mockUser.name}! Manage your AI interactions and explore NAVADA Robotics.
             </p>
           </div>
 
@@ -424,19 +357,19 @@ export default function Dashboard() {
                       <User className="h-8 w-8 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-white">{session?.user?.name || 'User'}</h3>
-                      <p className="text-gray-400">{session?.user?.email}</p>
+                      <h3 className="text-xl font-bold text-white">{mockUser.name}</h3>
+                      <p className="text-gray-400">{mockUser.email}</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="p-4 bg-black/40 border border-white/10 rounded-lg">
                       <label className="text-sm font-medium text-purple-300">Name</label>
-                      <p className="text-white mt-1">{session?.user?.name || 'Not set'}</p>
+                      <p className="text-white mt-1">{mockUser.name}</p>
                     </div>
                     <div className="p-4 bg-black/40 border border-white/10 rounded-lg">
                       <label className="text-sm font-medium text-purple-300">Email</label>
-                      <p className="text-white mt-1">{session?.user?.email}</p>
+                      <p className="text-white mt-1">{mockUser.email}</p>
                     </div>
                     <div className="p-4 bg-black/40 border border-white/10 rounded-lg">
                       <label className="text-sm font-medium text-purple-300">Account Type</label>

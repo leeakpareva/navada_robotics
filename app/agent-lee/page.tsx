@@ -594,6 +594,9 @@ export default function AgentLeePage() {
               <Link href="/agent-lee" className="text-purple-400 font-medium">
                 Agent Lee
               </Link>
+              <Link href="/agent-lee/analytics" className="text-white hover:text-purple-400 transition-colors">
+                Analytics
+              </Link>
               <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
                 Dashboard
               </Link>
@@ -642,6 +645,9 @@ export default function AgentLeePage() {
                 </Link>
                 <Link href="/agent-lee" className="text-purple-400 font-medium">
                   Agent Lee
+                </Link>
+                <Link href="/agent-lee/analytics" className="text-white hover:text-purple-400 transition-colors">
+                  Analytics
                 </Link>
                 <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
                   Dashboard
