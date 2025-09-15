@@ -1,6 +1,27 @@
 import { NextRequest, NextResponse } from "next/server"
-import { loadChatHistory, endSession } from "@/lib/agent-lee-helpers"
-import { DatabaseAnalytics } from "@/lib/database-analytics"
+
+// Load chat history function inline to avoid build issues
+async function loadChatHistory(threadId: string) {
+  try {
+    const { DatabaseAnalytics } = await import("@/lib/database-analytics")
+    const history = await DatabaseAnalytics.getChatHistory(threadId)
+    if (history && history.messages.length > 0) {
+      console.log(`[Agent Lee] Loaded ${history.messages.length} previous messages for thread ${threadId}`)
+      return history.messages.map(msg => ({
+        id: parseInt(msg.id) || Date.now(),
+        text: msg.content,
+        sender: msg.role === 'user' ? 'user' : 'agent',
+        timestamp: msg.timestamp,
+        image: msg.imageData || undefined,
+        website: msg.websiteData || undefined
+      }))
+    }
+    return null
+  } catch (error) {
+    console.error('[Agent Lee] Error loading chat history:', error)
+    return null
+  }
+}
 
 export async function GET(
   request: NextRequest,
@@ -46,22 +67,26 @@ export async function DELETE(
       )
     }
 
-    // Get the session first
+    // Import DatabaseAnalytics dynamically
+    const { DatabaseAnalytics } = await import("@/lib/database-analytics")
     const history = await DatabaseAnalytics.getChatHistory(threadId)
 
     if (history?.session) {
+      // Import prisma directly
+      const { prisma } = await import("@/lib/database-analytics")
+
       // Delete all messages for this thread
-      await DatabaseAnalytics.prisma.chatMessage.deleteMany({
+      await prisma.chatMessage.deleteMany({
         where: { threadId }
       })
 
       // Delete session analytics
-      await DatabaseAnalytics.prisma.sessionAnalytics.deleteMany({
+      await prisma.sessionAnalytics.deleteMany({
         where: { sessionId: history.session.id }
       })
 
       // Delete the session
-      await DatabaseAnalytics.prisma.chatSession.delete({
+      await prisma.chatSession.delete({
         where: { id: history.session.id }
       })
 
