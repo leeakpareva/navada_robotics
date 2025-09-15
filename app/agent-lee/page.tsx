@@ -11,17 +11,43 @@ import {
   Menu,
   X,
   Cog,
-  Microscope as Microchip,
-  Wrench,
-  Shield,
-  Phone,
-  Send,
-  User,
-  Mic,
+  CircuitBoard,
+  Hammer,
+  ShieldCheck,
+  PhoneCall,
+  SendHorizonal,
+  UserCircle2,
+  Mic2,
   MicOff,
-  Volume2,
+  AudioLines,
   VolumeX,
-  Brain,
+  BrainCircuit,
+  Sparkles,
+  Zap,
+  MessagesSquare,
+  Code2,
+  Globe2,
+  ImagePlus,
+  RocketIcon,
+  BotMessageSquare,
+  Cpu,
+  Atom,
+  Binary,
+  Boxes,
+  Dna,
+  Fingerprint,
+  GitBranch,
+  Infinity,
+  Network,
+  Orbit,
+  QrCode,
+  Radio,
+  Satellite,
+  ScanFace,
+  Terminal,
+  Wand2,
+  Workflow,
+  Activity,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -32,6 +58,7 @@ interface Message {
   sender: "user" | "agent"
   timestamp: Date
   image?: string // Base64 data URL for images
+  website?: any // Website generation data
 }
 
 export default function AgentLeePage() {
@@ -39,7 +66,7 @@ export default function AgentLeePage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm Agent Lee, your AI assistant for robotics, deep learning, and computer vision. I'm here to help you learn and explore these exciting fields. What would you like to know about today?",
+      text: "🚀 Hello! I'm Agent Lee, your AI powerhouse for robotics, deep learning, and computer vision!\n\n✨ I can help you with:\n• 🤖 Robotics guidance and project tutorials\n• 🐍 Python programming instruction\n• 👁️ Computer vision and OpenCV help\n• 🖼️ DALL-E 3 image generation (just say \"generate image\")\n• 🌐 NextJS website creation (just say \"create website\")\n\nWhat amazing things shall we build today?",
       sender: "agent",
       timestamp: new Date(),
     },
@@ -114,13 +141,13 @@ export default function AgentLeePage() {
 
     // Stop any currently playing audio/speech before starting new one
     stopSpeaking()
-    
+
     // Set flag to prevent duplicate calls
     isPlayingRef.current = true
 
     try {
       console.log("[v0] Starting speakText function")
-      
+
       await new Promise((resolve) => setTimeout(resolve, 100))
 
       setIsSpeaking(true)
@@ -145,7 +172,7 @@ export default function AgentLeePage() {
           const audioBlob = await response.blob()
           const audioUrl = URL.createObjectURL(audioBlob)
           const audio = new Audio(audioUrl)
-          
+
           // Store reference to current audio for stopping
           currentAudioRef.current = audio
 
@@ -190,7 +217,7 @@ export default function AgentLeePage() {
         currentAudioRef.current.pause()
         currentAudioRef.current = null
       }
-      
+
       if (window.speechSynthesis.speaking) {
         window.speechSynthesis.cancel()
       }
@@ -233,7 +260,7 @@ export default function AgentLeePage() {
 
   const stopSpeaking = () => {
     console.log("[v0] Stopping all speech and audio")
-    
+
     // Stop current audio if it exists
     if (currentAudioRef.current) {
       currentAudioRef.current.pause()
@@ -320,6 +347,7 @@ export default function AgentLeePage() {
         sender: "agent",
         timestamp: new Date(),
         image: data.image, // Include image data if present
+        website: data.website, // Include website data if present
       }
 
       // Update the last generated image if a new one was created
@@ -364,11 +392,13 @@ export default function AgentLeePage() {
     }
   }
 
-  const quickQuestions = [
-    "How do I start with robotics?",
-    "Explain computer vision basics",
-    "Python for deep learning",
-    "Raspberry Pi robot projects",
+  const quickActions = [
+    { icon: <Orbit className="h-3 w-3" />, text: "How do I start with robotics?", color: "from-purple-500 to-pink-500" },
+    { icon: <ScanFace className="h-3 w-3" />, text: "Explain computer vision basics", color: "from-cyan-500 to-blue-500" },
+    { icon: <Binary className="h-3 w-3" />, text: "Python for deep learning", color: "from-green-500 to-emerald-500" },
+    { icon: <CircuitBoard className="h-3 w-3" />, text: "Raspberry Pi robot projects", color: "from-orange-500 to-red-500" },
+    { icon: <Wand2 className="h-3 w-3" />, text: "Generate image of a robot", color: "from-pink-500 to-rose-500" },
+    { icon: <Network className="h-3 w-3" />, text: "Create a portfolio website", color: "from-blue-500 to-indigo-500" },
   ]
 
   return (
@@ -449,172 +479,215 @@ export default function AgentLeePage() {
       </header>
 
       {/* Chat Interface */}
-      <BeamsBackground 
-        intensity="subtle" 
+      <BeamsBackground
+        intensity="subtle"
         className="flex-1 flex flex-col"
       >
-        <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full px-4 py-6">
-          {/* Agent Lee Header */}
+        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-4 py-6">
+          {/* Agent Lee Header - More Vibrant */}
           <div className="text-center mb-6">
-            <div className="flex items-center justify-center mb-4">
-              <div className="bg-purple-600/20 backdrop-blur-sm p-4 rounded-full border border-purple-400/50">
-                <Brain className="h-8 w-8 text-purple-300" />
+            <div className="flex items-center justify-center mb-4 relative">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-gradient-to-r from-purple-600/40 to-pink-600/40 blur-3xl w-32 h-32 rounded-full animate-pulse"></div>
+              </div>
+              <div className="relative bg-gradient-to-br from-purple-600 via-pink-600 to-cyan-600 p-5 rounded-2xl shadow-2xl shadow-purple-500/50 transform hover:scale-110 transition-all duration-300">
+                <BrainCircuit className="h-10 w-10 text-white" />
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-white mb-2">Agent Lee</h2>
-            <p className="text-gray-100">Your AI assistant for Robotics, Deep Learning & Computer Vision</p>
-          {speechSupported && (
-            <div className="flex items-center justify-center mt-2 space-x-2">
-              <p className="text-sm text-purple-400">🎤 Voice enabled</p>
-              <Button onClick={toggleMute} variant="ghost" size="sm" className="text-purple-400 hover:bg-purple-600/20">
-                {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                <span className="ml-1 text-xs">{isMuted ? "Unmute" : "Mute"}</span>
-              </Button>
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-2 animate-pulse">
+              Agent Lee
+            </h2>
+            <p className="text-gray-300 text-lg mb-2">Your AI Powerhouse for Innovation</p>
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-600/20 border border-purple-400/50 text-purple-300 text-sm">
+                <Atom className="h-3 w-3" /> AI Assistant
+              </span>
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-pink-600/20 border border-pink-400/50 text-pink-300 text-sm">
+                <Wand2 className="h-3 w-3" /> Image Generation
+              </span>
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-600/20 border border-cyan-400/50 text-cyan-300 text-sm">
+                <Infinity className="h-3 w-3" /> Website Builder
+              </span>
             </div>
-          )}
-        </div>
-
-        {/* Quick Questions */}
-        <div className="mb-6">
-          <p className="text-sm text-gray-400 mb-3">Quick questions to get started:</p>
-          <div className="flex flex-wrap gap-2">
-            {quickQuestions.map((question, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                size="sm"
-                className="text-xs bg-gray-800 border-gray-600 text-gray-300 hover:bg-purple-600 hover:border-purple-500"
-                onClick={() => setInputMessage(question)}
-              >
-                {question}
-              </Button>
-            ))}
+            {speechSupported && (
+              <div className="flex items-center justify-center mt-3 space-x-2">
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isMuted ? 'bg-red-600/20 border border-red-400/50' : 'bg-green-600/20 border border-green-400/50'} transition-all duration-300`}>
+                  <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-red-400' : 'bg-green-400 animate-pulse'}`}></div>
+                  <p className={`text-sm ${isMuted ? 'text-red-300' : 'text-green-300'}`}>
+                    {isMuted ? 'Voice Muted' : 'Voice Enabled'}
+                  </p>
+                  <Button onClick={toggleMute} variant="ghost" size="sm" className={`${isMuted ? 'text-red-400 hover:bg-red-600/20' : 'text-green-400 hover:bg-green-600/20'}`}>
+                    {isMuted ? <VolumeX className="h-4 w-4" /> : <AudioLines className="h-4 w-4" />}
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
 
-        {/* Messages */}
-        <Card className="flex-1 bg-black/30 backdrop-blur-sm border-white/20 mb-4 hover:bg-black/40 transition-all duration-300">
-          <CardContent className="p-4 h-96 overflow-y-auto">
-            <div className="space-y-4">
-              {messages.map((message) => (
-                <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`flex items-start space-x-2 max-w-xs lg:max-w-md`}>
-                    {message.sender === "agent" && (
-                      <div className="bg-purple-600 p-2 rounded-full flex-shrink-0">
-                        <Brain className="h-4 w-4 text-white" />
-                      </div>
-                    )}
-                    <div
-                      className={`p-3 rounded-lg ${
-                        message.sender === "user" ? "bg-purple-600 text-white" : "bg-gray-800 text-gray-100"
-                      }`}
-                    >
-                      <p className="text-sm whitespace-pre-wrap">{message.text}</p>
-                      {message.image && (
-                        <div className="mt-3">
-                          <img
-                            src={message.image}
-                            alt="Generated image"
-                            className="max-w-full h-auto rounded-lg border border-gray-600"
-                            style={{ maxWidth: '300px', maxHeight: '300px' }}
-                            onLoad={() => console.log("[v0] Image loaded successfully")}
-                            onError={(e) => console.error("[v0] Image failed to load:", e)}
-                          />
+          {/* Quick Actions - More Vibrant */}
+          <div className="mb-6">
+            <p className="text-sm text-gray-400 mb-3 flex items-center gap-2">
+              <Workflow className="h-4 w-4" />
+              Quick actions to get started:
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {quickActions.map((action, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  className={`relative overflow-hidden text-xs bg-black/50 border-white/20 text-white hover:border-white/40 transition-all duration-300 hover:scale-105 group`}
+                  onClick={() => setInputMessage(action.text)}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-r ${action.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
+                  <span className="relative flex items-center gap-2">
+                    <span className={`bg-gradient-to-r ${action.color} bg-clip-text text-transparent`}>
+                      {action.icon}
+                    </span>
+                    {action.text}
+                  </span>
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Messages - Enhanced UI */}
+          <Card className="flex-1 bg-gradient-to-br from-black/40 via-purple-900/10 to-black/40 backdrop-blur-sm border-white/20 mb-4 shadow-2xl shadow-purple-500/10 hover:shadow-purple-500/20 transition-all duration-300">
+            <CardContent className="p-6 h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-600/50 scrollbar-track-transparent">
+              <div className="space-y-4">
+                {messages.map((message) => (
+                  <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"} animate-fadeIn`}>
+                    <div className={`flex items-start space-x-3 max-w-[80%]`}>
+                      {message.sender === "agent" && (
+                        <div className="relative">
+                          <div className="bg-gradient-to-br from-purple-600 to-pink-600 p-2.5 rounded-xl shadow-lg shadow-purple-500/30">
+                            <BrainCircuit className="h-5 w-5 text-white" />
+                          </div>
+                          <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-black animate-pulse"></div>
                         </div>
                       )}
-                      <p className="text-xs opacity-70 mt-1">
-                        {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                      </p>
-                      {message.sender === "agent" && speechSupported && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="mt-2 h-6 px-2 text-xs hover:bg-gray-700"
-                          onClick={() => speakText(message.text)}
-                          disabled={isMuted}
-                        >
-                          <Volume2 className="h-3 w-3 mr-1" />
-                          Speak
-                        </Button>
+                      <div
+                        className={`relative p-4 rounded-2xl ${
+                          message.sender === "user"
+                            ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/30"
+                            : "bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100 border border-gray-700 shadow-lg"
+                        } transition-all duration-300 hover:scale-[1.02]`}
+                      >
+                        <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.text}</p>
+                        {message.image && (
+                          <div className="mt-4 rounded-xl overflow-hidden border-2 border-purple-400/50 shadow-xl">
+                            <img
+                              src={message.image}
+                              alt="Generated image"
+                              className="w-full h-auto"
+                              style={{ maxWidth: '400px', maxHeight: '400px' }}
+                              onLoad={() => console.log("[v0] Image loaded successfully")}
+                              onError={(e) => console.error("[v0] Image failed to load:", e)}
+                            />
+                          </div>
+                        )}
+                        {message.website && (
+                          <div className="mt-4 p-4 bg-black/50 rounded-xl border border-cyan-400/50">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Infinity className="h-5 w-5 text-cyan-400" />
+                              <span className="text-cyan-300 font-semibold">Website Generated!</span>
+                            </div>
+                            <p className="text-sm text-gray-300">
+                              Your website has been created successfully. Files are ready for download.
+                            </p>
+                          </div>
+                        )}
+                        <div className="flex items-center justify-between mt-3">
+                          <p className="text-xs opacity-60">
+                            {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          </p>
+                          {message.sender === "agent" && speechSupported && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 px-3 text-xs hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300"
+                              onClick={() => speakText(message.text)}
+                              disabled={isMuted}
+                            >
+                              <Radio className="h-3 w-3 mr-1" />
+                              Speak
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      {message.sender === "user" && (
+                        <div className="bg-gradient-to-br from-gray-600 to-gray-700 p-2.5 rounded-xl shadow-lg">
+                          <Fingerprint className="h-5 w-5 text-white" />
+                        </div>
                       )}
                     </div>
-                    {message.sender === "user" && (
-                      <div className="bg-gray-600 p-2 rounded-full flex-shrink-0">
-                        <User className="h-4 w-4 text-white" />
-                      </div>
-                    )}
                   </div>
-                </div>
-              ))}
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="flex items-start space-x-2">
-                    <div className="bg-purple-600 p-2 rounded-full">
-                      <Brain className="h-4 w-4 text-white" />
-                    </div>
-                    <div className="bg-gray-800 p-3 rounded-lg">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.1s" }}
-                        ></div>
-                        <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.2s" }}
-                        ></div>
+                ))}
+                {isTyping && (
+                  <div className="flex justify-start animate-fadeIn">
+                    <div className="flex items-start space-x-3">
+                      <div className="bg-gradient-to-br from-purple-600 to-pink-600 p-2.5 rounded-xl shadow-lg shadow-purple-500/30">
+                        <BrainCircuit className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-4 rounded-2xl border border-gray-700 shadow-lg">
+                        <div className="flex space-x-2">
+                          <div className="w-3 h-3 bg-purple-400 rounded-full animate-bounce"></div>
+                          <div
+                            className="w-3 h-3 bg-pink-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "0.1s" }}
+                          ></div>
+                          <div
+                            className="w-3 h-3 bg-cyan-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "0.2s" }}
+                          ></div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-          </CardContent>
-        </Card>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Input */}
-        <div className="flex space-x-2">
-          <Input
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask me about robotics, deep learning, or computer vision..."
-            className="flex-1 bg-black/30 backdrop-blur-sm border-white/20 text-white placeholder-gray-300"
-          />
-          {speechSupported && (
-            <Button
-              onClick={isListening ? stopListening : startListening}
-              disabled={isTyping}
-              variant="outline"
-              className={`border-gray-600 ${isListening ? "bg-red-600 hover:bg-red-700" : "bg-gray-800 hover:bg-gray-700"}`}
-            >
-              {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-            </Button>
-          )}
-          {speechSupported && (
-            <Button
-              onClick={isSpeaking ? stopSpeaking : toggleMute}
-              variant="outline"
-              className={`border-gray-600 ${isMuted ? "bg-red-600 hover:bg-red-700" : "bg-gray-800 hover:bg-gray-700"}`}
-            >
-              {isSpeaking ? (
+          {/* Input - Enhanced */}
+          <div className="flex gap-2 p-4 bg-gradient-to-r from-black/60 via-purple-900/20 to-black/60 backdrop-blur-sm rounded-2xl border border-white/20 shadow-xl">
+            <Input
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask me anything... I can code, generate images, create websites, and more! ✨"
+              className="flex-1 bg-black/30 backdrop-blur-sm border-white/20 text-white placeholder-gray-400 focus:border-purple-400 transition-all duration-300"
+            />
+            {speechSupported && (
+              <Button
+                onClick={isListening ? stopListening : startListening}
+                disabled={isTyping}
+                className={`${
+                  isListening
+                    ? "bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 shadow-lg shadow-red-500/30"
+                    : "bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700"
+                } transition-all duration-300 transform hover:scale-105`}
+              >
+                {isListening ? <MicOff className="h-4 w-4" /> : <Mic2 className="h-4 w-4" />}
+              </Button>
+            )}
+            {speechSupported && isSpeaking && (
+              <Button
+                onClick={stopSpeaking}
+                className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 shadow-lg shadow-orange-500/30 transition-all duration-300 transform hover:scale-105"
+              >
                 <VolumeX className="h-4 w-4" />
-              ) : isMuted ? (
-                <VolumeX className="h-4 w-4" />
-              ) : (
-                <Volume2 className="h-4 w-4" />
-              )}
+              </Button>
+            )}
+            <Button
+              onClick={handleSendMessage}
+              disabled={!inputMessage.trim() || isTyping}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <SendHorizonal className="h-4 w-4 mr-2" />
+              Send
             </Button>
-          )}
-          <Button
-            onClick={handleSendMessage}
-            disabled={!inputMessage.trim() || isTyping}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            <Send className="h-4 w-4" />
-          </Button>
-        </div>
+          </div>
         </div>
       </BeamsBackground>
 
@@ -622,23 +695,23 @@ export default function AgentLeePage() {
       <nav className="bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">
         <div className="flex justify-around py-2">
           <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Microchip className="h-5 w-5 text-gray-400 mb-1" />
+            <Dna className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
           </Link>
           <Link href="/services" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Wrench className="h-5 w-5 text-gray-400 mb-1" />
+            <Boxes className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Services</span>
           </Link>
           <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Shield className="h-5 w-5 text-gray-400 mb-1" />
+            <ShieldCheck className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">About</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Brain className="h-5 w-5 text-purple-400 mb-1" />
+            <BrainCircuit className="h-5 w-5 text-purple-400 mb-1" />
             <span className="text-purple-400">Agent Lee</span>
           </Link>
           <Link href="/contact" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Phone className="h-5 w-5 text-gray-400 mb-1" />
+            <Satellite className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Contact</span>
           </Link>
         </div>

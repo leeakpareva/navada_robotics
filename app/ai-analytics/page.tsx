@@ -22,6 +22,12 @@ import {
   Newspaper,
   Image,
   Palette,
+  Server,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  RefreshCw,
+  Settings,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -43,11 +49,39 @@ interface AnalyticsData {
   };
 }
 
+interface MCPServerStatus {
+  id: string;
+  name: string;
+  description: string;
+  status: 'active' | 'inactive' | 'error' | 'connecting';
+  category: string;
+  requiresApiKey: boolean;
+  tools: Array<{
+    name: string;
+    description: string;
+    enabled: boolean;
+    usageCount: number;
+  }>;
+  lastHealthCheck?: string;
+  responseTime?: number;
+}
+
+interface MCPStats {
+  totalServers: number;
+  activeServers: number;
+  totalCalls: number;
+  successRate: number;
+  avgResponseTime: number;
+}
+
 export default function AIAnalyticsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [mcpServers, setMcpServers] = useState<MCPServerStatus[]>([])
+  const [mcpStats, setMcpStats] = useState<MCPStats | null>(null)
+  const [activeTab, setActiveTab] = useState<'analytics' | 'mcp'>('analytics')
 
   // Fetch real analytics data
   useEffect(() => {
@@ -69,10 +103,34 @@ export default function AIAnalyticsPage() {
       }
     }
 
+    const fetchMCPData = async () => {
+      try {
+        // Fetch MCP servers
+        const serversResponse = await fetch('/api/mcp/servers')
+        if (serversResponse.ok) {
+          const serversData = await serversResponse.json()
+          setMcpServers(serversData.servers || [])
+        }
+
+        // Fetch MCP stats
+        const statsResponse = await fetch('/api/mcp/stats')
+        if (statsResponse.ok) {
+          const statsData = await statsResponse.json()
+          setMcpStats(statsData)
+        }
+      } catch (err) {
+        console.error('MCP fetch error:', err)
+      }
+    }
+
     fetchAnalytics()
+    fetchMCPData()
 
     // Refresh data every 30 seconds
-    const interval = setInterval(fetchAnalytics, 30000)
+    const interval = setInterval(() => {
+      fetchAnalytics()
+      fetchMCPData()
+    }, 30000)
     return () => clearInterval(interval)
   }, [])
 
@@ -86,6 +144,32 @@ export default function AIAnalyticsPage() {
 
   // Calculate satisfaction percentage for display
   const satisfactionPercentage = analyticsData ? analyticsData.satisfaction.excellent + analyticsData.satisfaction.good : 0
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'active':
+        return <CheckCircle className="h-5 w-5 text-green-400" />
+      case 'connecting':
+        return <RefreshCw className="h-5 w-5 text-yellow-400 animate-spin" />
+      case 'error':
+        return <XCircle className="h-5 w-5 text-red-400" />
+      default:
+        return <AlertCircle className="h-5 w-5 text-gray-400" />
+    }
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active':
+        return 'border-green-400/50 bg-green-400/10'
+      case 'connecting':
+        return 'border-yellow-400/50 bg-yellow-400/10'
+      case 'error':
+        return 'border-red-400/50 bg-red-400/10'
+      default:
+        return 'border-gray-400/50 bg-gray-400/10'
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black">
@@ -169,18 +253,38 @@ export default function AIAnalyticsPage() {
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent mb-4 animate-pulse">
-              AI Analytics Dashboard
+              AI Analytics & MCP Dashboard
             </h2>
             <p className="text-lg text-gray-100 max-w-2xl mx-auto">
-              Real-time performance insights and chat analytics
+              Real-time performance insights, chat analytics, and MCP server monitoring
             </p>
             <div className="mt-6 flex justify-center space-x-4">
               <div className="w-3 h-3 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
               <div className="w-3 h-3 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
               <div className="w-3 h-3 bg-cyan-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
             </div>
+
+            {/* Tab Navigation */}
+            <div className="mt-8 flex justify-center space-x-4">
+              <Button
+                onClick={() => setActiveTab('analytics')}
+                className={`${activeTab === 'analytics' ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300'} hover:bg-purple-700 transition-all duration-300`}
+              >
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Chat Analytics
+              </Button>
+              <Button
+                onClick={() => setActiveTab('mcp')}
+                className={`${activeTab === 'mcp' ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300'} hover:bg-purple-700 transition-all duration-300`}
+              >
+                <Server className="h-4 w-4 mr-2" />
+                MCP Servers
+              </Button>
+            </div>
           </div>
 
+          {/* Analytics Tab Content */}
+          {activeTab === 'analytics' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Chat Volume Chart */}
             <Card className="bg-black/30 border-white/20 hover:border-purple-400/50 backdrop-blur-sm transition-all duration-300 hover:scale-105">
@@ -546,8 +650,148 @@ export default function AIAnalyticsPage() {
               </CardContent>
             </Card>
           </div>
+          )}
 
-          {/* Performance Metrics Summary */}
+          {/* MCP Tab Content */}
+          {activeTab === 'mcp' && (
+            <div>
+              {/* MCP Stats Overview */}
+              {mcpStats && (
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+                  <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center hover:border-purple-400/50 transition-all duration-300 hover:scale-105">
+                    <Server className="h-8 w-8 text-purple-400 mx-auto mb-2 animate-pulse" />
+                    <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{mcpStats.totalServers}</div>
+                    <div className="text-sm text-gray-400">Total Servers</div>
+                  </div>
+
+                  <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center hover:border-green-400/50 transition-all duration-300 hover:scale-105">
+                    <Activity className="h-8 w-8 text-green-400 mx-auto mb-2 animate-pulse" />
+                    <div className="text-2xl font-bold text-green-400">{mcpStats.activeServers}</div>
+                    <div className="text-sm text-gray-400">Active Servers</div>
+                  </div>
+
+                  <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center hover:border-blue-400/50 transition-all duration-300 hover:scale-105">
+                    <BarChart3 className="h-8 w-8 text-blue-400 mx-auto mb-2" />
+                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{mcpStats.totalCalls}</div>
+                    <div className="text-sm text-gray-400">Total Calls</div>
+                  </div>
+
+                  <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center hover:border-emerald-400/50 transition-all duration-300 hover:scale-105">
+                    <CheckCircle className="h-8 w-8 text-emerald-400 mx-auto mb-2" />
+                    <div className="text-2xl font-bold text-emerald-400">{mcpStats.successRate}%</div>
+                    <div className="text-sm text-gray-400">Success Rate</div>
+                  </div>
+
+                  <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center hover:border-yellow-400/50 transition-all duration-300 hover:scale-105">
+                    <Zap className="h-8 w-8 text-yellow-400 mx-auto mb-2 animate-bounce" />
+                    <div className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">{mcpStats.avgResponseTime}ms</div>
+                    <div className="text-sm text-gray-400">Avg Response</div>
+                  </div>
+                </div>
+              )}
+
+              {/* MCP Server List */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {mcpServers.map((server) => (
+                  <Card
+                    key={server.id}
+                    className={`bg-black/30 backdrop-blur-sm transition-all duration-300 hover:scale-105 border-white/20 ${getStatusColor(server.status)}`}
+                  >
+                    <CardHeader className="pb-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          {getStatusIcon(server.status)}
+                          <div>
+                            <CardTitle className="text-white">{server.name}</CardTitle>
+                            <CardDescription className="text-gray-300">{server.description}</CardDescription>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-white hover:bg-gray-700"
+                          >
+                            <Settings className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-400">Category:</span>
+                          <span className="text-white capitalize">{server.category}</span>
+                        </div>
+
+                        {server.responseTime && (
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Response Time:</span>
+                            <span className="text-white">{server.responseTime}ms</span>
+                          </div>
+                        )}
+
+                        {server.lastHealthCheck && (
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Last Check:</span>
+                            <span className="text-white">
+                              {new Date(server.lastHealthCheck).toLocaleTimeString()}
+                            </span>
+                          </div>
+                        )}
+
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-300 mb-2">Available Tools ({server.tools.length})</h4>
+                          <div className="space-y-1">
+                            {server.tools.slice(0, 3).map((tool, index) => (
+                              <div key={index} className="flex items-center justify-between text-xs">
+                                <div className="flex items-center space-x-2">
+                                  <div className={`w-2 h-2 rounded-full ${tool.enabled ? 'bg-green-400' : 'bg-gray-500'}`} />
+                                  <span className="text-gray-300">{tool.name}</span>
+                                </div>
+                                <span className="text-gray-400">{tool.usageCount || 0} calls</span>
+                              </div>
+                            ))}
+                            {server.tools.length > 3 && (
+                              <div className="text-xs text-gray-400">
+                                +{server.tools.length - 3} more tools
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex justify-between items-center">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            server.status === 'active' ? 'bg-green-100 text-green-800' :
+                            server.status === 'connecting' ? 'bg-yellow-100 text-yellow-800' :
+                            server.status === 'error' ? 'bg-red-100 text-red-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {server.status.toUpperCase()}
+                          </span>
+
+                          {server.requiresApiKey && (
+                            <span className="text-xs text-amber-400">🔑 API Key Required</span>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {mcpServers.length === 0 && !loading && (
+                <div className="text-center py-12">
+                  <Server className="h-16 w-16 text-gray-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-medium text-gray-300 mb-2">No MCP Servers Found</h3>
+                  <p className="text-gray-400">MCP servers will appear here once configured.</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Performance Metrics Summary - Show on Analytics Tab Only */}
+          {activeTab === 'analytics' && (
           <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center hover:border-green-400/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/20">
               <Activity className="h-8 w-8 text-green-400 mx-auto mb-2 animate-pulse" />
@@ -581,6 +825,7 @@ export default function AIAnalyticsPage() {
               <div className="text-sm text-gray-400">Accuracy</div>
             </div>
           </div>
+          )}
         </div>
       </BeamsBackground>
 
