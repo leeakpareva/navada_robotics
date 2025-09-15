@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
         featured: course.featured,
         published: course.published,
         thumbnailUrl: course.thumbnailUrl,
-        lessons: course.lessons,
+        lessons: course._count.lessons,
         studentCount: course._count.user_progress,
         lessonCount: course._count.lessons
       }))
