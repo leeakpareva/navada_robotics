@@ -427,16 +427,18 @@ export default function LearningPage() {
                     <div className="mb-4">
                       <h4 className="text-purple-300 font-semibold text-sm mb-2">Course Modules:</h4>
                       <div className="space-y-1">
-                        {course.courseModules?.slice(0, 3).map((module, idx) => (
-                          <div key={idx} className="flex items-center justify-between text-xs">
-                            <span className="text-gray-200">{module.title}</span>
-                            <span className="text-gray-400">{module.duration}</span>
-                          </div>
-                        )) || (
+                        {course.courseModules?.length > 0 ? (
+                          course.courseModules.slice(0, 3).map((module, idx) => (
+                            <div key={idx} className="flex items-center justify-between text-xs">
+                              <span className="text-gray-200">{module.title}</span>
+                              <span className="text-gray-400">{module.duration}</span>
+                            </div>
+                          ))
+                        ) : (
                           <div className="text-xs text-gray-400">
                             No modules available
                           </div>
-                        ))}
+                        )}
                         {course.courseModules?.length > 3 && (
                           <div className="text-xs text-purple-400">+{course.courseModules.length - 3} more modules</div>
                         )}
