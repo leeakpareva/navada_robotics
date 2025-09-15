@@ -22,7 +22,7 @@ export default function NavadaRoboticsApp() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black overflow-x-hidden">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60 border-b border-gray-800">
         <div className="container mx-auto px-4 py-4">
