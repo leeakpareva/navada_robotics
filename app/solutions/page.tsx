@@ -15,7 +15,6 @@ import {
   CircuitBoard,
   Cog,
   Microscope as Microchip,
-  Wrench,
   Phone,
 } from "lucide-react"
 import Link from "next/link"
@@ -85,9 +84,6 @@ export default function SolutionsPage() {
               <Link href="/solutions" className="text-purple-400 font-medium">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                Services
-              </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
@@ -112,9 +108,6 @@ export default function SolutionsPage() {
               <div className="flex flex-col space-y-3">
                 <Link href="/solutions" className="text-purple-400 font-medium">
                   Solutions
-                </Link>
-                <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                  Services
                 </Link>
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
@@ -212,10 +205,6 @@ export default function SolutionsPage() {
           <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
             <Microchip className="h-5 w-5 text-purple-400 mb-1" />
             <span className="text-purple-400">Research</span>
-          </Link>
-          <Link href="/services" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Wrench className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Services</span>
           </Link>
           <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
             <Shield className="h-5 w-5 text-gray-400 mb-1" />
