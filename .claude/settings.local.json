@@ -45,7 +45,14 @@
       "Bash(TASKKILL /F /PID 35040)",
       "Bash(TASKKILL /F /IM node.exe /T)",
       "Bash(find:*)",
-      "Bash(vercel env:*)"
+      "Bash(vercel env:*)",
+      "Bash(TASKKILL /F /PID 110112)",
+      "Bash(TASKKILL /F /PID 33400)",
+      "Bash(TASKKILL /F /PID 18960)",
+      "Bash(npx next dev:*)",
+      "Bash(start http://localhost:3001/learning)",
+      "Bash(start http://localhost:3001/admin/courses)",
+      "Bash(start http://localhost:3001/agent-lee)"
     ],
     "deny": [],
     "ask": []

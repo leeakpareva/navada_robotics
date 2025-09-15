@@ -32,13 +32,15 @@ import {
   Crown,
   Github,
   Code,
+  Code2,
   Cpu,
   Bot,
   Database,
   Globe,
   TrendingUp,
   Target,
-  Rocket
+  Rocket,
+  Settings
 } from "lucide-react"
 import Link from "next/link"
 
@@ -48,64 +50,82 @@ export default function LearningPage() {
   const freeCourses = [
     {
       id: 1,
-      title: "AI Fundamentals",
-      description: "Master the basics of artificial intelligence and machine learning",
-      duration: "4 weeks",
-      lessons: 12,
-      students: 1247,
-      rating: 4.8,
-      icon: Brain,
+      title: "AI Fundamentals & Machine Learning",
+      description: "Master the complete foundation of artificial intelligence and machine learning from theory to practical applications",
+      duration: "6 weeks",
+      lessons: 24,
+      students: 2847,
+      rating: 4.9,
       level: "Beginner",
-      tags: ["AI", "Machine Learning", "Fundamentals"]
+      tags: ["AI", "Machine Learning", "Python", "Theory"],
+      featured: true,
+      detailedDescription: "This comprehensive course covers everything from basic AI concepts to advanced machine learning algorithms. You'll learn linear regression, decision trees, neural networks, and how to implement them in Python. Includes hands-on projects with real datasets.",
+      learningOutcomes: [
+        "Understand fundamental AI and ML concepts",
+        "Build and train machine learning models",
+        "Work with popular Python libraries (scikit-learn, pandas)",
+        "Complete 5 real-world projects",
+        "Prepare for advanced AI courses"
+      ],
+      courseModules: [
+        { title: "Introduction to AI", lessons: 4, duration: "Week 1" },
+        { title: "Machine Learning Basics", lessons: 4, duration: "Week 2" },
+        { title: "Supervised Learning", lessons: 4, duration: "Week 3" },
+        { title: "Unsupervised Learning", lessons: 4, duration: "Week 4" },
+        { title: "Neural Networks", lessons: 4, duration: "Week 5" },
+        { title: "Final Project", lessons: 4, duration: "Week 6" }
+      ]
     },
     {
       id: 2,
-      title: "Neural Networks Deep Dive",
-      description: "Understand how neural networks work and build your own from scratch",
-      duration: "3 weeks",
-      lessons: 10,
-      students: 892,
-      rating: 4.9,
-      icon: Cpu,
+      title: "Computer Vision & Image Processing",
+      description: "Learn to build intelligent systems that can see and understand visual data using OpenCV and deep learning",
+      duration: "5 weeks",
+      lessons: 20,
+      students: 1634,
+      rating: 4.8,
       level: "Intermediate",
-      tags: ["Neural Networks", "Deep Learning", "Python"]
+      tags: ["Computer Vision", "OpenCV", "Deep Learning", "Image Processing"],
+      detailedDescription: "Dive deep into computer vision techniques from basic image processing to advanced deep learning models. Build real applications like face detection, object recognition, and image classification systems.",
+      learningOutcomes: [
+        "Master OpenCV for image processing",
+        "Build object detection systems",
+        "Implement facial recognition",
+        "Create image classification models",
+        "Deploy vision applications"
+      ],
+      courseModules: [
+        { title: "OpenCV Fundamentals", lessons: 4, duration: "Week 1" },
+        { title: "Image Processing Techniques", lessons: 4, duration: "Week 2" },
+        { title: "Feature Detection", lessons: 4, duration: "Week 3" },
+        { title: "Deep Learning for Vision", lessons: 4, duration: "Week 4" },
+        { title: "Real-world Applications", lessons: 4, duration: "Week 5" }
+      ]
     },
     {
       id: 3,
-      title: "Computer Vision Basics",
-      description: "Learn image processing and computer vision techniques",
-      duration: "3 weeks",
-      lessons: 9,
-      students: 634,
-      rating: 4.7,
-      icon: Globe,
-      level: "Beginner",
-      tags: ["Computer Vision", "OpenCV", "Image Processing"]
-    },
-    {
-      id: 4,
-      title: "Natural Language Processing",
-      description: "Process and understand human language with AI",
+      title: "AI Agent Development & Deployment",
+      description: "Build, customize, and deploy intelligent AI agents from scratch, including integration with modern frameworks",
       duration: "4 weeks",
-      lessons: 14,
-      students: 756,
-      rating: 4.6,
-      icon: MessageSquare,
-      level: "Intermediate",
-      tags: ["NLP", "Text Processing", "Transformers"]
-    },
-    {
-      id: 5,
-      title: "GitHub AI Agent Cloning",
-      description: "Clone, customize, and deploy AI agents from open-source repositories",
-      duration: "2 weeks",
-      lessons: 8,
-      students: 1523,
+      lessons: 16,
+      students: 2156,
       rating: 4.9,
-      icon: Github,
-      level: "Beginner",
-      tags: ["GitHub", "AI Agents", "Deployment"],
-      featured: true
+      level: "Advanced",
+      tags: ["AI Agents", "Development", "Deployment", "APIs"],
+      detailedDescription: "Learn to create sophisticated AI agents that can interact with users, process natural language, and integrate with various APIs. From concept to deployment, master the complete AI agent development lifecycle.",
+      learningOutcomes: [
+        "Design conversational AI agents",
+        "Integrate with OpenAI and other APIs",
+        "Deploy agents to cloud platforms",
+        "Implement memory and context handling",
+        "Build multi-modal agent capabilities"
+      ],
+      courseModules: [
+        { title: "Agent Architecture", lessons: 4, duration: "Week 1" },
+        { title: "Natural Language Processing", lessons: 4, duration: "Week 2" },
+        { title: "API Integration & Tools", lessons: 4, duration: "Week 3" },
+        { title: "Deployment & Scaling", lessons: 4, duration: "Week 4" }
+      ]
     }
   ]
 
@@ -189,6 +209,12 @@ export default function LearningPage() {
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
+              <Link href="/admin/courses" className="text-white hover:text-purple-400 transition-colors">
+                <div className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Admin
+                </div>
+              </Link>
             </nav>
           </div>
 
@@ -213,6 +239,12 @@ export default function LearningPage() {
                 </Link>
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
+                </Link>
+                <Link href="/admin/courses" className="text-white hover:text-purple-400 transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
+                    Admin
+                  </div>
                 </Link>
               </div>
             </nav>
@@ -269,18 +301,28 @@ export default function LearningPage() {
         <section className="py-16 px-4">
           <div className="container mx-auto">
             <div className="text-center mb-12">
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Free AI Learning Modules</h3>
-              <p className="text-lg text-gray-100 max-w-2xl mx-auto">
-                Start your AI journey with our comprehensive free courses. No credit card required.
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">AI Learning Modules</h3>
+              <p className="text-lg text-gray-100 max-w-2xl mx-auto mb-6">
+                Start your AI journey with our comprehensive courses, enhanced with Agent Lee integration for personalized learning.
               </p>
+              <div className="flex items-center justify-center gap-3 mb-8">
+                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-full border border-purple-400/50">
+                  <Bot className="h-4 w-4 text-purple-300" />
+                  <span className="text-purple-300 text-sm font-medium">Agent Lee Integration</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600/20 to-emerald-600/20 rounded-full border border-green-400/50">
+                  <Sparkles className="h-4 w-4 text-green-300" />
+                  <span className="text-green-300 text-sm font-medium">AI-Powered Learning</span>
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {freeCourses.map((course) => (
                 <Card
                   key={course.id}
-                  className={`bg-black/30 border-white/20 hover:border-purple-400/50 transition-all duration-300 cursor-pointer group ${
-                    course.featured ? 'ring-2 ring-purple-400/50' : ''
+                  className={`bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 border-gray-700/50 hover:border-purple-400/70 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 cursor-pointer group hover:scale-[1.02] hover:-translate-y-1 backdrop-blur-sm ${
+                    course.featured ? 'ring-2 ring-purple-400/60 shadow-lg shadow-purple-500/30' : ''
                   }`}
                 >
                   <CardHeader className="pb-4">
@@ -290,36 +332,57 @@ export default function LearningPage() {
                         Featured
                       </Badge>
                     )}
-                    <div className="flex items-center space-x-3 mb-3">
-                      <div className="p-2 bg-purple-500/20 rounded-lg">
-                        <course.icon className="h-6 w-6 text-purple-300" />
-                      </div>
-                      <div>
-                        <Badge variant="outline" className="text-xs text-purple-300 border-purple-400">
-                          {course.level}
-                        </Badge>
-                      </div>
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge variant="outline" className="text-xs text-purple-300 border-purple-400">
+                        {course.level}
+                      </Badge>
+                      <Link href="/agent-lee" className="group/agent">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 w-8 p-0 text-purple-400 hover:text-white hover:bg-purple-600/20 group-hover/agent:scale-110 transition-all duration-200"
+                          title="Ask Agent Lee about this course"
+                        >
+                          <Bot className="h-4 w-4" />
+                        </Button>
+                      </Link>
                     </div>
-                    <CardTitle className="text-white group-hover:text-purple-200 transition-colors">
+                    <CardTitle className="text-white group-hover:text-purple-200 transition-colors text-lg font-bold">
                       {course.title}
                     </CardTitle>
-                    <CardDescription className="text-gray-300">
+                    <CardDescription className="text-gray-100 text-sm leading-relaxed mb-4">
                       {course.description}
                     </CardDescription>
+
+                    {/* Course Modules Preview */}
+                    <div className="mb-4">
+                      <h4 className="text-purple-300 font-semibold text-sm mb-2">Course Modules:</h4>
+                      <div className="space-y-1">
+                        {course.courseModules.slice(0, 3).map((module, idx) => (
+                          <div key={idx} className="flex items-center justify-between text-xs">
+                            <span className="text-gray-200">{module.title}</span>
+                            <span className="text-gray-400">{module.duration}</span>
+                          </div>
+                        ))}
+                        {course.courseModules.length > 3 && (
+                          <div className="text-xs text-purple-400">+{course.courseModules.length - 3} more modules</div>
+                        )}
+                      </div>
+                    </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
+                    <div className="grid grid-cols-3 gap-4 text-sm text-gray-300 mb-4">
                       <div className="flex items-center space-x-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{course.duration}</span>
+                        <Clock className="h-4 w-4 text-purple-400" />
+                        <span className="text-gray-200">{course.duration}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <BookOpen className="h-4 w-4" />
-                        <span>{course.lessons} lessons</span>
+                        <BookOpen className="h-4 w-4 text-purple-400" />
+                        <span className="text-gray-200">{course.lessons} lessons</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <Users className="h-4 w-4" />
-                        <span>{course.students}</span>
+                        <Users className="h-4 w-4 text-purple-400" />
+                        <span className="text-gray-200">{course.students}</span>
                       </div>
                     </div>
 
@@ -327,8 +390,9 @@ export default function LearningPage() {
                       <div className="flex items-center space-x-1">
                         <Star className="h-4 w-4 text-yellow-400 fill-current" />
                         <span className="text-white font-medium">{course.rating}</span>
+                        <span className="text-gray-400 text-sm">({course.level})</span>
                       </div>
-                      <Badge className="bg-green-500/20 text-green-300">FREE</Badge>
+                      <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">FREE</Badge>
                     </div>
 
                     <div className="flex flex-wrap gap-1 mb-4">
@@ -336,17 +400,24 @@ export default function LearningPage() {
                         <Badge
                           key={tagIndex}
                           variant="outline"
-                          className="text-xs text-gray-400 border-gray-600"
+                          className="text-xs text-purple-300 border-purple-500/40 bg-purple-500/10"
                         >
                           {tag}
                         </Badge>
                       ))}
                     </div>
 
-                    <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
-                      <Play className="h-4 w-4 mr-2" />
-                      Start Course
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button className="flex-1 bg-purple-600 hover:bg-purple-700 text-white">
+                        <Play className="h-4 w-4 mr-2" />
+                        Start Course
+                      </Button>
+                      <Link href="/agent-lee">
+                        <Button variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white" title="Get help from Agent Lee">
+                          <MessageSquare className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -399,15 +470,128 @@ export default function LearningPage() {
           </div>
         </section>
 
+        {/* AI-Powered Features Section */}
+        <section className="py-16 px-4 bg-gradient-to-br from-cyan-900/10 to-purple-900/10">
+          <div className="container mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-600 to-purple-600 px-4 py-2 rounded-full text-white font-medium mb-4">
+                <Sparkles className="h-5 w-5" />
+                <span>AI-Enhanced Learning</span>
+              </div>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Personalized AI Learning Experience
+              </h3>
+              <p className="text-lg text-gray-100 max-w-2xl mx-auto">
+                Experience the future of education with Agent Lee and our AI-powered learning tools.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+              <Card className="bg-black/30 border-white/20 hover:border-cyan-400/50 transition-all duration-300 hover:scale-[1.02]">
+                <CardContent className="p-6 text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="p-3 bg-cyan-500/20 rounded-xl">
+                      <Bot className="h-8 w-8 text-cyan-300" />
+                    </div>
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">Agent Lee Tutor</h4>
+                  <p className="text-gray-300 text-sm">
+                    Get instant answers, explanations, and personalized guidance from Agent Lee throughout your learning journey.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-black/30 border-white/20 hover:border-purple-400/50 transition-all duration-300 hover:scale-[1.02]">
+                <CardContent className="p-6 text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="p-3 bg-purple-500/20 rounded-xl">
+                      <Zap className="h-8 w-8 text-purple-300" />
+                    </div>
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">Smart Recommendations</h4>
+                  <p className="text-gray-300 text-sm">
+                    AI analyzes your progress and suggests the next best courses and topics to accelerate your learning.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-black/30 border-white/20 hover:border-green-400/50 transition-all duration-300 hover:scale-[1.02]">
+                <CardContent className="p-6 text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="p-3 bg-green-500/20 rounded-xl">
+                      <Target className="h-8 w-8 text-green-300" />
+                    </div>
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">Adaptive Learning Paths</h4>
+                  <p className="text-gray-300 text-sm">
+                    Course content adapts to your learning style and pace, ensuring optimal comprehension and retention.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-black/30 border-white/20 hover:border-yellow-400/50 transition-all duration-300 hover:scale-[1.02]">
+                <CardContent className="p-6 text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="p-3 bg-yellow-500/20 rounded-xl">
+                      <BarChart3 className="h-8 w-8 text-yellow-300" />
+                    </div>
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">Intelligent Analytics</h4>
+                  <p className="text-gray-300 text-sm">
+                    Track your progress with AI-powered insights that identify strengths and areas for improvement.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-black/30 border-white/20 hover:border-pink-400/50 transition-all duration-300 hover:scale-[1.02]">
+                <CardContent className="p-6 text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="p-3 bg-pink-500/20 rounded-xl">
+                      <Code className="h-8 w-8 text-pink-300" />
+                    </div>
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">Code Review & Feedback</h4>
+                  <p className="text-gray-300 text-sm">
+                    Submit your code projects and receive detailed AI-powered feedback and suggestions for improvement.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-black/30 border-white/20 hover:border-orange-400/50 transition-all duration-300 hover:scale-[1.02]">
+                <CardContent className="p-6 text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="p-3 bg-orange-500/20 rounded-xl">
+                      <MessageSquare className="h-8 w-8 text-orange-300" />
+                    </div>
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">Interactive Q&A</h4>
+                  <p className="text-gray-300 text-sm">
+                    Ask questions anytime and get immediate, contextual answers powered by our AI knowledge base.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="text-center">
+              <Link href="/agent-lee">
+                <Button className="bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700 text-white px-8 py-3 text-lg">
+                  <Bot className="h-5 w-5 mr-2" />
+                  Try Agent Lee Now
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Learning Features */}
         <section className="py-16 px-4">
           <div className="container mx-auto">
             <div className="text-center mb-12">
               <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Complete Learning Experience
+                Complete Learning Platform
               </h3>
               <p className="text-lg text-gray-100 max-w-2xl mx-auto">
-                Our platform provides everything you need to master AI and robotics technology.
+                Everything you need to master AI and robotics in one comprehensive platform.
               </p>
             </div>
 
@@ -433,9 +617,9 @@ export default function LearningPage() {
                       <Bot className="h-8 w-8 text-green-300" />
                     </div>
                   </div>
-                  <h4 className="text-lg font-semibold text-white mb-2">AI-Powered Grading</h4>
+                  <h4 className="text-lg font-semibold text-white mb-2">Agent Lee Assistant</h4>
                   <p className="text-gray-300 text-sm">
-                    Submit assignments and get instant feedback from our advanced AI grading system.
+                    Get personalized help and instant answers from Agent Lee, your AI learning companion.
                   </p>
                 </CardContent>
               </Card>

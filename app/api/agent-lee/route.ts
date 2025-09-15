@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 import OpenAI from "openai"
+import { Mistral } from "@mistralai/mistralai"
 import { DatabaseAnalytics } from "@/lib/database-analytics"
 import { RAGService } from "@/lib/rag-service"
 import { mcpClient } from "@/lib/mcp/client"
@@ -124,6 +125,7 @@ async function handleMCPRequest(message: string, sessionId?: string, threadId?: 
 
 const API_KEY = process.env.OPENAI_API_KEY
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY
+const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID
 const VOICE_PROMPT_ID = process.env.VOICE_PROMPT_ID
 const VECTOR_STORE_ID = process.env.VECTOR_STORE_ID
@@ -148,6 +150,10 @@ if (BRAVE_SEARCH_API_KEY) {
 console.log("[v0] DEEPSEEK_API_KEY exists:", !!DEEPSEEK_API_KEY)
 if (DEEPSEEK_API_KEY) {
   console.log("[v0] DeepSeek API available")
+}
+console.log("[v0] MISTRAL_API_KEY exists:", !!MISTRAL_API_KEY)
+if (MISTRAL_API_KEY) {
+  console.log("[v0] Mistral API available")
 }
 console.log(
   "[v0] All env vars:",
@@ -428,6 +434,42 @@ async function generateImage(prompt: string, openai: OpenAI): Promise<string> {
   }
 }
 
+async function generateMistralResponse(message: string, mistral: Mistral): Promise<string> {
+  try {
+    console.log("[v0] Calling Mistral API with message:", message.substring(0, 100) + "...")
+
+    const response = await mistral.chat.complete({
+      model: "mistral-large-latest",
+      messages: [
+        {
+          role: "system",
+          content: "You are Agent Lee, an AI robotics instructor specializing in helping students learn robotics, Python programming, computer vision, and AI development. Be helpful, educational, and encouraging."
+        },
+        {
+          role: "user",
+          content: message
+        }
+      ],
+      maxTokens: 1000,
+      temperature: 0.7
+    })
+
+    if (response.choices && response.choices[0] && response.choices[0].message) {
+      const result = response.choices[0].message.content
+      console.log("[v0] Mistral response generated successfully, length:", result?.length)
+      return result || "I apologize, but I couldn't generate a response."
+    } else {
+      throw new Error("No response received from Mistral API")
+    }
+  } catch (error) {
+    console.error("[v0] Mistral API error:", error)
+    if (error instanceof Error) {
+      console.error("[v0] Error message:", error.message)
+    }
+    throw error
+  }
+}
+
 async function analyzeImage(imageUrl: string, prompt: string, openai: OpenAI): Promise<string> {
   try {
     console.log("[v0] Analyzing image with Vision API, prompt:", prompt)
@@ -472,6 +514,8 @@ async function analyzeImage(imageUrl: string, prompt: string, openai: OpenAI): P
 }
 
 let openai: OpenAI | null = null
+let mistral: Mistral | null = null
+
 try {
   if (API_KEY) {
     openai = new OpenAI({
@@ -481,6 +525,17 @@ try {
 } catch (initError) {
   console.error("[v0] Failed to initialize OpenAI client:", initError)
   openai = null
+}
+
+try {
+  if (MISTRAL_API_KEY) {
+    mistral = new Mistral({
+      apiKey: MISTRAL_API_KEY,
+    })
+  }
+} catch (initError) {
+  console.error("[v0] Failed to initialize Mistral client:", initError)
+  mistral = null
 }
 
 export async function POST(request: NextRequest) {
@@ -745,6 +800,109 @@ export async function POST(request: NextRequest) {
       }
     } else {
       console.log("[v0] Not an image generation request, proceeding with assistant")
+    }
+
+    // Handle Mistral API provider
+    if (apiProvider === 'mistral') {
+      console.log("[v0] Using Mistral API provider")
+
+      if (!mistral || !MISTRAL_API_KEY) {
+        console.error("[v0] Mistral configuration missing")
+        return NextResponse.json({
+          error: "Mistral configuration missing",
+          details: {
+            hasMistralKey: !!MISTRAL_API_KEY,
+            clientInitialized: !!mistral
+          }
+        }, { status: 500 })
+      }
+
+      try {
+        console.log("[v0] Generating response with Mistral API")
+        const responseStartTime = Date.now()
+
+        // Add MCP results if available
+        let enhancedMessage = message
+        const mcpResults = await handleMCPRequest(message, sessionId, threadId || "mistral_" + Date.now())
+        if (mcpResults) {
+          enhancedMessage = `${message}\n\n--- Additional Information ---\n${mcpResults}`
+        }
+
+        const mistralResponse = await generateMistralResponse(enhancedMessage, mistral)
+        const responseTime = Date.now() - requestStartTime
+
+        // Track chat session for Mistral
+        sessionId = await trackChatSession({
+          threadId: threadId || "mistral_" + Date.now(),
+          apiProvider: 'mistral',
+          userId: userId,
+          sessionData: {
+            startTime: new Date().toISOString(),
+            initialMessage: message
+          }
+        })
+
+        // Track the user message
+        if (sessionId) {
+          try {
+            await DatabaseAnalytics.addChatMessage({
+              sessionId,
+              threadId: threadId || "mistral_" + Date.now(),
+              messageIndex: 0,
+              role: 'user',
+              content: message,
+              metadata: { hasMCPResults: !!mcpResults }
+            })
+
+            // Track the assistant response
+            await DatabaseAnalytics.addChatMessage({
+              sessionId,
+              threadId: threadId || "mistral_" + Date.now(),
+              messageIndex: 1,
+              role: 'assistant',
+              content: mistralResponse,
+              metadata: { model: 'mistral-large-latest' }
+            })
+          } catch (trackErr) {
+            console.error('[Analytics] Error tracking Mistral messages:', trackErr)
+          }
+        }
+
+        // Update session with completion data
+        if (sessionId) {
+          updateChatSession(sessionId, {
+            endTime: new Date(),
+            responseTime,
+            status: 'completed'
+          })
+        }
+
+        console.log("[v0] Mistral response completed successfully")
+        return NextResponse.json({
+          message: mistralResponse,
+          threadId: threadId || "mistral_" + Date.now(),
+          timestamp: new Date().toISOString(),
+          responseTime,
+          provider: 'mistral'
+        })
+
+      } catch (mistralError) {
+        console.error("[v0] Mistral response generation failed:", mistralError)
+
+        // Update session with error status
+        if (sessionId) {
+          updateChatSession(sessionId, {
+            endTime: new Date(),
+            responseTime: Date.now() - requestStartTime,
+            status: 'error'
+          })
+        }
+
+        return NextResponse.json({
+          error: "Failed to generate response with Mistral",
+          details: mistralError instanceof Error ? mistralError.message : "Unknown error"
+        }, { status: 500 })
+      }
     }
 
     // Check if this is a code generation request
