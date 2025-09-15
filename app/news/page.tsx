@@ -8,7 +8,6 @@ import { NewsContent } from './NewsContent';
 export const metadata: Metadata = {
   title: 'News • NAVADA',
   description: 'Latest news and updates in AI, Robotics, Raspberry Pi, and technology from leading sources.',
-  canonical: '/news',
   openGraph: {
     title: 'News • NAVADA',
     description: 'Latest news and updates in AI, Robotics, Raspberry Pi, and technology from leading sources.',

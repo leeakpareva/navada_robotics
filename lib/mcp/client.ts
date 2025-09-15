@@ -62,7 +62,12 @@ export class MCPClient {
           } else if (toolName === 'create_directory') {
             result = await fileSystemMCP.createDirectory(params.path)
           } else if (toolName === 'delete_file') {
-            result = await fileSystemMCP.deleteFile(params.path)
+            // Method might not exist, handle gracefully
+            if ('deleteFile' in fileSystemMCP && typeof fileSystemMCP.deleteFile === 'function') {
+              result = await (fileSystemMCP as any).deleteFile(params.path)
+            } else {
+              result = { error: 'Delete file method not available' }
+            }
           } else {
             throw new Error(`Unknown tool ${toolName} for File System`)
           }

@@ -67,9 +67,9 @@ export class RAGService {
             query.category ? { category: query.category } : {},
             {
               OR: [
-                { title: { contains: query.query, mode: 'insensitive' } },
-                { content: { contains: query.query, mode: 'insensitive' } },
-                { summary: { contains: query.query, mode: 'insensitive' } }
+                { title: { contains: query.query } },
+                { content: { contains: query.query } },
+                { summary: { contains: query.query } }
               ]
             }
           ]

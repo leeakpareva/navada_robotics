@@ -26,7 +26,7 @@ function getCached<T>(): T | null {
   return cache.data && Date.now() - cache.ts < cache.ttlMs ? cache.data as T : null;
 }
 
-function setCached<T>(data: T): void {
+function setCached<T extends NewsItem[]>(data: T): void {
   cache.data = data;
   cache.ts = Date.now();
 }
