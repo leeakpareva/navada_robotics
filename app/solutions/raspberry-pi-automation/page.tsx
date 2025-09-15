@@ -33,9 +33,9 @@ export default function RaspberryPiAutomationPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const keyMetrics = [
-    { label: "Market Size", value: "$12.8B", growth: "+15.2%", icon: DollarSign },
+    { label: "Market Size", value: "£12.8B", growth: "+15.2%", icon: DollarSign },
     { label: "Job Growth", value: "23%", growth: "by 2030", icon: TrendingUp },
-    { label: "Avg Salary", value: "$95K", growth: "annually", icon: Users },
+    { label: "Avg Salary", value: "£95K", growth: "annually", icon: Users },
     { label: "Companies", value: "5000+", growth: "hiring", icon: Building }
   ]
 
@@ -70,7 +70,7 @@ export default function RaspberryPiAutomationPage() {
     {
       title: "IoT Solutions Engineer",
       company: "Microsoft",
-      salary: "$120,000 - $160,000",
+      salary: "£120,000 - £160,000",
       location: "Seattle, WA",
       type: "Full-time",
       skills: ["Raspberry Pi", "Python", "Azure IoT", "C++"]
@@ -78,7 +78,7 @@ export default function RaspberryPiAutomationPage() {
     {
       title: "Automation Systems Developer",
       company: "Tesla",
-      salary: "$110,000 - $150,000",
+      salary: "£110,000 - £150,000",
       location: "Austin, TX",
       type: "Full-time",
       skills: ["Embedded Systems", "Linux", "GPIO Programming", "MQTT"]
@@ -86,7 +86,7 @@ export default function RaspberryPiAutomationPage() {
     {
       title: "Robotics Software Engineer",
       company: "Boston Dynamics",
-      salary: "$130,000 - $180,000",
+      salary: "£130,000 - £180,000",
       location: "Waltham, MA",
       type: "Full-time",
       skills: ["ROS", "Computer Vision", "Machine Learning", "Hardware Integration"]
@@ -97,19 +97,19 @@ export default function RaspberryPiAutomationPage() {
     {
       category: "Industrial IoT",
       applications: ["Predictive Maintenance", "Asset Tracking", "Environmental Monitoring"],
-      marketValue: "$178B by 2025",
+      marketValue: "£178B by 2025",
       growthRate: "22.4% CAGR"
     },
     {
       category: "Smart Cities",
       applications: ["Traffic Management", "Waste Management", "Energy Grid Optimization"],
-      marketValue: "$2.5T by 2025",
+      marketValue: "£2.5T by 2025",
       growthRate: "18.9% CAGR"
     },
     {
       category: "Healthcare IoT",
       applications: ["Patient Monitoring", "Medical Device Automation", "Telemedicine"],
-      marketValue: "$659B by 2025",
+      marketValue: "£659B by 2025",
       growthRate: "25.1% CAGR"
     }
   ]

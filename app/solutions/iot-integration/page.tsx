@@ -37,9 +37,9 @@ export default function IoTIntegrationPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const iotMarketMetrics = [
-    { label: "IoT Market Size", value: "$650B", growth: "+24.9% by 2030", icon: DollarSign },
+    { label: "IoT Market Size", value: "£650B", growth: "+24.9% by 2030", icon: DollarSign },
     { label: "Connected Devices", value: "75B", growth: "by 2025", icon: Globe },
-    { label: "IoT Engineers", value: "$115K", growth: "avg salary", icon: Users },
+    { label: "IoT Engineers", value: "£115K", growth: "avg salary", icon: Users },
     { label: "IoT Companies", value: "15K+", growth: "globally", icon: Building }
   ]
 
@@ -133,7 +133,7 @@ export default function IoTIntegrationPage() {
     {
       title: "IoT Solutions Architect",
       company: "Amazon Web Services",
-      salary: "$140,000 - $200,000",
+      salary: "£140,000 - £200,000",
       location: "Seattle, WA",
       type: "Full-time",
       skills: ["AWS IoT Core", "System Architecture", "Edge Computing", "Security"],
@@ -142,7 +142,7 @@ export default function IoTIntegrationPage() {
     {
       title: "IoT Security Engineer",
       company: "Cisco Systems",
-      salary: "$120,000 - $170,000",
+      salary: "£120,000 - £170,000",
       location: "San Jose, CA",
       type: "Full-time",
       skills: ["Cybersecurity", "Network Protocols", "Penetration Testing", "Risk Assessment"],
@@ -151,7 +151,7 @@ export default function IoTIntegrationPage() {
     {
       title: "Industrial IoT Developer",
       company: "General Electric",
-      salary: "$100,000 - $145,000",
+      salary: "£100,000 - £145,000",
       location: "Boston, MA",
       type: "Full-time",
       skills: ["IIoT Platforms", "OPC-UA", "Industrial Protocols", "Data Analytics"],
@@ -160,7 +160,7 @@ export default function IoTIntegrationPage() {
     {
       title: "IoT Product Manager",
       company: "Google Cloud",
-      salary: "$130,000 - $180,000",
+      salary: "£130,000 - £180,000",
       location: "Mountain View, CA",
       type: "Full-time",
       skills: ["Product Strategy", "IoT Platforms", "Market Analysis", "Stakeholder Management"],
@@ -181,7 +181,7 @@ export default function IoTIntegrationPage() {
       applications: ["Smart Grid", "Renewable Integration", "Energy Storage"],
       impact: "15% efficiency improvement",
       devices: "500M+ smart meters",
-      roi: "$200B annual savings"
+      roi: "£200B annual savings"
     },
     {
       industry: "Transportation",

@@ -466,7 +466,7 @@ export default function AdminCoursesPage() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => togglePublishCourse(course.id, course.published)}
-                                className="text-white border-gray-600"
+                                className="text-white border-gray-600 hover:bg-gray-700 hover:text-white hover:border-gray-500"
                               >
                                 {course.published ? "Unpublish" : "Publish"}
                               </Button>
@@ -474,7 +474,7 @@ export default function AdminCoursesPage() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => setSelectedCourse(course)}
-                                className="text-white border-gray-600"
+                                className="text-white border-gray-600 hover:bg-gray-700 hover:text-white hover:border-gray-500"
                               >
                                 Edit
                               </Button>

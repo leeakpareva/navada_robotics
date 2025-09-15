@@ -36,10 +36,10 @@ export default function EducationalRoboticsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const educationMetrics = [
-    { label: "STEM Market", value: "$47B", growth: "+28% by 2027", icon: DollarSign },
+    { label: "STEM Market", value: "£47B", growth: "+28% by 2027", icon: DollarSign },
     { label: "Job Growth", value: "35%", growth: "robotics education", icon: TrendingUp },
     { label: "Universities", value: "2,500+", growth: "robotics programs", icon: School },
-    { label: "Avg Salary", value: "$88K", growth: "education tech", icon: Users }
+    { label: "Avg Salary", value: "£88K", growth: "education tech", icon: Users }
   ]
 
   const educationalPrograms = [
@@ -107,7 +107,7 @@ export default function EducationalRoboticsPage() {
     {
       title: "Robotics Education Specialist",
       company: "LEGO Education",
-      salary: "$75,000 - $105,000",
+      salary: "£75,000 - £105,000",
       location: "Billund, Denmark",
       type: "Full-time",
       skills: ["Curriculum Development", "Educational Technology", "STEM Teaching"],
@@ -116,7 +116,7 @@ export default function EducationalRoboticsPage() {
     {
       title: "University Robotics Professor",
       company: "Carnegie Mellon University",
-      salary: "$95,000 - $180,000",
+      salary: "£95,000 - £180,000",
       location: "Pittsburgh, PA",
       type: "Tenure Track",
       skills: ["PhD in Robotics", "Research Publications", "Grant Writing"],
@@ -125,7 +125,7 @@ export default function EducationalRoboticsPage() {
     {
       title: "Training Program Manager",
       company: "ABB Robotics",
-      salary: "$85,000 - $125,000",
+      salary: "£85,000 - £125,000",
       location: "Auburn Hills, MI",
       type: "Full-time",
       skills: ["Industrial Robotics", "Training Design", "Project Management"],
@@ -134,7 +134,7 @@ export default function EducationalRoboticsPage() {
     {
       title: "EdTech Product Manager",
       company: "Sphero",
-      salary: "$90,000 - $140,000",
+      salary: "£90,000 - £140,000",
       location: "Boulder, CO",
       type: "Full-time",
       skills: ["Product Management", "Educational Technology", "Market Research"],
@@ -192,7 +192,7 @@ export default function EducationalRoboticsPage() {
       company: "NVIDIA",
       partnership: "Technology Provider",
       programs: ["AI Hardware Grants", "Technical Training"],
-      impact: "$500K in equipment donated"
+      impact: "£500K in equipment donated"
     }
   ]
 
@@ -202,7 +202,7 @@ export default function EducationalRoboticsPage() {
       level: "High School",
       participants: "40,000+ students",
       focus: "Engineering Design Process",
-      awards: "$80M+ in scholarships"
+      awards: "£80M+ in scholarships"
     },
     {
       name: "RoboCup",

@@ -10,9 +10,18 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required to enroll in courses" },
+        { status: 401 }
+      )
+    }
+
+    // Use email as fallback identifier for admin user
+    const userId = session.user.id || session.user.email
+    if (!userId) {
+      return NextResponse.json(
+        { error: "User identification required for enrollment" },
         { status: 401 }
       )
     }
@@ -49,11 +58,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // For admin user, find user by email if no direct ID
+    let actualUserId = userId
+    if (session.user.email === "leeakpareva@gmail.com" && typeof userId === 'string' && userId.includes('@')) {
+      const adminUser = await prisma.users.findUnique({
+        where: { email: userId }
+      })
+      if (adminUser) {
+        actualUserId = adminUser.id
+      }
+    }
+
     // Check if already enrolled
     const existingEnrollment = await prisma.user_progress.findUnique({
       where: {
         userId_courseId: {
-          userId: session.user.id,
+          userId: actualUserId,
           courseId: courseId
         }
       }
@@ -67,9 +87,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has access (free tier or paid subscription)
-    if (!course.isFreeTier) {
+    // Admin user gets free access to all courses
+    const isAdmin = session.user.email === "leeakpareva@gmail.com"
+    if (!course.isFreeTier && !isAdmin) {
       const subscription = await prisma.subscriptions.findUnique({
-        where: { userId: session.user.id }
+        where: { userId: actualUserId }
       })
 
       if (!subscription || subscription.status !== "active" || subscription.tier !== "premium") {
@@ -86,7 +108,7 @@ export async function POST(request: NextRequest) {
       const userProgress = await tx.user_progress.create({
         data: {
           id: uuidv4(),
-          userId: session.user.id,
+          userId: actualUserId,
           courseId: courseId,
           totalLessons: course.lessons.length,
           enrolledAt: new Date(),
@@ -113,7 +135,7 @@ export async function POST(request: NextRequest) {
       await tx.learning_analytics.create({
         data: {
           id: uuidv4(),
-          userId: session.user.id,
+          userId: actualUserId,
           courseId: courseId,
           eventType: "course_enrollment",
           eventData: JSON.stringify({
@@ -128,7 +150,7 @@ export async function POST(request: NextRequest) {
       return userProgress
     })
 
-    console.log(`[Enrollment] User ${session.user.id} enrolled in course ${courseId}`)
+    console.log(`[Enrollment] User ${actualUserId} enrolled in course ${courseId}`)
 
     return NextResponse.json({
       success: true,
@@ -149,15 +171,35 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required" },
         { status: 401 }
       )
     }
 
+    // Use email as fallback identifier for admin user
+    const userId = session.user.id || session.user.email
+    if (!userId) {
+      return NextResponse.json(
+        { error: "User identification required" },
+        { status: 401 }
+      )
+    }
+
+    // For admin user, find user by email if no direct ID
+    let actualUserId = userId
+    if (session.user.email === "leeakpareva@gmail.com" && typeof userId === 'string' && userId.includes('@')) {
+      const adminUser = await prisma.users.findUnique({
+        where: { email: userId }
+      })
+      if (adminUser) {
+        actualUserId = adminUser.id
+      }
+    }
+
     const enrollments = await prisma.user_progress.findMany({
-      where: { userId: session.user.id },
+      where: { userId: actualUserId },
       include: {
         courses: {
           include: {

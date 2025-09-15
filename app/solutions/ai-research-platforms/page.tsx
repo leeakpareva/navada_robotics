@@ -34,9 +34,9 @@ export default function AIResearchPlatformsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const aiMarketMetrics = [
-    { label: "AI Market Size", value: "$390B", growth: "+37.3%", icon: DollarSign },
+    { label: "AI Market Size", value: "£390B", growth: "+37.3%", icon: DollarSign },
     { label: "Edge AI Growth", value: "42%", growth: "CAGR 2023-30", icon: TrendingUp },
-    { label: "AI Engineers", value: "$165K", growth: "avg salary", icon: Users },
+    { label: "AI Engineers", value: "£165K", growth: "avg salary", icon: Users },
     { label: "Research Labs", value: "12K+", growth: "worldwide", icon: Building }
   ]
 
@@ -94,8 +94,8 @@ export default function AIResearchPlatformsPage() {
     },
     {
       metric: "Cost Efficiency",
-      traditional: "Cloud: $0.50/hr/model",
-      edge: "Edge: $0.05/hr/model",
+      traditional: "Cloud: £0.50/hr/model",
+      edge: "Edge: £0.05/hr/model",
       improvement: "90% savings",
       icon: DollarSign
     }
@@ -105,7 +105,7 @@ export default function AIResearchPlatformsPage() {
     {
       title: "AI Research Scientist",
       company: "Google DeepMind",
-      salary: "$200,000 - $350,000",
+      salary: "£200,000 - £350,000",
       location: "Mountain View, CA",
       type: "Full-time",
       skills: ["Deep Learning", "TensorFlow", "Research Publications", "Edge Computing"],
@@ -114,7 +114,7 @@ export default function AIResearchPlatformsPage() {
     {
       title: "Edge AI Engineer",
       company: "NVIDIA",
-      salary: "$150,000 - $220,000",
+      salary: "£150,000 - £220,000",
       location: "Santa Clara, CA",
       type: "Full-time",
       skills: ["CUDA", "TensorRT", "Computer Vision", "Embedded Systems"],
@@ -123,7 +123,7 @@ export default function AIResearchPlatformsPage() {
     {
       title: "ML Platform Engineer",
       company: "Apple",
-      salary: "$180,000 - $280,000",
+      salary: "£180,000 - £280,000",
       location: "Cupertino, CA",
       type: "Full-time",
       skills: ["Core ML", "iOS/macOS", "Model Optimization", "Privacy-ML"],
@@ -132,7 +132,7 @@ export default function AIResearchPlatformsPage() {
     {
       title: "Research Engineer - Federated Learning",
       company: "Meta AI",
-      salary: "$170,000 - $250,000",
+      salary: "£170,000 - £250,000",
       location: "Menlo Park, CA",
       type: "Full-time",
       skills: ["PyTorch", "Distributed Systems", "Privacy Tech", "Federated Learning"],
