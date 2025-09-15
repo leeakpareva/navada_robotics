@@ -42,9 +42,6 @@ export default function ContactPage() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
-              <Link href="/ai-analytics" className="text-white hover:text-purple-400 transition-colors">
-                AI Analytics
-              </Link>
               <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
                 Learning
               </Link>
@@ -69,9 +66,6 @@ export default function ContactPage() {
                 </Link>
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
-                </Link>
-                <Link href="/ai-analytics" className="text-white hover:text-purple-400 transition-colors">
-                  AI Analytics
                 </Link>
                 <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
                   Learning

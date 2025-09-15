@@ -158,9 +158,6 @@ export default function MCPDashboardPage() {
 
             {/* Desktop navigation */}
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/ai-analytics" className="text-white hover:text-purple-400 transition-colors">
-                AI Analytics
-              </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                 Agent Lee
               </Link>

@@ -41,9 +41,6 @@ export default function LearningPage() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
-              <Link href="/ai-analytics" className="text-white hover:text-purple-400 transition-colors">
-                AI Analytics
-              </Link>
               <Link href="/learning" className="text-purple-400 font-medium">
                 Learning
               </Link>
@@ -68,9 +65,6 @@ export default function LearningPage() {
                 </Link>
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
-                </Link>
-                <Link href="/ai-analytics" className="text-white hover:text-purple-400 transition-colors">
-                  AI Analytics
                 </Link>
                 <Link href="/learning" className="text-purple-400 font-medium">
                   Learning
