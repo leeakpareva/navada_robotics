@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,6 +12,9 @@ export async function GET(request: NextRequest) {
         { status: 401 }
       )
     }
+
+    // Dynamic import to avoid build-time issues
+    const { prisma } = await import('@/lib/prisma')
 
     // Get all email subscribers
     const subscribers = await prisma.emailSubscriber.findMany({
@@ -48,7 +50,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Email admin error:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch email data' },
+      { error: 'Failed to fetch email data', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
@@ -66,6 +68,9 @@ export async function DELETE(request: NextRequest) {
         { status: 401 }
       )
     }
+
+    // Dynamic import to avoid build-time issues
+    const { prisma } = await import('@/lib/prisma')
 
     const { email } = await request.json()
 

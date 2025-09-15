@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
+    // Dynamic import to avoid build-time issues
+    const { prisma } = await import('@/lib/prisma')
     const { email, source } = await request.json()
 
     if (!email || typeof email !== 'string') {
@@ -75,6 +76,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
+    // Dynamic import to avoid build-time issues
+    const { prisma } = await import('@/lib/prisma')
+
     // Get subscription statistics (safe to expose)
     const stats = await prisma.emailSubscriber.aggregate({
       where: { isActive: true },
