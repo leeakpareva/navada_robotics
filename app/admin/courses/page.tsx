@@ -98,7 +98,8 @@ export default function AdminCoursesPage() {
     learningOutcomes: "",
     price: 0,
     featured: false,
-    published: false
+    published: false,
+    videoUrl: ""
   })
 
   const [courseModules, setCourseModules] = useState<CourseModule[]>([])
@@ -247,7 +248,8 @@ export default function AdminCoursesPage() {
         learningOutcomes: "",
         price: 0,
         featured: false,
-        published: false
+        published: false,
+        videoUrl: ""
       })
       setCourseModules([])
       setUploadedDocuments([])
@@ -517,6 +519,17 @@ export default function AdminCoursesPage() {
                         value={newCourse.title}
                         onChange={(e) => setNewCourse(prev => ({ ...prev, title: e.target.value }))}
                         placeholder="e.g., AI Fundamentals & Machine Learning"
+                        className="bg-black/30 border-gray-600 text-white"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="video-url" className="text-white">YouTube Video URL (Optional)</Label>
+                      <Input
+                        id="video-url"
+                        value={newCourse.videoUrl || ''}
+                        onChange={(e) => setNewCourse(prev => ({ ...prev, videoUrl: e.target.value }))}
+                        placeholder="https://www.youtube.com/watch?v=..."
                         className="bg-black/30 border-gray-600 text-white"
                       />
                     </div>

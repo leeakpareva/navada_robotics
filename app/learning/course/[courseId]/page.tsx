@@ -11,6 +11,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { BeamsBackground } from "@/components/ui/beams-background"
+import { VideoPlayer } from "@/components/ui/video-player"
+import { LessonNotes } from "@/components/ui/lesson-notes"
+import { TextToSpeech } from "@/components/ui/text-to-speech"
 import {
   BookOpen,
   Clock,
@@ -33,7 +36,8 @@ import {
   HelpCircle,
   Brain,
   Target,
-  Lightbulb
+  Lightbulb,
+  StickyNote
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -103,6 +107,8 @@ export default function CourseViewerPage() {
   const [quizScore, setQuizScore] = useState<number | null>(null)
   const [generatingQuiz, setGeneratingQuiz] = useState(false)
   const [generatedQuestions, setGeneratedQuestions] = useState<QuizQuestion[]>([])
+  const [readingTime, setReadingTime] = useState(0)
+  const [lastScrollPosition, setLastScrollPosition] = useState(0)
 
   useEffect(() => {
     if (!session) {
@@ -112,6 +118,69 @@ export default function CourseViewerPage() {
 
     fetchCourseAndProgress()
   }, [session, courseId])
+
+  // Reading progress tracking
+  useEffect(() => {
+    if (!currentLesson) return
+
+    // Load saved reading progress
+    const loadReadingProgress = async () => {
+      try {
+        const response = await fetch(`/api/learning/reading-progress?lessonId=${currentLesson.id}`)
+        if (response.ok) {
+          const data = await response.json()
+          if (data.progress) {
+            setLastScrollPosition(data.progress.scrollPosition)
+            setReadingTime(data.progress.readingTime)
+            // Restore scroll position after a short delay
+            setTimeout(() => {
+              window.scrollTo(0, data.progress.scrollPosition)
+            }, 500)
+          }
+        }
+      } catch (error) {
+        console.error("Error loading reading progress:", error)
+      }
+    }
+
+    loadReadingProgress()
+
+    // Track reading time
+    const startTime = Date.now()
+    const readingInterval = setInterval(() => {
+      setReadingTime(prev => prev + 1)
+    }, 1000)
+
+    // Auto-save scroll position
+    const saveProgress = () => {
+      const scrollPosition = window.scrollY
+      if (Math.abs(scrollPosition - lastScrollPosition) > 50) { // Only save if significant scroll
+        setLastScrollPosition(scrollPosition)
+        fetch("/api/learning/reading-progress", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            lessonId: currentLesson.id,
+            scrollPosition,
+            readingTime: Math.floor((Date.now() - startTime) / 1000)
+          })
+        }).catch(console.error)
+      }
+    }
+
+    const scrollHandler = () => {
+      clearTimeout((window as any).scrollTimeout)
+      ;(window as any).scrollTimeout = setTimeout(saveProgress, 1000)
+    }
+
+    window.addEventListener('scroll', scrollHandler)
+
+    return () => {
+      clearInterval(readingInterval)
+      window.removeEventListener('scroll', scrollHandler)
+      saveProgress() // Save final progress
+    }
+  }, [currentLesson, lastScrollPosition])
 
   const fetchCourseAndProgress = async () => {
     try {
@@ -378,20 +447,28 @@ export default function CourseViewerPage() {
                       const isCompleted = isLessonCompleted(lesson.id)
                       const isCurrent = currentLesson?.id === lesson.id
 
+                      // Check if this lesson is unlocked (first lesson or previous lesson completed)
+                      const isUnlocked = index === 0 || isLessonCompleted(course.lessons[index - 1].id)
+
                       return (
                         <button
                           key={lesson.id}
-                          onClick={() => handleLessonChange(lesson)}
+                          onClick={() => isUnlocked ? handleLessonChange(lesson) : null}
+                          disabled={!isUnlocked}
                           className={`w-full text-left px-4 py-3 transition-colors ${
                             isCurrent
                               ? "bg-purple-600/20 border-l-4 border-purple-500"
-                              : "hover:bg-gray-800/50"
+                              : isUnlocked
+                                ? "hover:bg-gray-800/50"
+                                : "opacity-50 cursor-not-allowed"
                           }`}
                         >
                           <div className="flex items-start space-x-3">
                             <div className="mt-1">
                               {isCompleted ? (
                                 <CheckCircle className="h-5 w-5 text-green-400" />
+                              ) : !isUnlocked ? (
+                                <Lock className="h-5 w-5 text-gray-600" />
                               ) : lesson.lessonType === "video" ? (
                                 <Video className="h-5 w-5 text-blue-400" />
                               ) : (
@@ -475,14 +552,18 @@ export default function CourseViewerPage() {
                   </CardHeader>
                   <CardContent>
                     <Tabs value={activeTab} onValueChange={setActiveTab}>
-                      <TabsList className="grid w-full grid-cols-4 bg-gray-800">
+                      <TabsList className="grid w-full grid-cols-5 bg-gray-800">
                         <TabsTrigger value="content" className="flex items-center gap-2">
                           <FileText className="h-4 w-4" />
                           Content
                         </TabsTrigger>
                         <TabsTrigger value="quiz" className="flex items-center gap-2" disabled={!isLessonCompleted(currentLesson.id)}>
                           {!isLessonCompleted(currentLesson.id) ? <Lock className="h-4 w-4" /> : <HelpCircle className="h-4 w-4" />}
-                          Quiz {!isLessonCompleted(currentLesson.id) && "(Complete lesson first)"}
+                          Quiz
+                        </TabsTrigger>
+                        <TabsTrigger value="notes" className="flex items-center gap-2">
+                          <StickyNote className="h-4 w-4" />
+                          Notes
                         </TabsTrigger>
                         <TabsTrigger value="resources" className="flex items-center gap-2">
                           <Download className="h-4 w-4" />
@@ -496,13 +577,21 @@ export default function CourseViewerPage() {
 
                       <TabsContent value="content" className="mt-6">
                         {currentLesson.videoUrl ? (
-                          <div className="aspect-video bg-gradient-to-br from-gray-900 to-black rounded-lg flex items-center justify-center mb-8 border border-gray-700">
-                            <div className="text-center">
-                              <PlayCircle className="h-16 w-16 text-purple-400 mx-auto mb-4" />
-                              <p className="text-gray-400 text-lg">Interactive Video Player</p>
-                              <p className="text-gray-500 text-sm">Click to start learning</p>
-                            </div>
-                          </div>
+                          <VideoPlayer
+                            videoUrl={currentLesson.videoUrl}
+                            title={currentLesson.title}
+                            className="mb-8"
+                            onProgress={(currentTime, duration) => {
+                              // Track video progress for analytics
+                              console.log(`Video progress: ${Math.round((currentTime / duration) * 100)}%`)
+                            }}
+                            onComplete={() => {
+                              // Auto-mark lesson as complete when video finishes
+                              if (!isLessonCompleted(currentLesson.id)) {
+                                markLessonComplete(currentLesson.id)
+                              }
+                            }}
+                          />
                         ) : null}
 
                         {/* Enhanced Content with Better Formatting */}
@@ -553,6 +642,15 @@ export default function CourseViewerPage() {
                               <span>Review and test your understanding with the quiz</span>
                             </li>
                           </ul>
+                        </div>
+
+                        {/* Text to Speech */}
+                        <div className="mt-8">
+                          <TextToSpeech
+                            text={currentLesson.content}
+                            title={currentLesson.title}
+                            className="max-w-4xl"
+                          />
                         </div>
 
                         <div className="mt-8 flex items-center justify-between">
@@ -806,6 +904,15 @@ export default function CourseViewerPage() {
                             )}
                           </div>
                         )}
+                      </TabsContent>
+
+                      {/* Notes Tab Content */}
+                      <TabsContent value="notes" className="mt-6">
+                        <LessonNotes
+                          lessonId={currentLesson.id}
+                          courseId={courseId}
+                          className="max-w-4xl"
+                        />
                       </TabsContent>
 
                       <TabsContent value="resources" className="mt-6">

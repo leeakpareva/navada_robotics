@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
             orderIndex: module.orderIndex !== undefined ? module.orderIndex : index,
             duration: parseInt(module.duration) || 30, // Default 30 minutes
             lessonType: module.lessonType || "text",
-            videoUrl: module.videoUrl || null,
+            videoUrl: module.videoUrl || body.videoUrl || null, // Use module video URL or course-wide video URL
             resources: JSON.stringify(enhancedResources), // Store quiz and images in resources
             published: published || false,
             createdAt: new Date(),

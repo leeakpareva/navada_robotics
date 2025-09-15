@@ -54,7 +54,8 @@
       "Bash(start http://localhost:3001/admin/courses)",
       "Bash(start http://localhost:3001/agent-lee)",
       "Bash(start http://localhost:3000/admin/courses)",
-      "Bash(start http://localhost:3001/auth/signup)"
+      "Bash(start http://localhost:3001/auth/signup)",
+      "Bash(start http://localhost:3002/learning)"
     ],
     "deny": [],
     "ask": []

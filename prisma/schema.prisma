@@ -79,6 +79,9 @@ model lessons {
   updatedAt       DateTime
   lesson_progress lesson_progress[]
   courses         courses           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  notes           notes[]
+  bookmarks       bookmarks[]
+  reading_progress reading_progress[]
 }
 
 model sessions {
@@ -129,6 +132,9 @@ model users {
   certificates       certificates[]
   learning_analytics learning_analytics[]
   subscription       subscriptions?
+  notes              notes[]
+  bookmarks          bookmarks[]
+  reading_progress   reading_progress[]
 }
 
 model EmailSubscriber {
@@ -290,6 +296,56 @@ model LearningComment {
 
   @@map("learning_comments")
   @@index([createdAt])
+}
+
+// Notes and Bookmarks System
+model notes {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson    lessons  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@map("notes")
+  @@index([userId])
+  @@index([lessonId])
+}
+
+model bookmarks {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson    lessons  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@map("bookmarks")
+  @@index([userId])
+  @@index([lessonId])
+}
+
+// Reading Progress Tracking
+model reading_progress {
+  id             String   @id @default(cuid())
+  userId         String
+  lessonId       String
+  scrollPosition Int      @default(0)
+  readingTime    Int      @default(0) // in minutes
+  lastReadAt     DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson         lessons  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@map("reading_progress")
+  @@index([userId])
+  @@index([lessonId])
 }
 
 // Enhanced LMS Models
