@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -40,14 +42,76 @@ import {
   TrendingUp,
   Target,
   Rocket,
-  Settings
+  Settings,
+  Loader2
 } from "lucide-react"
 import Link from "next/link"
+import { SignupModal } from "@/components/ui/signup-modal"
 
 export default function LearningPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [courses, setCourses] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [enrolling, setEnrolling] = useState<string | null>(null)
+  const [showSignupModal, setShowSignupModal] = useState(false)
+  const [selectedCourseForSignup, setSelectedCourseForSignup] = useState<any>(null)
+  const router = useRouter()
+  const { data: session } = useSession()
 
-  const freeCourses = [
+  useEffect(() => {
+    fetchCourses()
+  }, [])
+
+  const fetchCourses = async () => {
+    try {
+      const response = await fetch('/api/learning/courses')
+      if (response.ok) {
+        const data = await response.json()
+        setCourses(data.courses.filter((c: any) => c.published))
+      }
+    } catch (error) {
+      console.error('Error fetching courses:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleStartCourse = async (courseId: string, course?: any) => {
+    if (!session) {
+      setSelectedCourseForSignup(course)
+      setShowSignupModal(true)
+      return
+    }
+
+    setEnrolling(courseId)
+    try {
+      const response = await fetch('/api/learning/enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ courseId })
+      })
+
+      if (response.ok) {
+        // Redirect to course viewer
+        router.push(`/learning/course/${courseId}`)
+      } else {
+        const error = await response.json()
+        if (error.error === 'Already enrolled in this course') {
+          // If already enrolled, go directly to course
+          router.push(`/learning/course/${courseId}`)
+        } else {
+          alert(error.error || 'Failed to enroll')
+        }
+      }
+    } catch (error) {
+      console.error('Error enrolling:', error)
+      alert('Failed to enroll in course')
+    } finally {
+      setEnrolling(null)
+    }
+  }
+
+  const defaultCourses = [
     {
       id: 1,
       title: "AI Fundamentals & Machine Learning",
@@ -209,10 +273,10 @@ export default function LearningPage() {
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
-              <Link href="/admin/courses" className="text-white hover:text-purple-400 transition-colors">
+              <Link href="/auth/signup" className="text-white hover:text-purple-400 transition-colors">
                 <div className="flex items-center gap-2">
                   <Settings className="h-4 w-4" />
-                  Admin
+                  Admin Login
                 </div>
               </Link>
             </nav>
@@ -240,10 +304,10 @@ export default function LearningPage() {
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
                 </Link>
-                <Link href="/admin/courses" className="text-white hover:text-purple-400 transition-colors">
+                <Link href="/auth/signup" className="text-white hover:text-purple-400 transition-colors">
                   <div className="flex items-center gap-2">
                     <Settings className="h-4 w-4" />
-                    Admin
+                    Admin Login
                   </div>
                 </Link>
               </div>
@@ -317,8 +381,13 @@ export default function LearningPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {freeCourses.map((course) => (
+            {loading ? (
+              <div className="flex justify-center items-center py-16">
+                <Loader2 className="h-8 w-8 text-purple-400 animate-spin" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {(courses.length > 0 ? courses : defaultCourses).map((course: any) => (
                 <Card
                   key={course.id}
                   className={`bg-gradient-to-br from-gray-900/95 via-black/90 to-gray-900/95 border-gray-700/50 hover:border-purple-400/70 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 cursor-pointer group hover:scale-[1.02] hover:-translate-y-1 backdrop-blur-sm ${
@@ -408,9 +477,22 @@ export default function LearningPage() {
                     </div>
 
                     <div className="flex gap-2">
-                      <Button className="flex-1 bg-purple-600 hover:bg-purple-700 text-white">
-                        <Play className="h-4 w-4 mr-2" />
-                        Start Course
+                      <Button
+                        className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+                        onClick={() => handleStartCourse(course.id, course)}
+                        disabled={enrolling === course.id}
+                      >
+                        {enrolling === course.id ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Enrolling...
+                          </>
+                        ) : (
+                          <>
+                            <Play className="h-4 w-4 mr-2" />
+                            Start Course
+                          </>
+                        )}
                       </Button>
                       <Link href="/agent-lee">
                         <Button variant="outline" className="border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white" title="Get help from Agent Lee">
@@ -421,7 +503,8 @@ export default function LearningPage() {
                   </CardContent>
                 </Card>
               ))}
-            </div>
+              </div>
+            )}
           </div>
         </section>
 
@@ -715,6 +798,22 @@ export default function LearningPage() {
           </Link>
         </div>
       </nav>
+
+      {/* Signup Modal */}
+      <SignupModal
+        isOpen={showSignupModal}
+        onClose={() => {
+          setShowSignupModal(false)
+          setSelectedCourseForSignup(null)
+        }}
+        courseTitle={selectedCourseForSignup?.title}
+        onSuccess={() => {
+          // After successful signup, enroll in the course
+          if (selectedCourseForSignup) {
+            handleStartCourse(selectedCourseForSignup.id)
+          }
+        }}
+      />
     </div>
   )
 }

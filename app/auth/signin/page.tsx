@@ -33,7 +33,12 @@ export default function SignIn() {
       if (result?.error) {
         setError('Invalid credentials')
       } else {
-        router.push('/dashboard')
+        // Check if user is admin and redirect accordingly
+        if (email === 'leeakpareva@gmail.com') {
+          router.push('/admin/courses')
+        } else {
+          router.push('/learning')
+        }
         router.refresh()
       }
     } catch (error) {

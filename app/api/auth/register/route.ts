@@ -45,6 +45,8 @@ export async function POST(request: Request) {
       }
     })
 
+    console.log(`[Registration] New user created: ${email} (${email === "leeakpareva@gmail.com" ? "admin" : "student"})`)
+
     return NextResponse.json({
       user: {
         id: user.id,

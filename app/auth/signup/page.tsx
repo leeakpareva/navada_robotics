@@ -64,7 +64,12 @@ export default function SignUp() {
         })
 
         if (result?.ok) {
-          router.push('/dashboard')
+          // Check if user is admin and redirect accordingly
+          if (email.trim() === 'leeakpareva@gmail.com') {
+            router.push('/admin/courses')
+          } else {
+            router.push('/learning')
+          }
           router.refresh()
         }
       } else {

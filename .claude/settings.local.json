@@ -52,7 +52,9 @@
       "Bash(npx next dev:*)",
       "Bash(start http://localhost:3001/learning)",
       "Bash(start http://localhost:3001/admin/courses)",
-      "Bash(start http://localhost:3001/agent-lee)"
+      "Bash(start http://localhost:3001/agent-lee)",
+      "Bash(start http://localhost:3000/admin/courses)",
+      "Bash(start http://localhost:3001/auth/signup)"
     ],
     "deny": [],
     "ask": []
