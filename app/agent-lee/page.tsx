@@ -49,7 +49,6 @@ import {
   Workflow,
   Activity,
   Lock,
-  Unlock,
   Eye,
   EyeOff,
   Download,
@@ -533,24 +532,14 @@ export default function AgentLeePage() {
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Authentication Required
                 </h2>
-                <p className="text-white/70 text-sm">Please sign in to access Agent Lee</p>
+                <p className="text-white/70 text-sm">Please create an account to access Agent Lee</p>
               </div>
 
               <div className="space-y-3">
-                <Link href="/auth/signin">
-                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105">
-                    <Unlock className="h-4 w-4 mr-2" />
-                    Sign In to Access Agent Lee
-                  </Button>
-                </Link>
-
                 <Link href="/auth/signup">
-                  <Button
-                    variant="outline"
-                    className="w-full border-purple-400/50 text-purple-300 hover:bg-purple-600/20 hover:border-purple-400 hover:text-white transition-all duration-300"
-                  >
+                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105">
                     <UserCircle2 className="h-4 w-4 mr-2" />
-                    Create New Account
+                    Create Account to Access Agent Lee
                   </Button>
                 </Link>
 
