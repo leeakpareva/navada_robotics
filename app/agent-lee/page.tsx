@@ -48,6 +48,15 @@ import {
   Wand2,
   Workflow,
   Activity,
+  Lock,
+  Unlock,
+  Eye,
+  EyeOff,
+  Download,
+  FileDown,
+  Settings2,
+  Home,
+  ArrowLeft,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -63,6 +72,12 @@ interface Message {
 
 export default function AgentLeePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [authError, setAuthError] = useState("")
+  const [apiProvider, setApiProvider] = useState<'openai' | 'deepseek'>('openai')
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -291,6 +306,42 @@ export default function AgentLeePage() {
     }
   }
 
+  const handleLogin = () => {
+    if (username === "Agent Lee" && password === "Activate") {
+      setIsAuthenticated(true)
+      setAuthError("")
+    } else {
+      setAuthError("Invalid credentials. Please try again.")
+    }
+  }
+
+  const handleKeyPressLogin = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleLogin()
+    }
+  }
+
+  const downloadContent = (content: string, filename: string, type: string = 'text/plain') => {
+    const blob = new Blob([content], { type })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const downloadImage = (imageSrc: string, filename: string) => {
+    const a = document.createElement('a')
+    a.href = imageSrc
+    a.download = filename
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+  }
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return
 
@@ -317,7 +368,8 @@ export default function AgentLeePage() {
         body: JSON.stringify({
           message: currentMessage,
           threadId: threadId,
-          lastImage: lastGeneratedImage, // Include last generated image for context
+          lastImage: lastGeneratedImage,
+          apiProvider: apiProvider,
         }),
       })
 
@@ -400,6 +452,98 @@ export default function AgentLeePage() {
     { icon: <Wand2 className="h-3 w-3" />, text: "Generate image of a robot", color: "from-pink-500 to-rose-500" },
     { icon: <Network className="h-3 w-3" />, text: "Create a portfolio website", color: "from-blue-500 to-indigo-500" },
   ]
+
+  // Login page UI
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <BeamsBackground intensity="subtle" className="absolute inset-0" />
+        <div className="relative z-10 w-full max-w-md mx-auto px-6">
+          <Card className="bg-gradient-to-br from-black/60 via-purple-900/20 to-black/60 backdrop-blur-sm border-white/20 shadow-2xl shadow-purple-500/20">
+            <CardContent className="p-8">
+              <div className="text-center mb-8">
+                <div className="flex items-center justify-center mb-4 relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-gradient-to-r from-purple-600/40 to-pink-600/40 blur-2xl w-20 h-20 rounded-full animate-pulse"></div>
+                  </div>
+                  <div className="relative bg-gradient-to-br from-purple-600 via-pink-600 to-cyan-600 p-4 rounded-xl shadow-xl shadow-purple-500/50">
+                    <Lock className="h-8 w-8 text-white" />
+                  </div>
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-2">
+                  Agent Lee Access
+                </h2>
+                <p className="text-white text-sm">Enter your credentials to continue</p>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">Username</label>
+                  <Input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    onKeyPress={handleKeyPressLogin}
+                    placeholder="Enter username"
+                    className="bg-black/30 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 transition-all duration-300"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">Password</label>
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      onKeyPress={handleKeyPressLogin}
+                      placeholder="Enter password"
+                      className="bg-black/30 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 transition-all duration-300 pr-10"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                </div>
+
+                {authError && (
+                  <div className="text-red-400 text-sm text-center bg-red-900/20 border border-red-400/50 rounded-lg p-2">
+                    {authError}
+                  </div>
+                )}
+
+                <div className="space-y-3">
+                  <Button
+                    onClick={handleLogin}
+                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105"
+                  >
+                    <Unlock className="h-4 w-4 mr-2" />
+                    Access Agent Lee
+                  </Button>
+
+                  <Link href="/">
+                    <Button
+                      variant="outline"
+                      className="w-full border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300"
+                    >
+                      <Home className="h-4 w-4 mr-2" />
+                      Return to Home
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-black flex flex-col">
@@ -524,6 +668,34 @@ export default function AgentLeePage() {
             )}
           </div>
 
+          {/* API Provider Settings */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Settings2 className="h-4 w-4 text-gray-400" />
+                <span className="text-sm text-gray-400">AI Provider:</span>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant={apiProvider === 'openai' ? 'default' : 'outline'}
+                  onClick={() => setApiProvider('openai')}
+                  className={apiProvider === 'openai' ? 'bg-green-600 hover:bg-green-700' : 'border-gray-600 text-gray-300'}
+                >
+                  OpenAI
+                </Button>
+                <Button
+                  size="sm"
+                  variant={apiProvider === 'deepseek' ? 'default' : 'outline'}
+                  onClick={() => setApiProvider('deepseek')}
+                  className={apiProvider === 'deepseek' ? 'bg-blue-600 hover:bg-blue-700' : 'border-gray-600 text-gray-300'}
+                >
+                  DeepSeek
+                </Button>
+              </div>
+            </div>
+          </div>
+
           {/* Quick Actions - More Vibrant */}
           <div className="mb-6">
             <p className="text-sm text-gray-400 mb-3 flex items-center gap-2">
@@ -535,7 +707,7 @@ export default function AgentLeePage() {
                 <Button
                   key={index}
                   variant="outline"
-                  className={`relative overflow-hidden text-xs bg-black/50 border-white/20 text-white hover:border-white/40 transition-all duration-300 hover:scale-105 group`}
+                  className={`relative overflow-hidden text-xs bg-black/50 border-white/20 text-white hover:border-purple-400/50 transition-all duration-300 hover:scale-105 group cursor-pointer`}
                   onClick={() => setInputMessage(action.text)}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-r ${action.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
@@ -587,9 +759,19 @@ export default function AgentLeePage() {
                         )}
                         {message.website && (
                           <div className="mt-4 p-4 bg-black/50 rounded-xl border border-cyan-400/50">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Infinity className="h-5 w-5 text-cyan-400" />
-                              <span className="text-cyan-300 font-semibold">Website Generated!</span>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <Infinity className="h-5 w-5 text-cyan-400" />
+                                <span className="text-cyan-300 font-semibold">Website Generated!</span>
+                              </div>
+                              <Button
+                                size="sm"
+                                onClick={() => downloadContent(JSON.stringify(message.website, null, 2), `website-${Date.now()}.json`, 'application/json')}
+                                className="bg-cyan-600 hover:bg-cyan-700 text-white"
+                              >
+                                <Download className="h-3 w-3 mr-1" />
+                                Download
+                              </Button>
                             </div>
                             <p className="text-sm text-gray-300">
                               Your website has been created successfully. Files are ready for download.
@@ -600,18 +782,42 @@ export default function AgentLeePage() {
                           <p className="text-xs opacity-60">
                             {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                           </p>
-                          {message.sender === "agent" && speechSupported && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 px-3 text-xs hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300"
-                              onClick={() => speakText(message.text)}
-                              disabled={isMuted}
-                            >
-                              <Radio className="h-3 w-3 mr-1" />
-                              Speak
-                            </Button>
-                          )}
+                          <div className="flex gap-2">
+                            {message.sender === "agent" && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 px-3 text-xs hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300"
+                                onClick={() => downloadContent(message.text, `agent-lee-response-${message.id}.txt`)}
+                              >
+                                <FileDown className="h-3 w-3 mr-1" />
+                                Save
+                              </Button>
+                            )}
+                            {message.image && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 px-3 text-xs hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300"
+                                onClick={() => downloadImage(message.image!, `agent-lee-image-${message.id}.png`)}
+                              >
+                                <Download className="h-3 w-3 mr-1" />
+                                Image
+                              </Button>
+                            )}
+                            {message.sender === "agent" && speechSupported && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 px-3 text-xs hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300"
+                                onClick={() => speakText(message.text)}
+                                disabled={isMuted}
+                              >
+                                <Radio className="h-3 w-3 mr-1" />
+                                Speak
+                              </Button>
+                              )}
+                          </div>
                         </div>
                       </div>
                       {message.sender === "user" && (

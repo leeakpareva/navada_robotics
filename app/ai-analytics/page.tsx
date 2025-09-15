@@ -28,6 +28,8 @@ import {
   AlertCircle,
   RefreshCw,
   Settings,
+  Play,
+  Square,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -82,6 +84,29 @@ export default function AIAnalyticsPage() {
   const [mcpServers, setMcpServers] = useState<MCPServerStatus[]>([])
   const [mcpStats, setMcpStats] = useState<MCPStats | null>(null)
   const [activeTab, setActiveTab] = useState<'analytics' | 'mcp'>('analytics')
+
+  const handleMCPServerControl = async (serverId: string, action: 'start' | 'stop') => {
+    try {
+      const response = await fetch('/api/mcp/control', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ serverId, action }),
+      })
+
+      if (response.ok) {
+        // Refresh MCP data after control action
+        const serversResponse = await fetch('/api/mcp/servers')
+        if (serversResponse.ok) {
+          const serversData = await serversResponse.json()
+          setMcpServers(serversData.servers || [])
+        }
+      }
+    } catch (error) {
+      console.error('MCP server control error:', error)
+    }
+  }
 
   // Fetch real analytics data
   useEffect(() => {
@@ -707,6 +732,24 @@ export default function AIAnalyticsPage() {
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
+                          <Button
+                            size="sm"
+                            onClick={() => handleMCPServerControl(server.id, 'start')}
+                            disabled={server.status === 'active'}
+                            className={`${server.status === 'active' ? 'bg-gray-600' : 'bg-green-600 hover:bg-green-700'} text-white`}
+                          >
+                            <Play className="h-3 w-3 mr-1" />
+                            Start
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={() => handleMCPServerControl(server.id, 'stop')}
+                            disabled={server.status !== 'active'}
+                            className={`${server.status !== 'active' ? 'bg-gray-600' : 'bg-red-600 hover:bg-red-700'} text-white`}
+                          >
+                            <Square className="h-3 w-3 mr-1" />
+                            Stop
+                          </Button>
                           <Button
                             size="sm"
                             variant="ghost"

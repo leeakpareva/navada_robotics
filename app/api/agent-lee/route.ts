@@ -2,8 +2,11 @@ import { type NextRequest, NextResponse } from "next/server"
 import OpenAI from "openai"
 import { trackChatSession, updateChatSession, trackImageGeneration } from "@/lib/analytics"
 import { mcpClient } from "@/lib/mcp/client"
+import { parseUserRequest, formatWebsitePreview } from "@/lib/website-generator/utils"
+import { WebsiteGenerator } from "@/lib/website-generator/generator"
 
 const API_KEY = process.env.OPENAI_API_KEY
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID
 const VOICE_PROMPT_ID = process.env.VOICE_PROMPT_ID
 const VECTOR_STORE_ID = process.env.VECTOR_STORE_ID
@@ -24,6 +27,10 @@ if (VECTOR_STORE_ID) {
 console.log("[v0] BRAVE_SEARCH_API_KEY exists:", !!BRAVE_SEARCH_API_KEY)
 if (BRAVE_SEARCH_API_KEY) {
   console.log("[v0] Brave Search MCP server available")
+}
+console.log("[v0] DEEPSEEK_API_KEY exists:", !!DEEPSEEK_API_KEY)
+if (DEEPSEEK_API_KEY) {
+  console.log("[v0] DeepSeek API available")
 }
 console.log(
   "[v0] All env vars:",
@@ -67,11 +74,30 @@ I use DALL-E 3 to create high-quality images that can help visualize robotics co
 
 What image would you like me to generate?`,
 
+  website: `I can create complete NextJS websites for you! Just describe what kind of website you need and I'll generate a modern, secure, and responsive website.
+
+I can create:
+- Business websites with professional layouts
+- Landing pages with hero sections and features
+- Portfolio sites to showcase your work
+- Modern designs with custom colors and themes
+
+Just say something like "create a website for my business" or "build a landing page for my product" and I'll generate all the code files you need!
+
+What kind of website would you like me to create?`,
+
   default: `Hello! I'm Agent Lee, your AI robotics instructor. I specialize in helping you learn robotics, Python programming, computer vision, and AI development.
 
-I can guide you through practical projects, explain complex concepts clearly, help troubleshoot your code, and even generate images to visualize concepts! Just ask me to "generate image" if you need visual aids.
+I can guide you through practical projects, explain complex concepts clearly, help troubleshoot your code, generate images to visualize concepts, and even create complete NextJS websites for you!
 
-What would you like to learn about today?`,
+My capabilities include:
+- 🤖 Robotics guidance and project tutorials
+- 🐍 Python programming instruction
+- 👁️ Computer vision and OpenCV help
+- 🖼️ DALL-E 3 image generation (just say "generate image")
+- 🌐 NextJS website creation (just say "create website")
+
+What would you like to learn about or build today?`,
 }
 
 function generateMockResponse(message: string): string {
@@ -84,8 +110,10 @@ function generateMockResponse(message: string): string {
 
   let baseResponse = ""
 
-  // Check for image generation requests first
-  if (detectImageGenerationRequest(message)) {
+  // Check for website generation requests first
+  if (detectWebsiteGenerationRequest(message)) {
+    baseResponse = mockResponses.website
+  } else if (detectImageGenerationRequest(message)) {
     baseResponse = mockResponses.image
   } else if (lowerMessage.includes("robot") || lowerMessage.includes("robotic")) {
     baseResponse = mockResponses.robotics
@@ -148,6 +176,62 @@ function detectImageAnalysisRequest(message: string): boolean {
   ]
 
   return analysisKeywords.some(keyword => lowerMessage.includes(keyword))
+}
+
+function detectWebsiteGenerationRequest(message: string): boolean {
+  const lowerMessage = message.toLowerCase()
+  const websiteKeywords = [
+    'create website', 'build website', 'make website', 'design website',
+    'create site', 'build site', 'make site', 'design site',
+    'create a website', 'build a website', 'make a website',
+    'website for', 'site for', 'landing page', 'homepage',
+    'generate website', 'generate site'
+  ]
+
+  return websiteKeywords.some(keyword => lowerMessage.includes(keyword))
+}
+
+async function searchWithBrave(query: string): Promise<string> {
+  if (!BRAVE_SEARCH_API_KEY) {
+    return "Web search is not available at the moment."
+  }
+
+  try {
+    const response = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}`, {
+      headers: {
+        'X-Subscription-Token': BRAVE_SEARCH_API_KEY,
+        'Accept': 'application/json'
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error(`Brave Search API error: ${response.status}`)
+    }
+
+    const data = await response.json()
+    const results = data.web?.results?.slice(0, 3) || []
+
+    if (results.length === 0) {
+      return "No search results found for your query."
+    }
+
+    return results.map((result: any) =>
+      `**${result.title}**\n${result.description}\n*Source: ${result.url}*`
+    ).join('\n\n')
+  } catch (error) {
+    console.error('Brave search error:', error)
+    return "Search functionality is temporarily unavailable."
+  }
+}
+
+function shouldUseWebSearch(message: string): boolean {
+  const searchKeywords = [
+    'current', 'latest', 'recent', 'news', 'what happened', 'update',
+    'search for', 'find information', 'look up', 'what is happening',
+    'today', 'this year', 'new developments', 'breaking'
+  ]
+
+  return searchKeywords.some(keyword => message.toLowerCase().includes(keyword))
 }
 
 async function generateImage(prompt: string, openai: OpenAI): Promise<string> {
@@ -265,7 +349,7 @@ export async function POST(request: NextRequest) {
   try {
     console.log("[v0] Agent Lee API called")
 
-    const { message, threadId, lastImage } = await request.json()
+    const { message, threadId, lastImage, apiProvider = 'openai' } = await request.json()
     console.log("[v0] Received message:", message, "threadId:", threadId)
     console.log("[v0] Has last image for context:", !!lastImage)
 
@@ -284,6 +368,13 @@ export async function POST(request: NextRequest) {
     }
 
     console.log("[v0] Checking if message is image generation request:", message)
+
+    // Check if we need to search for current information
+    let searchResults = ''
+    if (shouldUseWebSearch(message)) {
+      console.log('[v0] Using Brave Search for current information...')
+      searchResults = await searchWithBrave(message)
+    }
 
     // Check if this is an image analysis request first
     if (detectImageAnalysisRequest(message) && lastImage) {
@@ -418,6 +509,102 @@ export async function POST(request: NextRequest) {
           details: imageError instanceof Error ? imageError.message : "Unknown error"
         }, { status: 500 })
       }
+    }
+
+    // Check if this is a website generation request
+    if (detectWebsiteGenerationRequest(message)) {
+      console.log("[v0] Website generation request detected for message:", message)
+
+      try {
+        console.log("[v0] Parsing website request:", message)
+        const websiteStartTime = Date.now()
+        const parsedRequest = parseUserRequest(message)
+
+        if (!parsedRequest.isWebsiteRequest) {
+          return NextResponse.json({
+            error: "Unable to parse website request",
+            details: "Please provide more details about the website you want to create"
+          }, { status: 400 })
+        }
+
+        // Generate the website
+        const generator = new WebsiteGenerator()
+        const websiteRequest = {
+          description: parsedRequest.description || message,
+          siteName: parsedRequest.siteName || 'My Website',
+          style: parsedRequest.style ? {
+            primaryColor: parsedRequest.style.primaryColor,
+            secondaryColor: parsedRequest.style.secondaryColor,
+            theme: parsedRequest.style.theme as 'modern' | 'classic' | 'minimal' | 'bold' || 'modern'
+          } : undefined,
+          pages: parsedRequest.pages,
+          features: parsedRequest.features
+        }
+
+        console.log("[v0] Generating website with request:", websiteRequest)
+        const generatedWebsite = await generator.generateWebsite(websiteRequest)
+        const websiteGenerationTime = Date.now() - websiteStartTime
+        const responseTime = Date.now() - requestStartTime
+
+        // Check if all files are safe
+        const unsafeFiles = generatedWebsite.files.filter(file => !file.safe)
+        if (unsafeFiles.length > 0) {
+          console.warn("[v0] Generated website contains unsafe files:", unsafeFiles.map(f => f.path))
+
+          // Update session with error status
+          if (sessionId) {
+            updateChatSession(sessionId, {
+              endTime: new Date(),
+              responseTime,
+              status: 'error'
+            })
+          }
+
+          return NextResponse.json({
+            error: "Generated website contains security issues",
+            details: "The generated code contains potential security vulnerabilities and cannot be provided.",
+            unsafeFiles: unsafeFiles.map(file => file.path)
+          }, { status: 400 })
+        }
+
+        // Format the website preview
+        const websitePreview = formatWebsitePreview(generatedWebsite)
+
+        // Update session with completion data
+        if (sessionId) {
+          updateChatSession(sessionId, {
+            endTime: new Date(),
+            responseTime,
+            status: 'completed'
+          })
+        }
+
+        console.log("[v0] Website generated successfully, returning response")
+        return NextResponse.json({
+          message: `I've generated a ${generatedWebsite.projectName} website for you!\n\n${websitePreview}`,
+          website: generatedWebsite,
+          threadId: threadId || "website_" + Date.now(),
+          timestamp: new Date().toISOString(),
+          responseTime,
+          websiteGenerationTime
+        })
+      } catch (websiteError) {
+        console.error("[v0] Website generation failed:", websiteError)
+
+        // Update session with error status
+        if (sessionId) {
+          updateChatSession(sessionId, {
+            endTime: new Date(),
+            responseTime: Date.now() - requestStartTime,
+            status: 'error'
+          })
+        }
+
+        return NextResponse.json({
+          error: "Failed to generate website",
+          details: websiteError instanceof Error ? websiteError.message : "Unknown error"
+        }, { status: 500 })
+      }
     } else {
       console.log("[v0] Not an image generation request, proceeding with assistant")
     }
@@ -505,28 +692,73 @@ export async function POST(request: NextRequest) {
 
       // Add MCP tools if available
       try {
-        // Ensure Brave Search is connected if API key is available
+        // Check for user message patterns and add appropriate MCP tools
+        const recommendations = await mcpClient.getRecommendedTools(message)
+        console.log("[v0] MCP tool recommendations:", recommendations)
+
+        // Add basic search functionality if Brave Search is available
         if (BRAVE_SEARCH_API_KEY) {
-          await mcpClient.connectServer('brave-search')
-        }
-
-        const mcpTools = mcpClient.getAvailableTools()
-        console.log("[v0] Available MCP tools:", mcpTools.length)
-
-        for (const tool of mcpTools) {
           runParams.tools.push({
             type: "function",
             function: {
-              name: tool.name,
-              description: tool.description,
-              parameters: tool.parameters
+              name: "web_search",
+              description: "Search the web for current information using Brave Search",
+              parameters: {
+                type: "object",
+                properties: {
+                  query: {
+                    type: "string",
+                    description: "The search query to execute"
+                  }
+                },
+                required: ["query"]
+              }
             }
           })
+
+          runParams.tools.push({
+            type: "function",
+            function: {
+              name: "news_search",
+              description: "Search for recent news articles using Brave Search",
+              parameters: {
+                type: "object",
+                properties: {
+                  query: {
+                    type: "string",
+                    description: "The news search query to execute"
+                  }
+                },
+                required: ["query"]
+              }
+            }
+          })
+
+          console.log("[v0] Added Brave Search MCP tools")
         }
 
-        if (mcpTools.length > 0) {
-          console.log("[v0] Added MCP tools to assistant:", mcpTools.map(t => t.name))
+        // Add GitHub tools if API key is available
+        if (process.env.GITHUB_API_KEY) {
+          runParams.tools.push({
+            type: "function",
+            function: {
+              name: "list_github_repos",
+              description: "List GitHub repositories for a user",
+              parameters: {
+                type: "object",
+                properties: {
+                  username: {
+                    type: "string",
+                    description: "GitHub username (optional, defaults to authenticated user)"
+                  }
+                }
+              }
+            }
+          })
+
+          console.log("[v0] Added GitHub MCP tools")
         }
+
       } catch (mcpError) {
         console.error("[v0] Error setting up MCP tools:", mcpError)
       }
@@ -606,21 +838,25 @@ export async function POST(request: NextRequest) {
           let output = "Tool call failed"
 
           try {
-            // Check if this is an MCP tool
-            const mcpTools = mcpClient.getAvailableTools()
-            const mcpTool = mcpTools.find(tool => tool.name === toolCall.function.name)
+            // Handle MCP tool calls with the new client interface
+            const parameters = JSON.parse(toolCall.function.arguments)
+            let result: any
 
-            if (mcpTool) {
-              console.log("[v0] Executing MCP tool:", toolCall.function.name)
-              const parameters = JSON.parse(toolCall.function.arguments)
+            if (toolCall.function.name === 'web_search') {
+              console.log("[v0] Executing Brave Search web search:", parameters.query)
+              result = await mcpClient.performWebSearch(parameters.query)
+            } else if (toolCall.function.name === 'news_search') {
+              console.log("[v0] Executing Brave Search news search:", parameters.query)
+              result = await mcpClient.performNewsSearch(parameters.query)
+            } else if (toolCall.function.name === 'list_github_repos') {
+              console.log("[v0] Executing GitHub list repos:", parameters.username)
+              result = await mcpClient.listGitHubRepos(parameters.username)
+            } else {
+              output = `Unknown tool: ${toolCall.function.name}`
+              console.warn("[v0] Unknown tool requested:", toolCall.function.name)
+            }
 
-              const result = await mcpClient.callTool({
-                serverId: 'brave-search', // For now, we know it's Brave Search
-                toolName: toolCall.function.name,
-                parameters,
-                sessionId: sessionId || 'unknown'
-              })
-
+            if (result) {
               if (result.success) {
                 output = JSON.stringify(result.data)
                 console.log("[v0] MCP tool call successful:", toolCall.function.name)
@@ -628,9 +864,6 @@ export async function POST(request: NextRequest) {
                 output = `Tool error: ${result.error}`
                 console.error("[v0] MCP tool call failed:", result.error)
               }
-            } else {
-              output = `Unknown tool: ${toolCall.function.name}`
-              console.warn("[v0] Unknown tool requested:", toolCall.function.name)
             }
           } catch (toolError) {
             console.error("[v0] Tool execution error:", toolError)

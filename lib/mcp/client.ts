@@ -1,348 +1,193 @@
-// MCP Client for managing Model Context Protocol servers
+import { mcpServerManager } from './server-manager'
+import { braveSearchMCP } from './servers/brave-search'
+import { fileSystemMCP } from './servers/file-system'
+import { githubMCP } from './servers/github'
 
-import { MCPServer, MCPTool, MCPConnection, MCPToolCall, MCPToolResponse } from './types';
+export interface MCPCallResult {
+  success: boolean
+  data?: any
+  error?: string
+  serverId: string
+  toolName: string
+}
 
 export class MCPClient {
-  private servers: Map<string, MCPServer> = new Map();
-  private connections: Map<string, MCPConnection> = new Map();
-  private usageLogs: Array<{
-    serverId: string;
-    toolName: string;
-    success: boolean;
-    responseTime: number;
-    timestamp: Date;
-  }> = [];
-
   constructor() {
-    this.initializeDefaultServers();
+    // Initialize using the real server manager
   }
 
-  private initializeDefaultServers() {
-    // Initialize with Brave Search server
-    const braveSearchServer: MCPServer = {
-      id: 'brave-search',
-      name: 'Brave Search',
-      description: 'Web search capabilities using Brave Search API',
-      category: 'web_search',
-      status: 'inactive',
-      requiresApiKey: true,
-      apiKeyName: 'BRAVE_SEARCH_API_KEY',
-      tools: [
-        {
-          name: 'web_search',
-          description: 'Search the web for information on any topic',
-          parameters: {
-            type: 'object',
-            properties: {
-              query: {
-                type: 'string',
-                description: 'The search query to execute'
-              },
-              count: {
-                type: 'number',
-                description: 'Number of results to return (default: 10, max: 20)',
-                minimum: 1,
-                maximum: 20
-              },
-              offset: {
-                type: 'number',
-                description: 'Offset for pagination (default: 0)',
-                minimum: 0
-              }
-            },
-            required: ['query']
-          },
-          enabled: true,
-          usageCount: 0
-        }
-      ],
-      createdAt: new Date()
-    };
-
-    this.servers.set('brave-search', braveSearchServer);
-  }
-
-  async connectServer(serverId: string): Promise<boolean> {
-    const server = this.servers.get(serverId);
-    if (!server) {
-      throw new Error(`Server ${serverId} not found`);
-    }
-
+  async callTool(serverId: string, toolName: string, params: any): Promise<MCPCallResult> {
     try {
-      // Update server status to connecting
-      server.status = 'connecting';
-      this.servers.set(serverId, server);
+      const servers = await mcpServerManager.getServers()
+      const server = servers.find(s => s.id === serverId)
 
-      // For Brave Search, test the API key
-      if (serverId === 'brave-search') {
-        const isValid = await this.testBraveSearchConnection();
-        if (isValid) {
-          server.status = 'active';
-          server.lastHealthCheck = new Date();
-
-          // Create connection record
-          const connection: MCPConnection = {
-            serverId,
-            sessionId: `session_${Date.now()}`,
-            isConnected: true,
-            lastUsed: new Date()
-          };
-
-          this.connections.set(serverId, connection);
-          console.log(`[MCP] Successfully connected to ${server.name}`);
-          return true;
-        } else {
-          server.status = 'error';
-          return false;
+      if (!server) {
+        return {
+          success: false,
+          error: `Server ${serverId} not found`,
+          serverId,
+          toolName
         }
       }
 
-      return false;
-    } catch (error) {
-      console.error(`[MCP] Failed to connect to ${server.name}:`, error);
-      server.status = 'error';
-      this.servers.set(serverId, server);
-      return false;
-    }
-  }
-
-  async disconnectServer(serverId: string): Promise<void> {
-    const server = this.servers.get(serverId);
-    if (server) {
-      server.status = 'inactive';
-      this.servers.set(serverId, server);
-    }
-
-    this.connections.delete(serverId);
-    console.log(`[MCP] Disconnected from server ${serverId}`);
-  }
-
-  async callTool(toolCall: MCPToolCall): Promise<MCPToolResponse> {
-    const startTime = Date.now();
-    const { serverId, toolName, parameters } = toolCall;
-
-    try {
-      const server = this.servers.get(serverId);
-      if (!server || server.status !== 'active') {
-        throw new Error(`Server ${serverId} is not active`);
+      if (server.status !== 'active') {
+        return {
+          success: false,
+          error: `Server ${serverId} is not active (status: ${server.status})`,
+          serverId,
+          toolName
+        }
       }
 
-      const tool = server.tools.find(t => t.name === toolName);
-      if (!tool || !tool.enabled) {
-        throw new Error(`Tool ${toolName} not found or disabled`);
-      }
+      let result: any
 
-      let result;
-
-      // Route to specific server implementation
       switch (serverId) {
         case 'brave-search':
-          result = await this.callBraveSearchTool(toolName, parameters);
-          break;
+          if (toolName === 'web_search') {
+            result = await braveSearchMCP.webSearch(params.query)
+          } else if (toolName === 'news_search') {
+            result = await braveSearchMCP.newsSearch(params.query)
+          } else {
+            throw new Error(`Unknown tool ${toolName} for Brave Search`)
+          }
+          break
+
+        case 'file-system':
+          if (toolName === 'read_file') {
+            result = await fileSystemMCP.readFile(params.path)
+          } else if (toolName === 'write_file') {
+            result = await fileSystemMCP.writeFile(params.path, params.content)
+          } else if (toolName === 'list_directory') {
+            result = await fileSystemMCP.listDirectory(params.path)
+          } else if (toolName === 'create_directory') {
+            result = await fileSystemMCP.createDirectory(params.path)
+          } else if (toolName === 'delete_file') {
+            result = await fileSystemMCP.deleteFile(params.path)
+          } else {
+            throw new Error(`Unknown tool ${toolName} for File System`)
+          }
+          break
+
+        case 'github':
+          if (toolName === 'list_repos') {
+            result = await githubMCP.listRepos(params.username)
+          } else if (toolName === 'create_repo') {
+            result = await githubMCP.createRepo(params.name, params.description, params.isPrivate)
+          } else if (toolName === 'create_issue') {
+            result = await githubMCP.createIssue(params.owner, params.repo, params.title, params.body)
+          } else {
+            throw new Error(`Unknown tool ${toolName} for GitHub`)
+          }
+          break
+
         default:
-          throw new Error(`Server ${serverId} not implemented`);
+          throw new Error(`Unknown server ${serverId}`)
       }
-
-      const responseTime = Date.now() - startTime;
-
-      // Update tool usage count
-      tool.usageCount = (tool.usageCount || 0) + 1;
-
-      // Log usage
-      this.usageLogs.push({
-        serverId,
-        toolName,
-        success: true,
-        responseTime,
-        timestamp: new Date()
-      });
 
       return {
         success: true,
         data: result,
-        responseTime
-      };
+        serverId,
+        toolName
+      }
 
     } catch (error) {
-      const responseTime = Date.now() - startTime;
-
-      // Log failed usage
-      this.usageLogs.push({
-        serverId,
-        toolName,
-        success: false,
-        responseTime,
-        timestamp: new Date()
-      });
-
-      console.error(`[MCP] Tool call failed:`, error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
-        responseTime
-      };
-    }
-  }
-
-  private async testBraveSearchConnection(): Promise<boolean> {
-    try {
-      const apiKey = process.env.BRAVE_SEARCH_API_KEY;
-      if (!apiKey) {
-        console.error('[MCP] Brave Search API key not found');
-        return false;
-      }
-
-      // Test with a simple query
-      const response = await fetch('https://api.search.brave.com/res/v1/web/search?q=test', {
-        headers: {
-          'Accept': 'application/json',
-          'X-Subscription-Token': apiKey
-        }
-      });
-
-      return response.ok;
-    } catch (error) {
-      console.error('[MCP] Brave Search connection test failed:', error);
-      return false;
-    }
-  }
-
-  private async callBraveSearchTool(toolName: string, parameters: any): Promise<any> {
-    if (toolName !== 'web_search') {
-      throw new Error(`Unknown Brave Search tool: ${toolName}`);
-    }
-
-    const apiKey = process.env.BRAVE_SEARCH_API_KEY;
-    if (!apiKey) {
-      throw new Error('Brave Search API key not configured');
-    }
-
-    const { query, count = 10, offset = 0 } = parameters;
-
-    const url = new URL('https://api.search.brave.com/res/v1/web/search');
-    url.searchParams.set('q', query);
-    url.searchParams.set('count', count.toString());
-    url.searchParams.set('offset', offset.toString());
-
-    const response = await fetch(url.toString(), {
-      headers: {
-        'Accept': 'application/json',
-        'X-Subscription-Token': apiKey
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Brave Search API error: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
-
-    // Format results for Agent Lee
-    const results = data.web?.results?.map((result: any) => ({
-      title: result.title,
-      url: result.url,
-      description: result.description,
-      age: result.age
-    })) || [];
-
-    return {
-      query: data.query.original,
-      results,
-      total_results: results.length
-    };
-  }
-
-  getServer(serverId: string): MCPServer | undefined {
-    return this.servers.get(serverId);
-  }
-
-  getAllServers(): MCPServer[] {
-    return Array.from(this.servers.values());
-  }
-
-  getActiveServers(): MCPServer[] {
-    return this.getAllServers().filter(server => server.status === 'active');
-  }
-
-  getAvailableTools(): MCPTool[] {
-    const tools: MCPTool[] = [];
-    for (const server of this.getActiveServers()) {
-      tools.push(...server.tools.filter(tool => tool.enabled));
-    }
-    return tools;
-  }
-
-  async healthCheck(serverId?: string): Promise<void> {
-    const serversToCheck = serverId ? [serverId] : Array.from(this.servers.keys());
-
-    for (const id of serversToCheck) {
-      const server = this.servers.get(id);
-      if (!server || server.status !== 'active') continue;
-
-      try {
-        let isHealthy = false;
-
-        switch (id) {
-          case 'brave-search':
-            isHealthy = await this.testBraveSearchConnection();
-            break;
-        }
-
-        server.lastHealthCheck = new Date();
-        if (!isHealthy) {
-          server.status = 'error';
-          console.warn(`[MCP] Health check failed for ${server.name}`);
-        }
-
-        this.servers.set(id, server);
-      } catch (error) {
-        console.error(`[MCP] Health check error for ${id}:`, error);
-      }
-    }
-  }
-
-  getUsageStats() {
-    const now = Date.now();
-    const oneHourAgo = now - (60 * 60 * 1000);
-
-    const recentLogs = this.usageLogs.filter(log =>
-      log.timestamp.getTime() > oneHourAgo
-    );
-
-    return {
-      totalCalls: recentLogs.length,
-      successfulCalls: recentLogs.filter(log => log.success).length,
-      averageResponseTime: recentLogs.length > 0
-        ? recentLogs.reduce((sum, log) => sum + log.responseTime, 0) / recentLogs.length
-        : 0,
-      toolUsage: this.getToolUsageStats(recentLogs)
-    };
-  }
-
-  private getToolUsageStats(logs: any[]) {
-    const usage = new Map<string, { count: number; totalTime: number; errors: number }>();
-
-    for (const log of logs) {
-      const key = `${log.serverId}:${log.toolName}`;
-      const current = usage.get(key) || { count: 0, totalTime: 0, errors: 0 };
-
-      current.count++;
-      current.totalTime += log.responseTime;
-      if (!log.success) current.errors++;
-
-      usage.set(key, current);
-    }
-
-    return Array.from(usage.entries()).map(([key, stats]) => {
-      const [serverId, toolName] = key.split(':');
-      return {
         serverId,
-        toolName,
-        count: stats.count,
-        avgResponseTime: stats.totalTime / stats.count,
-        errorRate: (stats.errors / stats.count) * 100
-      };
-    });
+        toolName
+      }
+    }
+  }
+
+  shouldUseWebSearch(message: string): boolean {
+    const webSearchTriggers = [
+      'search', 'find', 'look up', 'what is', 'who is', 'when did', 'where is',
+      'latest', 'current', 'recent', 'news', 'today', 'this week', 'this month',
+      'price', 'stock', 'weather', 'definition', 'meaning'
+    ]
+
+    const lowerMessage = message.toLowerCase()
+    return webSearchTriggers.some(trigger => lowerMessage.includes(trigger))
+  }
+
+  shouldUseGitHub(message: string): boolean {
+    const githubTriggers = [
+      'repository', 'repo', 'github', 'create repo', 'list repos', 'issue', 'bug report',
+      'feature request', 'pull request', 'commit', 'branch'
+    ]
+
+    const lowerMessage = message.toLowerCase()
+    return githubTriggers.some(trigger => lowerMessage.includes(trigger))
+  }
+
+  shouldUseFileSystem(message: string): boolean {
+    const fileSystemTriggers = [
+      'file', 'directory', 'folder', 'read file', 'write file', 'save', 'load',
+      'create directory', 'delete file', 'list files', 'browse files'
+    ]
+
+    const lowerMessage = message.toLowerCase()
+    return fileSystemTriggers.some(trigger => lowerMessage.includes(trigger))
+  }
+
+  async getRecommendedTools(message: string): Promise<Array<{serverId: string, toolName: string, confidence: number}>> {
+    const recommendations = []
+
+    if (this.shouldUseWebSearch(message)) {
+      if (message.toLowerCase().includes('news')) {
+        recommendations.push({ serverId: 'brave-search', toolName: 'news_search', confidence: 0.9 })
+      } else {
+        recommendations.push({ serverId: 'brave-search', toolName: 'web_search', confidence: 0.8 })
+      }
+    }
+
+    if (this.shouldUseGitHub(message)) {
+      if (message.toLowerCase().includes('create repo')) {
+        recommendations.push({ serverId: 'github', toolName: 'create_repo', confidence: 0.9 })
+      } else if (message.toLowerCase().includes('list repos')) {
+        recommendations.push({ serverId: 'github', toolName: 'list_repos', confidence: 0.9 })
+      } else if (message.toLowerCase().includes('issue')) {
+        recommendations.push({ serverId: 'github', toolName: 'create_issue', confidence: 0.8 })
+      }
+    }
+
+    if (this.shouldUseFileSystem(message)) {
+      if (message.toLowerCase().includes('read')) {
+        recommendations.push({ serverId: 'file-system', toolName: 'read_file', confidence: 0.8 })
+      } else if (message.toLowerCase().includes('write') || message.toLowerCase().includes('save')) {
+        recommendations.push({ serverId: 'file-system', toolName: 'write_file', confidence: 0.8 })
+      } else if (message.toLowerCase().includes('list') || message.toLowerCase().includes('browse')) {
+        recommendations.push({ serverId: 'file-system', toolName: 'list_directory', confidence: 0.7 })
+      }
+    }
+
+    return recommendations.sort((a, b) => b.confidence - a.confidence)
+  }
+
+  async performWebSearch(query: string): Promise<MCPCallResult> {
+    return this.callTool('brave-search', 'web_search', { query })
+  }
+
+  async performNewsSearch(query: string): Promise<MCPCallResult> {
+    return this.callTool('brave-search', 'news_search', { query })
+  }
+
+  async listGitHubRepos(username?: string): Promise<MCPCallResult> {
+    return this.callTool('github', 'list_repos', { username })
+  }
+
+  async createGitHubRepo(name: string, description?: string, isPrivate: boolean = false): Promise<MCPCallResult> {
+    return this.callTool('github', 'create_repo', { name, description, isPrivate })
+  }
+
+  async readFile(path: string): Promise<MCPCallResult> {
+    return this.callTool('file-system', 'read_file', { path })
+  }
+
+  async writeFile(path: string, content: string): Promise<MCPCallResult> {
+    return this.callTool('file-system', 'write_file', { path, content })
   }
 }
 
