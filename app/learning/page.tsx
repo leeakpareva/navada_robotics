@@ -471,7 +471,7 @@ export default function LearningPage() {
                     </div>
 
                     <div className="flex flex-wrap gap-1 mb-4">
-                      {course.tags.map((tag, tagIndex) => (
+                      {course.tags?.map((tag, tagIndex) => (
                         <Badge
                           key={tagIndex}
                           variant="outline"

@@ -32,6 +32,7 @@ export default function SolutionsPage() {
       icon: <CircuitBoard className="h-8 w-8" />,
       features: ["Cost-Effective", "Open Source", "Modular Design"],
       image: "/InnovavtionShowCase.png",
+      link: "/solutions/raspberry-pi-automation",
     },
     {
       title: "AI Research Platforms",
@@ -40,6 +41,7 @@ export default function SolutionsPage() {
       icon: <Cpu className="h-8 w-8" />,
       features: ["Edge Computing", "Neural Networks", "Computer Vision"],
       image: "/AiResearchPlatform.png",
+      link: "/solutions/ai-research-platforms",
     },
     {
       title: "Educational Robotics",
@@ -48,6 +50,7 @@ export default function SolutionsPage() {
       icon: <Zap className="h-8 w-8" />,
       features: ["STEM Education", "Research Tools", "Prototyping"],
       image: "/Educa.png",
+      link: "/solutions/educational-robotics",
     },
     {
       title: "IoT Integration",
@@ -56,6 +59,7 @@ export default function SolutionsPage() {
       icon: <Shield className="h-8 w-8" />,
       features: ["Sensor Networks", "Remote Monitoring", "Data Analytics"],
       image: "/IoTIntegration.png",
+      link: "/solutions/iot-integration",
     },
   ]
 
@@ -185,13 +189,15 @@ export default function SolutionsPage() {
                       </Badge>
                     ))}
                   </div>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-between text-white hover:bg-purple-500/20 hover:text-purple-200 backdrop-blur-sm"
-                  >
-                    Learn More
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
+                  <Link href={solution.link}>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-between text-white hover:bg-purple-500/20 hover:text-purple-200 backdrop-blur-sm"
+                    >
+                      Learn More
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
