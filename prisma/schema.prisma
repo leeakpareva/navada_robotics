@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model accounts {
@@ -256,4 +256,18 @@ model MCPUsage {
   @@index([serverId])
   @@index([timestamp])
   @@index([sessionId])
+}
+
+// Learning Interest Comments
+model LearningComment {
+  id          String   @id @default(cuid())
+  comment     String
+  email       String?  // Optional email for follow-up
+  name        String?  // Optional name
+  source      String   @default("homepage") // Where the comment was submitted from
+  createdAt   DateTime @default(now())
+  isActive    Boolean  @default(true)
+
+  @@map("learning_comments")
+  @@index([createdAt])
 }

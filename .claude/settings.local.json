@@ -35,7 +35,12 @@
       "Bash(node:*)",
       "Bash(npx next lint:*)",
       "Bash(timeout 30s npm run build)",
-      "Bash(git grep:*)"
+      "Bash(git grep:*)",
+      "Bash(cat:*)",
+      "Bash(npx dotenv -e .env.local -- npx prisma db push:*)",
+      "Bash(copy .env.local .env)",
+      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"yes\" npx prisma db push --force-reset)",
+      "Bash(TASKKILL /F /PID 1640)"
     ],
     "deny": [],
     "ask": []
