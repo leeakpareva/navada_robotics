@@ -2,10 +2,15 @@
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
+    dirs: ['app', 'lib', 'components']
   },
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    esmExternals: false,
+  },
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
@@ -24,17 +29,8 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  // Aggressive caching
+  // Simple caching
   headers: async () => [
-    {
-      source: '/(.*)',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable',
-        },
-      ],
-    },
     {
       source: '/api/(.*)',
       headers: [
