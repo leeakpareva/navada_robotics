@@ -489,22 +489,12 @@ export async function POST(request: NextRequest) {
     console.log("[v0] Received message:", message, "threadId:", threadId)
     console.log("[v0] Has last image for context:", !!lastImage)
 
-    // Track new chat session
-    sessionId = await trackChatSession({
-      threadId,
-      apiProvider
-    })
-
     if (!message || typeof message !== "string") {
       console.log("[v0] Invalid message format")
       return NextResponse.json({ error: "Message is required and must be a string" }, { status: 400 })
     }
 
     console.log("[v0] Checking if message is image generation request:", message)
-
-    // Check if we need to use MCP services
-    let mcpResults = ''
-    mcpResults = await handleMCPRequest(message, sessionId, threadId)
 
     // Check if this is an image analysis request first
     if (detectImageAnalysisRequest(message) && lastImage) {
@@ -855,14 +845,29 @@ export async function POST(request: NextRequest) {
           type: threadError?.type,
           code: threadError?.code,
         })
-        return NextResponse.json({ 
+        return NextResponse.json({
           error: "Failed to create conversation thread",
-          details: threadError?.message 
+          details: threadError?.message
         }, { status: 500 })
       }
     }
 
     console.log("[v0] Using thread ID:", currentThreadId)
+
+    // Track chat session with the actual thread ID
+    sessionId = await trackChatSession({
+      threadId: currentThreadId,
+      apiProvider,
+      userId: 'user_' + (currentThreadId || Date.now()),
+      sessionData: {
+        startTime: new Date().toISOString(),
+        initialMessage: message
+      }
+    })
+
+    // Check if we need to use MCP services
+    let mcpResults = ''
+    mcpResults = await handleMCPRequest(message, sessionId, currentThreadId)
 
     try {
       // Construct the enhanced message with MCP results
@@ -876,6 +881,22 @@ export async function POST(request: NextRequest) {
         content: enhancedMessage,
       })
       console.log("[v0] Message added to thread", mcpResults ? "(with MCP results)" : "")
+
+      // Track the user message
+      if (sessionId && currentThreadId) {
+        try {
+          await DatabaseAnalytics.addChatMessage({
+            sessionId,
+            threadId: currentThreadId,
+            messageIndex: 0,
+            role: 'user',
+            content: message,
+            metadata: { hasMCPResults: !!mcpResults }
+          })
+        } catch (trackErr) {
+          console.error('[Analytics] Error tracking user message:', trackErr)
+        }
+      }
     } catch (messageError: any) {
       console.error("[v0] Failed to add message:", messageError)
       console.error("[v0] Message error details:", {
@@ -1166,6 +1187,22 @@ export async function POST(request: NextRequest) {
           // Remove markdown bold formatting (**text**)
           const response = rawResponse.replace(/\*\*(.*?)\*\*/g, '$1')
           console.log("[v0] Generated response:", response.substring(0, 100) + "...")
+
+          // Track the assistant response
+          if (sessionId && currentThreadId) {
+            try {
+              await DatabaseAnalytics.addChatMessage({
+                sessionId,
+                threadId: currentThreadId,
+                messageIndex: 1,
+                role: 'assistant',
+                content: response,
+                metadata: { model: 'gpt-4' }
+              })
+            } catch (trackErr) {
+              console.error('[Analytics] Error tracking assistant response:', trackErr)
+            }
+          }
 
           // Check if the assistant's response suggests it should generate an image
           // This catches cases where the original message was asking for image generation

@@ -9,7 +9,7 @@ export async function initializeSession(threadId: string | null, apiProvider: st
 
   return {
     sessionId: session.id,
-    threadId: session.threadId
+    threadId: 'threadId' in session ? session.threadId : null
   }
 }
 
