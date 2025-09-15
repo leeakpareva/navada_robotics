@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Brain, Cpu, Sparkles, Folder, Newspaper } from "lucide-react"
+import { Menu, X, Cog, Microscope as Microchip, Shield, Phone, Brain, Cpu, Sparkles, Folder, Newspaper } from "lucide-react"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/ui/optimized-image"
 import { useSession } from "next-auth/react"
@@ -48,9 +48,6 @@ export default function NavadaRoboticsApp() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
-                Services
-              </Link>
               <Link href="/news" className="relative text-white hover:text-cyan-400 transition-all duration-200 font-semibold">
                 <span className="relative z-10">News</span>
                 <span className="absolute -top-1 -right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
@@ -80,9 +77,6 @@ export default function NavadaRoboticsApp() {
             <nav className="flex flex-col space-y-3">
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
-              </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
-                Services
               </Link>
               <Link href="/news" className="relative text-white hover:text-cyan-400 transition-all duration-200 font-semibold">
                 <span className="relative z-10">News</span>
@@ -355,10 +349,6 @@ export default function NavadaRoboticsApp() {
           <Link href="/solutions" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Microchip className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
-          </Link>
-          <Link href="/services" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
-            <Wrench className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Services</span>
           </Link>
           <Link href="/news" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200 relative">
             <Newspaper className="h-5 w-5 text-cyan-400 mb-1 animate-pulse" />

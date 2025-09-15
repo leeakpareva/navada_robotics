@@ -34,7 +34,6 @@ import {
   Cpu,
   Atom,
   Binary,
-  Boxes,
   Dna,
   Fingerprint,
   GitBranch,
@@ -603,9 +602,6 @@ export default function AgentLeePage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                Services
-              </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
@@ -654,9 +650,6 @@ export default function AgentLeePage() {
               <div className="flex flex-col space-y-3">
                 <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                   Solutions
-                </Link>
-                <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                  Services
                 </Link>
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
@@ -993,10 +986,6 @@ export default function AgentLeePage() {
           <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
             <Dna className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
-          </Link>
-          <Link href="/services" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Boxes className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Services</span>
           </Link>
           <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
             <ShieldCheck className="h-5 w-5 text-gray-400 mb-1" />

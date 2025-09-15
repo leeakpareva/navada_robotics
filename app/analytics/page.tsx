@@ -232,9 +232,6 @@ export default function AnalyticsPage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                Services
-              </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
@@ -278,9 +275,6 @@ export default function AnalyticsPage() {
               <div className="flex flex-col space-y-3">
                 <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                   Solutions
-                </Link>
-                <Link href="/services" className="text-white hover:text-purple-400 transition-colors">
-                  Services
                 </Link>
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
