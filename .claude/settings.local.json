@@ -22,7 +22,10 @@
       "Bash(git checkout:*)",
       "Bash(git merge:*)",
       "Bash(npm run build:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npx prisma:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

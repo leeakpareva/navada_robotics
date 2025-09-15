@@ -643,27 +643,32 @@ export default function AgentLeePage() {
             </h2>
             <p className="text-gray-300 text-lg mb-2">Your AI Powerhouse for Innovation</p>
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-600/20 border border-purple-400/50 text-purple-300 text-sm">
-                <Atom className="h-3 w-3" /> AI Assistant
+              <span className="inline-flex items-center px-4 py-2 rounded-full bg-purple-600/20 border border-purple-400/50 text-purple-300 text-sm font-medium min-w-[120px] justify-center">
+                AI Assistant
               </span>
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-pink-600/20 border border-pink-400/50 text-pink-300 text-sm">
-                <Wand2 className="h-3 w-3" /> Image Generation
+              <span className="inline-flex items-center px-4 py-2 rounded-full bg-purple-600/20 border border-purple-400/50 text-purple-300 text-sm font-medium min-w-[120px] justify-center">
+                Image Generation
               </span>
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-600/20 border border-cyan-400/50 text-cyan-300 text-sm">
-                <Infinity className="h-3 w-3" /> Website Builder
+              <span className="inline-flex items-center px-4 py-2 rounded-full bg-purple-600/20 border border-purple-400/50 text-purple-300 text-sm font-medium min-w-[120px] justify-center">
+                Website Builder
               </span>
+              {speechSupported && (
+                <span className="inline-flex items-center px-4 py-2 rounded-full bg-purple-600/20 border border-purple-400/50 text-purple-300 text-sm font-medium min-w-[120px] justify-center">
+                  Voice Enabled
+                </span>
+              )}
             </div>
             {speechSupported && (
-              <div className="flex items-center justify-center mt-3 space-x-2">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isMuted ? 'bg-red-600/20 border border-red-400/50' : 'bg-green-600/20 border border-green-400/50'} transition-all duration-300`}>
-                  <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-red-400' : 'bg-green-400 animate-pulse'}`}></div>
-                  <p className={`text-sm ${isMuted ? 'text-red-300' : 'text-green-300'}`}>
-                    {isMuted ? 'Voice Muted' : 'Voice Enabled'}
-                  </p>
-                  <Button onClick={toggleMute} variant="ghost" size="sm" className={`${isMuted ? 'text-red-400 hover:bg-red-600/20' : 'text-green-400 hover:bg-green-600/20'}`}>
-                    {isMuted ? <VolumeX className="h-4 w-4" /> : <AudioLines className="h-4 w-4" />}
-                  </Button>
-                </div>
+              <div className="flex items-center justify-center mt-3">
+                <Button
+                  onClick={toggleMute}
+                  variant="ghost"
+                  size="sm"
+                  className="text-purple-400 hover:bg-purple-600/20 hover:text-purple-300 transition-all duration-300"
+                >
+                  {isMuted ? <VolumeX className="h-4 w-4" /> : <AudioLines className="h-4 w-4" />}
+                  <span className="ml-2">{isMuted ? 'Unmute' : 'Mute'}</span>
+                </Button>
               </div>
             )}
           </div>
@@ -698,8 +703,7 @@ export default function AgentLeePage() {
 
           {/* Quick Actions - More Vibrant */}
           <div className="mb-6">
-            <p className="text-sm text-gray-400 mb-3 flex items-center gap-2">
-              <Workflow className="h-4 w-4" />
+            <p className="text-sm text-gray-400 mb-3">
               Quick actions to get started:
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -718,10 +722,7 @@ export default function AgentLeePage() {
                   }}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-r from-purple-500 to-violet-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
-                  <span className="relative flex items-center gap-2">
-                    <span className={`bg-gradient-to-r ${action.color} bg-clip-text text-transparent`}>
-                      {action.icon}
-                    </span>
+                  <span className="relative">
                     {action.text}
                   </span>
                 </Button>
@@ -868,7 +869,7 @@ export default function AgentLeePage() {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask me anything... I can code, generate images, create websites, and more! ✨"
+              placeholder="Ask me anything... I can code, generate images, create websites, and more!"
               className="flex-1 bg-black/30 backdrop-blur-sm border-white/20 text-white placeholder-gray-400 focus:border-purple-400 transition-all duration-300"
             />
             {speechSupported && (

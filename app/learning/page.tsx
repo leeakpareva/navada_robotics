@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { BeamsBackground } from "@/components/ui/beams-background"
+import { EmailSignup } from "@/components/ui/email-signup"
 import { Menu, X, BookOpen, Clock, Microscope as Microchip, Wrench, Shield, Phone, Brain, BarChart3 } from "lucide-react"
 import Link from "next/link"
 
@@ -141,18 +142,17 @@ export default function LearningPage() {
             </div>
 
             {/* Newsletter Signup */}
-            <div className="mt-8 bg-black/20 backdrop-blur-sm rounded-lg p-8 border border-white/10">
+            <div className="mt-8">
               <h4 className="text-xl font-semibold text-white mb-4">Get Notified</h4>
               <p className="text-gray-300 mb-6">Be the first to know when our Learning Hub launches</p>
-              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 rounded-lg bg-gray-900 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              <div className="max-w-md mx-auto">
+                <EmailSignup
+                  variant="purple"
+                  source="learning-page"
+                  placeholder="Enter your email for updates"
+                  buttonText="Notify Me"
+                  className="bg-black/30 backdrop-blur-sm border-white/20"
                 />
-                <Button className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors">
-                  Notify Me
-                </Button>
               </div>
             </div>
           </div>
