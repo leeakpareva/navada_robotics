@@ -22,6 +22,17 @@ export interface ImageGeneration {
   sessionId?: string;
 }
 
+export interface CodeGeneration {
+  id: string;
+  timestamp: Date;
+  instruction: string;
+  success: boolean;
+  generationTime: number; // in milliseconds
+  model: string; // e.g., 'claude-sonnet-4-20250514'
+  filesCreated: number;
+  sessionId?: string;
+}
+
 export interface ChatMetrics {
   chatVolume: { time: string; value: number }[];
   responseTimeData: { time: string; value: number }[];
@@ -46,17 +57,27 @@ export interface ChatMetrics {
     hourlyData: { time: string; value: number }[];
     topPrompts: { prompt: string; count: number }[];
   };
+  codeGeneration: {
+    totalGenerated: number;
+    successRate: number;
+    avgGenerationTime: number;
+    filesCreated: number;
+    hourlyData: { time: string; value: number }[];
+    topInstructions: { instruction: string; count: number }[];
+  };
 }
 
 // In-memory storage (in production, use a database)
 let chatSessions: ChatSession[] = [];
 let imageGenerations: ImageGeneration[] = [];
+let codeGenerations: CodeGeneration[] = [];
 let dailyMetrics: { date: string; queries: number; uptime: number }[] = [];
 
 // Reset function to clear all analytics data
 export function resetAnalyticsData() {
   chatSessions.length = 0;
   imageGenerations.length = 0;
+  codeGenerations.length = 0;
   dailyMetrics.length = 0;
   console.log("[Analytics] All analytics data has been reset");
 }
@@ -74,7 +95,50 @@ export function clearCompletedSessionsIfInactive() {
   }
 }
 
+// Mark sessions as completed if they've been inactive for more than 30 minutes
+export function cleanupInactiveSessions() {
+  const now = new Date();
+  const inactivityThreshold = new Date(now.getTime() - 30 * 60 * 1000); // 30 minutes
+
+  chatSessions.forEach((session, index) => {
+    if (session.status === 'active') {
+      // Check if session has been inactive for more than 30 minutes
+      const lastActivityTime = session.endTime || session.startTime;
+      if (lastActivityTime < inactivityThreshold) {
+        chatSessions[index] = {
+          ...session,
+          status: 'completed',
+          endTime: new Date()
+        };
+      }
+    }
+  });
+}
+
+export function findActiveSessionByThread(threadId: string): ChatSession | null {
+  const last30Minutes = new Date(Date.now() - 30 * 60 * 1000);
+
+  return chatSessions.find(session =>
+    session.threadId === threadId &&
+    (session.status === 'active' || (session.endTime && session.endTime >= last30Minutes))
+  ) || null;
+}
+
 export function trackChatSession(session: Omit<ChatSession, 'id'>) {
+  // Check if there's an existing active session for this thread
+  if (session.threadId) {
+    const existingSession = findActiveSessionByThread(session.threadId);
+    if (existingSession) {
+      // Extend existing session
+      updateChatSession(existingSession.id, {
+        messageCount: existingSession.messageCount + 1,
+        status: 'active'
+      });
+      return existingSession.id;
+    }
+  }
+
+  // Create new session
   const newSession: ChatSession = {
     ...session,
     id: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
@@ -120,7 +184,26 @@ export function trackImageGeneration(imageGen: Omit<ImageGeneration, 'id'>) {
   return newImageGen.id;
 }
 
+export function trackCodeGeneration(codeGen: Omit<CodeGeneration, 'id'>) {
+  const newCodeGen: CodeGeneration = {
+    ...codeGen,
+    id: `code_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  };
+
+  codeGenerations.push(newCodeGen);
+
+  // Keep only last 1000 code generations to prevent memory bloat
+  if (codeGenerations.length > 1000) {
+    codeGenerations = codeGenerations.slice(-1000);
+  }
+
+  return newCodeGen.id;
+}
+
 export function getChatMetrics(): ChatMetrics {
+  // Clean up inactive sessions before calculating metrics
+  cleanupInactiveSessions();
+
   const now = new Date();
   const last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
   const lastHour = new Date(now.getTime() - 60 * 60 * 1000);
@@ -162,12 +245,21 @@ export function getChatMetrics(): ChatMetrics {
     };
   });
 
-  // Active Users
-  const activeSessions = recentSessions.filter(session => session.status === 'active');
+  // Active Users - Consider sessions active if they were active in the last 30 minutes
+  const last30Minutes = new Date(now.getTime() - 30 * 60 * 1000);
+  const activeSessionsCheck = recentSessions.filter(session => {
+    // Session is active if:
+    // 1. Status is 'active', OR
+    // 2. It was completed/error but within the last 30 minutes (ongoing conversation)
+    if (session.status === 'active') return true;
+    if (session.endTime && session.endTime >= last30Minutes) return true;
+    return false;
+  });
+
   const hourSessions = recentSessions.filter(session => session.startTime >= lastHour);
 
   const activeUsers = {
-    current: activeSessions.length,
+    current: activeSessionsCheck.length,
     thisHour: hourSessions.length,
     today: recentSessions.length
   };
@@ -239,6 +331,43 @@ export function getChatMetrics(): ChatMetrics {
     })()
   };
 
+  // Code Generation Analytics
+  const recentCode = codeGenerations.filter(code => code.timestamp >= last24Hours);
+  const successfulCode = recentCode.filter(code => code.success);
+
+  const codeGeneration = {
+    totalGenerated: recentCode.length,
+    successRate: recentCode.length > 0 ? Math.round((successfulCode.length / recentCode.length) * 100) : 0,
+    avgGenerationTime: successfulCode.length > 0
+      ? Math.round(successfulCode.reduce((sum, code) => sum + code.generationTime, 0) / successfulCode.length / 1000)
+      : 0,
+    filesCreated: recentCode.reduce((sum, code) => sum + (code.filesCreated || 0), 0),
+    hourlyData: Array.from({ length: 24 }, (_, i) => {
+      const hourStart = new Date(now.getTime() - (23 - i) * 60 * 60 * 1000);
+      const hourEnd = new Date(hourStart.getTime() + 60 * 60 * 1000);
+      const hourCode = recentCode.filter(code =>
+        code.timestamp >= hourStart && code.timestamp < hourEnd
+      );
+
+      return {
+        time: hourStart.toTimeString().slice(0, 5),
+        value: hourCode.length
+      };
+    }),
+    topInstructions: (() => {
+      const instructionCounts: { [key: string]: number } = {};
+      recentCode.forEach(code => {
+        const shortInstruction = code.instruction.length > 30 ? code.instruction.substring(0, 30) + '...' : code.instruction;
+        instructionCounts[shortInstruction] = (instructionCounts[shortInstruction] || 0) + 1;
+      });
+
+      return Object.entries(instructionCounts)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 5)
+        .map(([instruction, count]) => ({ instruction, count }));
+    })()
+  };
+
   return {
     chatVolume,
     responseTimeData,
@@ -247,12 +376,30 @@ export function getChatMetrics(): ChatMetrics {
     dailyQueries,
     uptime,
     accuracy,
-    imageGeneration
+    imageGeneration,
+    codeGeneration
   };
+}
+
+// Add demo session for testing (if no sessions exist)
+function ensureDemoSession() {
+  if (chatSessions.length === 0) {
+    const now = new Date();
+    trackChatSession({
+      threadId: 'demo_thread_active',
+      startTime: new Date(now.getTime() - 5 * 60 * 1000), // 5 minutes ago
+      messageCount: 3,
+      responseTime: 1500,
+      status: 'active'
+    });
+  }
 }
 
 // Helper function to get current analytics for display
 export function getCurrentAnalytics() {
+  // Ensure there's at least one session for demo purposes
+  ensureDemoSession();
+
   const metrics = getChatMetrics();
   const totalSessions = chatSessions.length;
   const avgResponseTime = chatSessions.length > 0

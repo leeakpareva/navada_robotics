@@ -57,6 +57,9 @@ import {
   Settings2,
   Home,
   ArrowLeft,
+  LogOut,
+  History,
+  Trash2,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -81,7 +84,7 @@ export default function AgentLeePage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "🚀 Hello! I'm Agent Lee, your AI powerhouse for robotics, deep learning, and computer vision!\n\n✨ I can help you with:\n• 🤖 Robotics guidance and project tutorials\n• 🐍 Python programming instruction\n• 👁️ Computer vision and OpenCV help\n• 🖼️ DALL-E 3 image generation (just say \"generate image\")\n• 🌐 NextJS website creation (just say \"create website\")\n\nWhat amazing things shall we build today?",
+      text: "🚀 Hello! I'm Agent Lee, your AI powerhouse for robotics, deep learning, and computer vision!\n\n✨ Enhanced Features Now Available:\n• 🤖 Robotics guidance with knowledge base (RAG-powered)\n• 🐍 Python programming instruction with examples\n• 👁️ Computer vision and OpenCV help\n• 🖼️ DALL-E 3 image generation (say \"generate image\")\n• 🌐 NextJS website creation (say \"create website\")\n• 💾 **Persistent chat history** - all conversations saved!\n• 🧠 **Smart context** - I remember our previous discussions\n• 📊 **Real-time analytics** - track your learning progress\n• 🔍 **Knowledge base search** - enhanced with expert robotics content\n\nTry asking: \"What's the best way to start with Raspberry Pi robotics?\" to see the knowledge base in action!\n\nWhat amazing things shall we build today?",
       sender: "agent",
       timestamp: new Date(),
     },
@@ -306,12 +309,82 @@ export default function AgentLeePage() {
     }
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (username === "Agent Lee" && password === "Activate") {
       setIsAuthenticated(true)
       setAuthError("")
+
+      // Load previous chat history if threadId exists
+      await loadChatHistory()
     } else {
       setAuthError("Invalid credentials. Please try again.")
+    }
+  }
+
+  const handleLogout = async () => {
+    // End current session
+    if (threadId) {
+      try {
+        await fetch(`/api/agent-lee/session/${threadId}`, {
+          method: 'DELETE'
+        })
+      } catch (error) {
+        console.error('Error ending session:', error)
+      }
+    }
+
+    // Reset state
+    setIsAuthenticated(false)
+    setUsername("")
+    setPassword("")
+    setMessages([{
+      id: 1,
+      text: "🚀 Hello! I'm Agent Lee, your AI powerhouse for robotics, deep learning, and computer vision!\n\n✨ I can help you with:\n• 🤖 Robotics guidance and project tutorials\n• 🐍 Python programming instruction\n• 👁️ Computer vision and OpenCV help\n• 🖼️ DALL-E 3 image generation (just say \"generate image\")\n• 🌐 NextJS website creation (just say \"create website\")\n• 💾 All conversations are automatically saved\n\nWhat amazing things shall we build today?",
+      sender: "agent",
+      timestamp: new Date(),
+    }])
+    setThreadId(null)
+    setInputMessage("")
+    setIsTyping(false)
+    setLastGeneratedImage(null)
+  }
+
+  const loadChatHistory = async () => {
+    if (!threadId) return
+
+    try {
+      const response = await fetch(`/api/agent-lee/history/${threadId}`)
+      if (response.ok) {
+        const history = await response.json()
+        if (history && history.length > 0) {
+          setMessages(history)
+          console.log(`Loaded ${history.length} previous messages`)
+        }
+      }
+    } catch (error) {
+      console.error('Error loading chat history:', error)
+    }
+  }
+
+  const clearChatHistory = async () => {
+    if (!threadId) return
+
+    try {
+      const response = await fetch(`/api/agent-lee/history/${threadId}`, {
+        method: 'DELETE'
+      })
+
+      if (response.ok) {
+        setMessages([{
+          id: 1,
+          text: "🚀 Chat history cleared! I'm Agent Lee, ready to help you with robotics, AI, and more!\n\nWhat would you like to work on?",
+          sender: "agent",
+          timestamp: new Date(),
+        }])
+        setThreadId(null)
+      }
+    } catch (error) {
+      console.error('Error clearing chat history:', error)
     }
   }
 
@@ -588,6 +661,28 @@ export default function AgentLeePage() {
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
+
+              {/* Session Management */}
+              <div className="flex items-center space-x-2">
+                <Button
+                  onClick={clearChatHistory}
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
+                  title="Clear Chat History"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+                <Button
+                  onClick={handleLogout}
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  title="Logout"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
             </nav>
           </div>
 

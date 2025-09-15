@@ -120,3 +120,120 @@ model EmailSubscriber {
 
   @@map("email_subscribers")
 }
+
+// Agent Lee Chat System
+model ChatSession {
+  id              String        @id @default(cuid())
+  threadId        String        @unique
+  userId          String?       // Optional - for authenticated users
+  startTime       DateTime      @default(now())
+  endTime         DateTime?
+  lastActivity    DateTime      @default(now())
+  messageCount    Int           @default(0)
+  status          String        @default("active") // active, completed, inactive
+  sessionData     String?       // JSON data for session context
+  apiProvider     String        @default("openai")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  messages        ChatMessage[]
+  analytics       SessionAnalytics[]
+
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id              String      @id @default(cuid())
+  sessionId       String
+  threadId        String      // For quick lookups
+  messageIndex    Int         // Order in conversation
+  role            String      // user, assistant, system
+  content         String      // Message text
+  imageData       String?     // Base64 image data
+  websiteData     String?     // JSON website generation data
+  codeData        String?     // JSON code generation data
+  metadata        String?     // JSON metadata (response times, etc.)
+  timestamp       DateTime    @default(now())
+
+  // Relations
+  session         ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+  @@index([threadId])
+  @@index([sessionId, messageIndex])
+}
+
+model SessionAnalytics {
+  id              String      @id @default(cuid())
+  sessionId       String
+  eventType       String      // message_sent, response_generated, image_created, etc.
+  eventData       String?     // JSON event data
+  responseTime    Int?        // Response time in milliseconds
+  success         Boolean     @default(true)
+  errorDetails    String?
+  timestamp       DateTime    @default(now())
+
+  // Relations
+  session         ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("session_analytics")
+  @@index([sessionId])
+  @@index([eventType])
+}
+
+// Code Generation Tracking
+model CodeGeneration {
+  id              String      @id @default(cuid())
+  sessionId       String?
+  threadId        String?
+  instruction     String
+  model           String      @default("claude-sonnet-4-20250514")
+  success         Boolean
+  filesCreated    Int         @default(0)
+  generationTime  Int         // milliseconds
+  errorDetails    String?
+  filesList       String?     // JSON array of created files
+  timestamp       DateTime    @default(now())
+
+  @@map("code_generations")
+  @@index([sessionId])
+  @@index([timestamp])
+}
+
+// Image Generation Tracking
+model ImageGeneration {
+  id              String      @id @default(cuid())
+  sessionId       String?
+  threadId        String?
+  prompt          String
+  model           String      @default("dall-e-3")
+  success         Boolean
+  generationTime  Int         // milliseconds
+  imageUrl        String?
+  errorDetails    String?
+  timestamp       DateTime    @default(now())
+
+  @@map("image_generations")
+  @@index([sessionId])
+  @@index([timestamp])
+}
+
+// RAG Knowledge Base
+model KnowledgeBase {
+  id              String      @id @default(cuid())
+  title           String
+  content         String      // Full text content
+  summary         String?     // Summary for quick reference
+  source          String?     // Source URL or file path
+  category        String      @default("general")
+  tags            String?     // JSON array of tags
+  embeddings      String?     // JSON vector embeddings
+  isActive        Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@map("knowledge_base")
+  @@index([category])
+  @@index([isActive])
+}

@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCurrentAnalytics } from '@/lib/analytics';
+import { DatabaseAnalytics } from '@/lib/database-analytics';
 
 export async function GET(request: NextRequest) {
   try {
-    const analytics = getCurrentAnalytics();
+    const url = new URL(request.url);
+    const hours = parseInt(url.searchParams.get('hours') || '24');
+
+    const analytics = await DatabaseAnalytics.getAnalyticsData(hours);
 
     return NextResponse.json(analytics, {
       headers: {

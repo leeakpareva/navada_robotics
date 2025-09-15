@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import OpenAI from "openai"
-import { trackChatSession, updateChatSession, trackImageGeneration } from "@/lib/analytics"
+import { DatabaseAnalytics } from "@/lib/database-analytics"
+import { RAGService } from "@/lib/rag-service"
 import { mcpClient } from "@/lib/mcp/client"
 import { parseUserRequest, formatWebsitePreview } from "@/lib/website-generator/utils"
 import { WebsiteGenerator } from "@/lib/website-generator/generator"
@@ -189,6 +190,30 @@ function detectWebsiteGenerationRequest(message: string): boolean {
   ]
 
   return websiteKeywords.some(keyword => lowerMessage.includes(keyword))
+}
+
+function detectCodeGenerationRequest(message: string): boolean {
+  const lowerMessage = message.toLowerCase()
+  const codeKeywords = [
+    'create component', 'build component', 'make component', 'generate component',
+    'create function', 'build function', 'make function', 'write function',
+    'create api', 'build api', 'make api', 'generate api',
+    'create file', 'build file', 'make file', 'write file',
+    'create code', 'build code', 'write code', 'generate code',
+    'create util', 'create helper', 'create service',
+    'build feature', 'implement feature', 'create feature',
+    'write typescript', 'write react', 'write next.js',
+    'create hook', 'build hook', 'custom hook',
+    'create page', 'build page', 'make page',
+    'create form', 'build form', 'contact form', 'login form',
+    'create modal', 'build modal', 'create dialog',
+    'create config', 'build config', 'configuration file'
+  ]
+
+  const excludeWebsite = !detectWebsiteGenerationRequest(message)
+  const excludeImage = !detectImageGenerationRequest(message)
+
+  return excludeWebsite && excludeImage && codeKeywords.some(keyword => lowerMessage.includes(keyword))
 }
 
 async function searchWithBrave(query: string): Promise<string> {
@@ -396,12 +421,12 @@ export async function POST(request: NextRequest) {
         const analysisResult = await analyzeImage(lastImage, message, openai)
         const responseTime = Date.now() - requestStartTime
 
-        // Update session with completion data
+        // Update session with response data but keep it active
         if (sessionId) {
           updateChatSession(sessionId, {
-            endTime: new Date(),
             responseTime,
-            status: 'completed'
+            status: 'active',
+            endTime: new Date() // Track last activity time
           })
         }
 
@@ -464,12 +489,12 @@ export async function POST(request: NextRequest) {
           sessionId: sessionId || undefined
         })
 
-        // Update session with completion data
+        // Update session with response data but keep it active
         if (sessionId) {
           updateChatSession(sessionId, {
-            endTime: new Date(),
             responseTime,
-            status: 'completed'
+            status: 'active',
+            endTime: new Date() // Track last activity time
           })
         }
 
@@ -570,12 +595,12 @@ export async function POST(request: NextRequest) {
         // Format the website preview
         const websitePreview = formatWebsitePreview(generatedWebsite)
 
-        // Update session with completion data
+        // Update session with response data but keep it active
         if (sessionId) {
           updateChatSession(sessionId, {
-            endTime: new Date(),
             responseTime,
-            status: 'completed'
+            status: 'active',
+            endTime: new Date() // Track last activity time
           })
         }
 
@@ -607,6 +632,91 @@ export async function POST(request: NextRequest) {
       }
     } else {
       console.log("[v0] Not an image generation request, proceeding with assistant")
+    }
+
+    // Check if this is a code generation request
+    if (detectCodeGenerationRequest(message)) {
+      console.log("[v0] Code generation request detected for message:", message)
+
+      // Validate Anthropic API key
+      if (!process.env.ANTHROPIC_API_KEY) {
+        console.error("[v0] Anthropic API key not configured for code generation")
+        return NextResponse.json({
+          error: "Code generation not available",
+          details: "Anthropic API key not configured"
+        }, { status: 500 })
+      }
+
+      try {
+        console.log("[v0] Starting code generation with Anthropic")
+        const codegenStartTime = Date.now()
+
+        // Call our internal codegen API
+        const codegenResponse = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/anthropic/codegen`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.INTERNAL_API_KEY || 'agent-lee-internal'}`
+          },
+          body: JSON.stringify({
+            instruction: message,
+            model: 'claude-sonnet-4-20250514',
+            sessionId: sessionId || 'unknown'
+          })
+        })
+
+        if (!codegenResponse.ok) {
+          throw new Error(`Code generation API error: ${codegenResponse.status}`)
+        }
+
+        const codegenResult = await codegenResponse.json()
+        const codegenTime = Date.now() - codegenStartTime
+        const responseTime = Date.now() - requestStartTime
+
+        // Update session with response data but keep it active
+        if (sessionId) {
+          updateChatSession(sessionId, {
+            responseTime,
+            status: 'active',
+            endTime: new Date() // Track last activity time
+          })
+        }
+
+        let responseMessage = "I've generated the code for you!"
+
+        if (codegenResult.success && codegenResult.filesCreated.length > 0) {
+          responseMessage = `I've successfully generated ${codegenResult.filesCreated.length} file(s) for you!\n\n**Files Created:**\n${codegenResult.filesCreated.map((file: string) => `• ${file}`).join('\n')}\n\n${codegenResult.message}`
+        } else if (codegenResult.error) {
+          responseMessage = `Code generation encountered an issue: ${codegenResult.error}\n\n${codegenResult.message}`
+        }
+
+        console.log("[v0] Code generation completed successfully")
+        return NextResponse.json({
+          message: responseMessage,
+          codegenResult,
+          threadId: threadId || "codegen_" + Date.now(),
+          timestamp: new Date().toISOString(),
+          responseTime,
+          codegenTime
+        })
+
+      } catch (codegenError) {
+        console.error("[v0] Code generation failed:", codegenError)
+
+        // Update session with error status
+        if (sessionId) {
+          updateChatSession(sessionId, {
+            endTime: new Date(),
+            responseTime: Date.now() - requestStartTime,
+            status: 'error'
+          })
+        }
+
+        return NextResponse.json({
+          error: "Failed to generate code",
+          details: codegenError instanceof Error ? codegenError.message : "Unknown error"
+        }, { status: 500 })
+      }
     }
 
     // Validate configuration

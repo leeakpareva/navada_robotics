@@ -22,6 +22,7 @@ import {
   Newspaper,
   Image,
   Palette,
+  Code,
   Server,
   CheckCircle,
   XCircle,
@@ -48,6 +49,14 @@ interface AnalyticsData {
     avgGenerationTime: number;
     hourlyData: { time: string; value: number }[];
     topPrompts: { prompt: string; count: number }[];
+  };
+  codeGeneration: {
+    totalGenerated: number;
+    successRate: number;
+    avgGenerationTime: number;
+    filesCreated: number;
+    hourlyData: { time: string; value: number }[];
+    topInstructions: { instruction: string; count: number }[];
   };
 }
 
@@ -564,6 +573,117 @@ export default function AIAnalyticsPage() {
                         <span className="text-emerald-300 font-medium">
                           {analyticsData?.activeUsers.today.toLocaleString() || '0'}
                         </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Code Generation Analytics */}
+            <Card className="bg-black/30 border-white/20 hover:border-indigo-400/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-indigo-500/20 lg:col-span-3">
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-gradient-to-br from-indigo-500/30 to-purple-500/30 rounded-lg animate-pulse">
+                    <Code className="h-6 w-6 text-indigo-300" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-white">Code Generation Analytics</CardTitle>
+                    <CardDescription className="text-gray-300">Anthropic Claude code generation performance</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="h-48 flex items-center justify-center">
+                    <div className="text-gray-400">Loading code generation data...</div>
+                  </div>
+                ) : error ? (
+                  <div className="h-48 flex items-center justify-center">
+                    <div className="text-red-400">Error loading data</div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Code Generation Chart */}
+                    <div className="md:col-span-2">
+                      <h4 className="text-sm font-medium text-gray-300 mb-4">Hourly Code Generation (24h)</h4>
+                      <div className="h-40 flex items-end space-x-1">
+                        {(analyticsData?.codeGeneration.hourlyData || []).map((data, i) => {
+                          const maxValue = Math.max(...(analyticsData?.codeGeneration.hourlyData || []).map(d => d.value))
+                          const height = maxValue > 0 ? (data.value / maxValue) * 100 : 0
+                          return (
+                            <div
+                              key={i}
+                              className="bg-gradient-to-t from-indigo-600 via-purple-500 to-pink-400 rounded-t flex-1 transition-all duration-300 hover:from-indigo-500 hover:to-pink-300 hover:scale-105"
+                              style={{
+                                height: `${Math.max(height, 5)}%`,
+                                animationDelay: `${i * 50}ms`,
+                              }}
+                              title={`${data.time}: ${data.value} generations`}
+                            />
+                          )
+                        })}
+                      </div>
+                      <div className="mt-2 flex justify-between text-xs text-gray-400">
+                        {analyticsData?.codeGeneration.hourlyData && analyticsData.codeGeneration.hourlyData.length >= 5 && (
+                          <>
+                            <span>{analyticsData.codeGeneration.hourlyData[0]?.time || '00:00'}</span>
+                            <span>{analyticsData.codeGeneration.hourlyData[Math.floor(analyticsData.codeGeneration.hourlyData.length * 0.25)]?.time || '06:00'}</span>
+                            <span>{analyticsData.codeGeneration.hourlyData[Math.floor(analyticsData.codeGeneration.hourlyData.length * 0.5)]?.time || '12:00'}</span>
+                            <span>{analyticsData.codeGeneration.hourlyData[Math.floor(analyticsData.codeGeneration.hourlyData.length * 0.75)]?.time || '18:00'}</span>
+                            <span>{analyticsData.codeGeneration.hourlyData[analyticsData.codeGeneration.hourlyData.length - 1]?.time || '23:59'}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Code Stats and Top Instructions */}
+                    <div className="space-y-4">
+                      <div className="space-y-3">
+                        <div className="text-center p-4 bg-black/20 rounded-lg border border-indigo-400/20">
+                          <div className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                            {analyticsData?.codeGeneration.totalGenerated.toLocaleString() || '0'}
+                          </div>
+                          <div className="text-xs text-gray-400">Code Generated (24h)</div>
+                        </div>
+
+                        <div className="text-center p-4 bg-black/20 rounded-lg border border-green-400/20">
+                          <div className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                            {analyticsData?.codeGeneration.successRate || 0}%
+                          </div>
+                          <div className="text-xs text-gray-400">Success Rate</div>
+                        </div>
+
+                        <div className="text-center p-4 bg-black/20 rounded-lg border border-blue-400/20">
+                          <div className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                            {analyticsData?.codeGeneration.avgGenerationTime || 0}s
+                          </div>
+                          <div className="text-xs text-gray-400">Avg Generation Time</div>
+                        </div>
+
+                        <div className="text-center p-4 bg-black/20 rounded-lg border border-yellow-400/20">
+                          <div className="text-xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                            {analyticsData?.codeGeneration.filesCreated.toLocaleString() || '0'}
+                          </div>
+                          <div className="text-xs text-gray-400">Files Created</div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h5 className="text-sm font-medium text-gray-300 mb-2">Top Instructions</h5>
+                        <div className="space-y-2">
+                          {(analyticsData?.codeGeneration.topInstructions || []).map((instruction, i) => (
+                            <div key={i} className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-2">
+                                <Code className="h-3 w-3 text-indigo-400" />
+                                <span className="text-gray-300 truncate" title={instruction.instruction}>
+                                  {instruction.instruction}
+                                </span>
+                              </div>
+                              <span className="text-indigo-300 font-medium">{instruction.count}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
