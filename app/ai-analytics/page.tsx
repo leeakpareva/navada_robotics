@@ -20,6 +20,8 @@ import {
   Shield,
   Phone,
   Newspaper,
+  Image,
+  Palette,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -32,6 +34,13 @@ interface AnalyticsData {
   uptime: number;
   accuracy: number;
   avgResponseTime: number;
+  imageGeneration: {
+    totalGenerated: number;
+    successRate: number;
+    avgGenerationTime: number;
+    hourlyData: { time: string; value: number }[];
+    topPrompts: { prompt: string; count: number }[];
+  };
 }
 
 export default function AIAnalyticsPage() {
@@ -76,7 +85,7 @@ export default function AIAnalyticsPage() {
   ] : []
 
   // Calculate satisfaction percentage for display
-  const satisfactionPercentage = analyticsData ? analyticsData.satisfaction.excellent + analyticsData.satisfaction.good : 87
+  const satisfactionPercentage = analyticsData ? analyticsData.satisfaction.excellent + analyticsData.satisfaction.good : 0
 
   return (
     <div className="min-h-screen bg-black">
@@ -172,7 +181,7 @@ export default function AIAnalyticsPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Chat Volume Chart */}
             <Card className="bg-black/30 border-white/20 hover:border-purple-400/50 backdrop-blur-sm transition-all duration-300 hover:scale-105">
               <CardHeader className="pb-4">
@@ -239,7 +248,7 @@ export default function AIAnalyticsPage() {
                   <div>
                     <CardTitle className="text-white">Response Time</CardTitle>
                     <CardDescription className="text-gray-300">
-                      Average: {analyticsData?.avgResponseTime ? `${analyticsData.avgResponseTime}s` : '1.8s'}
+                      Average: {analyticsData?.avgResponseTime ? `${analyticsData.avgResponseTime}s` : '0s'}
                     </CardDescription>
                   </div>
                 </div>
@@ -432,6 +441,110 @@ export default function AIAnalyticsPage() {
                 )}
               </CardContent>
             </Card>
+
+            {/* Image Generation Analytics */}
+            <Card className="bg-black/30 border-white/20 hover:border-orange-400/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/20 lg:col-span-3">
+              <CardHeader className="pb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-gradient-to-br from-orange-500/30 to-red-500/30 rounded-lg animate-pulse">
+                    <Image className="h-6 w-6 text-orange-300" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-white">Image Generation Analytics</CardTitle>
+                    <CardDescription className="text-gray-300">DALL-E 3 performance and usage</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="h-48 flex items-center justify-center">
+                    <div className="text-gray-400">Loading image generation data...</div>
+                  </div>
+                ) : error ? (
+                  <div className="h-48 flex items-center justify-center">
+                    <div className="text-red-400">Error loading data</div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Image Generation Chart */}
+                    <div className="md:col-span-2">
+                      <h4 className="text-sm font-medium text-gray-300 mb-4">Hourly Image Generation (24h)</h4>
+                      <div className="h-40 flex items-end space-x-1">
+                        {(analyticsData?.imageGeneration.hourlyData || []).map((data, i) => {
+                          const maxValue = Math.max(...(analyticsData?.imageGeneration.hourlyData || []).map(d => d.value))
+                          const height = maxValue > 0 ? (data.value / maxValue) * 100 : 0
+                          return (
+                            <div
+                              key={i}
+                              className="bg-gradient-to-t from-orange-600 via-red-500 to-pink-400 rounded-t flex-1 transition-all duration-300 hover:from-orange-500 hover:to-pink-300 hover:scale-105"
+                              style={{
+                                height: `${Math.max(height, 5)}%`,
+                                animationDelay: `${i * 50}ms`,
+                              }}
+                              title={`${data.time}: ${data.value} images`}
+                            />
+                          )
+                        })}
+                      </div>
+                      <div className="mt-2 flex justify-between text-xs text-gray-400">
+                        {analyticsData?.imageGeneration.hourlyData && analyticsData.imageGeneration.hourlyData.length >= 5 && (
+                          <>
+                            <span>{analyticsData.imageGeneration.hourlyData[0]?.time || '00:00'}</span>
+                            <span>{analyticsData.imageGeneration.hourlyData[Math.floor(analyticsData.imageGeneration.hourlyData.length * 0.25)]?.time || '06:00'}</span>
+                            <span>{analyticsData.imageGeneration.hourlyData[Math.floor(analyticsData.imageGeneration.hourlyData.length * 0.5)]?.time || '12:00'}</span>
+                            <span>{analyticsData.imageGeneration.hourlyData[Math.floor(analyticsData.imageGeneration.hourlyData.length * 0.75)]?.time || '18:00'}</span>
+                            <span>{analyticsData.imageGeneration.hourlyData[analyticsData.imageGeneration.hourlyData.length - 1]?.time || '23:59'}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Image Stats and Top Prompts */}
+                    <div className="space-y-4">
+                      <div className="space-y-3">
+                        <div className="text-center p-4 bg-black/20 rounded-lg border border-orange-400/20">
+                          <div className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                            {analyticsData?.imageGeneration.totalGenerated.toLocaleString() || '0'}
+                          </div>
+                          <div className="text-xs text-gray-400">Images Generated (24h)</div>
+                        </div>
+
+                        <div className="text-center p-4 bg-black/20 rounded-lg border border-green-400/20">
+                          <div className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                            {analyticsData?.imageGeneration.successRate || 0}%
+                          </div>
+                          <div className="text-xs text-gray-400">Success Rate</div>
+                        </div>
+
+                        <div className="text-center p-4 bg-black/20 rounded-lg border border-blue-400/20">
+                          <div className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                            {analyticsData?.imageGeneration.avgGenerationTime || 0}s
+                          </div>
+                          <div className="text-xs text-gray-400">Avg Generation Time</div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h5 className="text-sm font-medium text-gray-300 mb-2">Top Prompts</h5>
+                        <div className="space-y-2">
+                          {(analyticsData?.imageGeneration.topPrompts || []).map((prompt, i) => (
+                            <div key={i} className="flex items-center justify-between text-xs">
+                              <div className="flex items-center space-x-2">
+                                <Palette className="h-3 w-3 text-orange-400" />
+                                <span className="text-gray-300 truncate" title={prompt.prompt}>
+                                  {prompt.prompt}
+                                </span>
+                              </div>
+                              <span className="text-orange-300 font-medium">{prompt.count}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
 
           {/* Performance Metrics Summary */}
@@ -439,7 +552,7 @@ export default function AIAnalyticsPage() {
             <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center hover:border-green-400/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/20">
               <Activity className="h-8 w-8 text-green-400 mx-auto mb-2 animate-pulse" />
               <div className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
-                {analyticsData?.uptime ? `${analyticsData.uptime}%` : '99.9%'}
+                {analyticsData?.uptime ? `${analyticsData.uptime}%` : '0%'}
               </div>
               <div className="text-sm text-gray-400">Uptime</div>
             </div>
@@ -447,7 +560,7 @@ export default function AIAnalyticsPage() {
             <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center hover:border-yellow-400/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
               <Zap className="h-8 w-8 text-yellow-400 mx-auto mb-2 animate-bounce" />
               <div className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                {analyticsData?.avgResponseTime ? `${analyticsData.avgResponseTime}s` : '1.8s'}
+                {analyticsData?.avgResponseTime ? `${analyticsData.avgResponseTime}s` : '0s'}
               </div>
               <div className="text-sm text-gray-400">Avg Response</div>
             </div>
@@ -463,7 +576,7 @@ export default function AIAnalyticsPage() {
             <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center hover:border-purple-400/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20">
               <Brain className="h-8 w-8 text-purple-400 mx-auto mb-2" />
               <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                {analyticsData?.accuracy ? `${analyticsData.accuracy}%` : '92%'}
+                {analyticsData?.accuracy ? `${analyticsData.accuracy}%` : '0%'}
               </div>
               <div className="text-sm text-gray-400">Accuracy</div>
             </div>

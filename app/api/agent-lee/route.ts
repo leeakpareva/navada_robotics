@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import OpenAI from "openai"
-import { trackChatSession, updateChatSession } from "@/lib/analytics"
+import { trackChatSession, updateChatSession, trackImageGeneration } from "@/lib/analytics"
 
 const API_KEY = process.env.OPENAI_API_KEY
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID
@@ -16,6 +16,9 @@ console.log("[v0] OPENAI_ASSISTANT_ID value:", ASSISTANT_ID || "Not set")
 console.log("[v0] VOICE_PROMPT_ID exists:", !!VOICE_PROMPT_ID)
 console.log("[v0] VECTOR_STORE_ID exists:", !!VECTOR_STORE_ID)
 console.log("[v0] VECTOR_STORE_ID value:", VECTOR_STORE_ID || "Not set")
+if (VECTOR_STORE_ID) {
+  console.log("[v0] Vector store configured for file search capabilities")
+}
 console.log(
   "[v0] All env vars:",
   Object.keys(process.env).filter((key) => key.includes("OPENAI")),
@@ -348,8 +351,21 @@ export async function POST(request: NextRequest) {
 
       try {
         console.log("[v0] Generating image with prompt:", message)
+        const imageStartTime = Date.now()
         const imageDataUrl = await generateImage(message, openai)
+        const imageGenerationTime = Date.now() - imageStartTime
         const responseTime = Date.now() - requestStartTime
+
+        // Track image generation analytics
+        trackImageGeneration({
+          timestamp: new Date(),
+          prompt: message,
+          success: true,
+          generationTime: imageGenerationTime,
+          model: 'dall-e-3',
+          size: '1024x1024',
+          sessionId: sessionId || undefined
+        })
 
         // Update session with completion data
         if (sessionId) {
@@ -370,6 +386,17 @@ export async function POST(request: NextRequest) {
         })
       } catch (imageError) {
         console.error("[v0] Image generation failed:", imageError)
+
+        // Track failed image generation
+        trackImageGeneration({
+          timestamp: new Date(),
+          prompt: message,
+          success: false,
+          generationTime: Date.now() - requestStartTime,
+          model: 'dall-e-3',
+          size: '1024x1024',
+          sessionId: sessionId || undefined
+        })
 
         // Update session with error status
         if (sessionId) {
@@ -450,9 +477,24 @@ export async function POST(request: NextRequest) {
 
     let run
     try {
-      run = await openai.beta.threads.runs.create(currentThreadId, {
+      const runParams: any = {
         assistant_id: ASSISTANT_ID,
-      })
+      }
+
+      // Attach vector store if available
+      if (VECTOR_STORE_ID) {
+        console.log("[v0] Attaching vector store:", VECTOR_STORE_ID)
+        runParams.tools = [{
+          type: "file_search"
+        }]
+        runParams.tool_resources = {
+          file_search: {
+            vector_store_ids: [VECTOR_STORE_ID]
+          }
+        }
+      }
+
+      run = await openai.beta.threads.runs.create(currentThreadId, runParams)
       console.log("[v0] Created run:", run.id, "for thread:", currentThreadId)
     } catch (runError: any) {
       console.error("[v0] Failed to create run:", runError)
@@ -535,8 +577,21 @@ export async function POST(request: NextRequest) {
             console.log("[v0] Assistant gave programming instructions instead of generating image, triggering image generation")
 
             try {
+              const imageStartTime = Date.now()
               const imageDataUrl = await generateImage(message, openai)
+              const imageGenerationTime = Date.now() - imageStartTime
               const responseTime = Date.now() - requestStartTime
+
+              // Track fallback image generation analytics
+              trackImageGeneration({
+                timestamp: new Date(),
+                prompt: message,
+                success: true,
+                generationTime: imageGenerationTime,
+                model: 'dall-e-3',
+                size: '1024x1024',
+                sessionId: sessionId || undefined
+              })
 
               // Update session with completion data
               if (sessionId) {
@@ -556,6 +611,18 @@ export async function POST(request: NextRequest) {
               })
             } catch (imageError) {
               console.error("[v0] Fallback image generation failed:", imageError)
+
+              // Track failed fallback image generation
+              trackImageGeneration({
+                timestamp: new Date(),
+                prompt: message,
+                success: false,
+                generationTime: Date.now() - requestStartTime,
+                model: 'dall-e-3',
+                size: '1024x1024',
+                sessionId: sessionId || undefined
+              })
+
               // Fall through to return the original response
             }
           }
