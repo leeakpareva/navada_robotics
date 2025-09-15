@@ -1,4 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
+
+export const runtime = 'nodejs'
 import OpenAI from "openai"
 import { DatabaseAnalytics } from "@/lib/database-analytics"
 import { RAGService } from "@/lib/rag-service"

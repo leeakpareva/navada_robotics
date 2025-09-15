@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+export const runtime = 'nodejs';
 import { DatabaseAnalytics } from '@/lib/database-analytics';
 
 export async function GET(request: NextRequest) {

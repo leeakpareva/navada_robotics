@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-import { prisma } from './database-analytics'
+import { prisma } from './prisma'
 
 export interface KnowledgeEntry {
   id?: string

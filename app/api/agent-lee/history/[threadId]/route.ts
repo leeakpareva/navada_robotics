@@ -73,7 +73,7 @@ export async function DELETE(
 
     if (history?.session) {
       // Import prisma directly
-      const { prisma } = await import("@/lib/database-analytics")
+      const { prisma } = await import("@/lib/prisma")
 
       // Delete all messages for this thread
       await prisma.chatMessage.deleteMany({

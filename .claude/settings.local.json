@@ -34,7 +34,8 @@
       "Bash(npx kill-port:*)",
       "Bash(node:*)",
       "Bash(npx next lint:*)",
-      "Bash(timeout 30s npm run build)"
+      "Bash(timeout 30s npm run build)",
+      "Bash(git grep:*)"
     ],
     "deny": [],
     "ask": []
