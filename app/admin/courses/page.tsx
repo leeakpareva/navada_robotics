@@ -207,6 +207,15 @@ export default function AdminCoursesPage() {
       return
     }
 
+    // Confirmation dialog
+    const confirmed = window.confirm(
+      `Are you sure you want to save the course "${newCourse.title}"?\n\nThis will create a new course in the database with ${courseModules.length} modules.`
+    )
+
+    if (!confirmed) {
+      return
+    }
+
     setLoading(true)
     try {
       const response = await fetch("/api/learning/courses", {
