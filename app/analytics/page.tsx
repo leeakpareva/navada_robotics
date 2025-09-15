@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BeamsBackground } from "@/components/ui/beams-background"
@@ -22,6 +24,13 @@ import {
   Image,
   Code,
   RefreshCw,
+  Play,
+  Square,
+  Server,
+  LineChart,
+  PieChart,
+  TrendingDown,
+  AlertCircle,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -56,11 +65,14 @@ interface AnalyticsData {
 }
 
 export default function AnalyticsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const [mcpServerStatus, setMcpServerStatus] = useState<'running' | 'stopped' | 'loading'>('stopped')
 
   const fetchAnalytics = async () => {
     try {
@@ -87,19 +99,36 @@ export default function AnalyticsPage() {
     }
   }
 
+  // Check authentication and fetch data
   useEffect(() => {
-    // Initial fetch
-    fetchAnalytics()
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin?callbackUrl=/analytics')
+      return
+    }
 
-    // Set up real-time updates every 30 seconds
-    const interval = setInterval(fetchAnalytics, 30000)
+    if (status === 'authenticated') {
+      // Initial fetch
+      fetchAnalytics()
 
-    return () => clearInterval(interval)
-  }, [])
+      // Set up real-time updates every 30 seconds
+      const interval = setInterval(fetchAnalytics, 30000)
+
+      return () => clearInterval(interval)
+    }
+  }, [status, router])
 
   const refreshData = () => {
     setLoading(true)
     fetchAnalytics()
+  }
+
+  // Handle loading and unauthenticated states
+  if (status === 'loading') {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>
+  }
+
+  if (!session) {
+    return null
   }
 
   // Transform satisfaction data for display
@@ -113,6 +142,70 @@ export default function AnalyticsPage() {
   const satisfactionPercentage = analyticsData?.satisfaction
     ? analyticsData.satisfaction.excellent + analyticsData.satisfaction.good
     : 0
+
+  // MCP Server Controls
+  const handleMcpServerStart = async () => {
+    setMcpServerStatus('loading')
+    try {
+      // Simulate server start - replace with actual implementation
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      setMcpServerStatus('running')
+    } catch (error) {
+      console.error('Failed to start MCP server:', error)
+      setMcpServerStatus('stopped')
+    }
+  }
+
+  const handleMcpServerStop = async () => {
+    setMcpServerStatus('loading')
+    try {
+      // Simulate server stop - replace with actual implementation
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setMcpServerStatus('stopped')
+    } catch (error) {
+      console.error('Failed to stop MCP server:', error)
+      setMcpServerStatus('running')
+    }
+  }
+
+  // Chart Component for Hourly Data
+  const HourlyChart = ({ data }: { data: { time: string; value: number }[] }) => {
+    const maxValue = Math.max(...data.map(d => d.value), 1)
+    return (
+      <div className="h-32 flex items-end justify-between space-x-1">
+        {data.slice(-12).map((item, index) => (
+          <div key={index} className="flex flex-col items-center space-y-1 flex-1">
+            <div
+              className="bg-gradient-to-t from-purple-500 to-purple-300 w-full rounded-t transition-all duration-300 hover:from-purple-400 hover:to-purple-200"
+              style={{ height: `${Math.max((item.value / maxValue) * 100, 2)}%` }}
+              title={`${item.time}: ${item.value} messages`}
+            />
+            <span className="text-xs text-gray-400 transform rotate-45 origin-left whitespace-nowrap">
+              {item.time.split(':')[0]}h
+            </span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  // Response Time Chart
+  const ResponseTimeChart = ({ data }: { data: { time: string; value: number }[] }) => {
+    const maxValue = Math.max(...data.map(d => d.value), 1)
+    return (
+      <div className="h-20 flex items-end justify-between space-x-1">
+        {data.slice(-8).map((item, index) => (
+          <div key={index} className="flex flex-col items-center space-y-1 flex-1">
+            <div
+              className="bg-gradient-to-t from-cyan-500 to-cyan-300 w-full rounded-t"
+              style={{ height: `${Math.max((item.value / maxValue) * 100, 5)}%` }}
+              title={`${item.time}: ${item.value}s response time`}
+            />
+          </div>
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-black">
@@ -157,6 +250,25 @@ export default function AnalyticsPage() {
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
+              {session ? (
+                <>
+                  <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
+                    Dashboard
+                  </Link>
+                  <Button
+                    onClick={() => router.push('/auth/signin')}
+                    variant="outline"
+                    size="sm"
+                    className="border-purple-500 text-purple-400 hover:bg-purple-500 hover:text-white"
+                  >
+                    {session.user.name || 'Account'}
+                  </Button>
+                </>
+              ) : (
+                <Link href="/auth/signin" className="text-white hover:text-purple-400 transition-colors">
+                  Sign In
+                </Link>
+              )}
             </nav>
           </div>
 
@@ -182,6 +294,11 @@ export default function AnalyticsPage() {
                 <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                   Agent Lee
                 </Link>
+                {session && (
+                  <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
+                    Dashboard
+                  </Link>
+                )}
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
                 </Link>
@@ -240,7 +357,63 @@ export default function AnalyticsPage() {
               ))}
             </div>
           ) : analyticsData ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              {/* MCP Server Management */}
+              <div className="mb-8">
+              <Card className="bg-black/30 border-white/20 hover:border-yellow-400/50 backdrop-blur-sm transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-yellow-500/20 rounded-lg">
+                        <Server className="h-6 w-6 text-yellow-300" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-white">MCP Server Management</CardTitle>
+                        <CardDescription className="text-gray-300">Control Model Context Protocol server</CardDescription>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-3 h-3 rounded-full ${
+                        mcpServerStatus === 'running' ? 'bg-green-400 animate-pulse' :
+                        mcpServerStatus === 'loading' ? 'bg-yellow-400 animate-pulse' :
+                        'bg-red-400'
+                      }`} />
+                      <span className={`text-sm font-medium ${
+                        mcpServerStatus === 'running' ? 'text-green-300' :
+                        mcpServerStatus === 'loading' ? 'text-yellow-300' :
+                        'text-red-300'
+                      }`}>
+                        {mcpServerStatus === 'running' ? 'Running' :
+                         mcpServerStatus === 'loading' ? 'Loading...' :
+                         'Stopped'}
+                      </span>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex space-x-3">
+                    <Button
+                      onClick={handleMcpServerStart}
+                      disabled={mcpServerStatus === 'running' || mcpServerStatus === 'loading'}
+                      className="bg-green-600 hover:bg-green-700 text-white flex-1"
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      Start Server
+                    </Button>
+                    <Button
+                      onClick={handleMcpServerStop}
+                      disabled={mcpServerStatus === 'stopped' || mcpServerStatus === 'loading'}
+                      className="bg-red-600 hover:bg-red-700 text-white flex-1"
+                    >
+                      <Square className="h-4 w-4 mr-2" />
+                      Stop Server
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {/* Total Sessions */}
               <Card className="bg-black/30 border-white/20 hover:border-purple-400/50 backdrop-blur-sm transition-all duration-300">
                 <CardHeader className="pb-4">
@@ -403,6 +576,141 @@ export default function AnalyticsPage() {
                   </p>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* Charts Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              {/* Hourly Activity Chart */}
+              <Card className="bg-black/30 border-white/20 hover:border-purple-400/50 backdrop-blur-sm transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-purple-500/20 rounded-lg">
+                      <LineChart className="h-6 w-6 text-purple-300" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-white">24-Hour Activity</CardTitle>
+                      <CardDescription className="text-gray-300">Messages per hour (last 12 hours)</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {analyticsData?.usage.hourlyData ? (
+                    <HourlyChart data={analyticsData.usage.hourlyData} />
+                  ) : (
+                    <div className="h-32 flex items-center justify-center">
+                      <span className="text-gray-500">No data available</span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Response Time Trends */}
+              <Card className="bg-black/30 border-white/20 hover:border-cyan-400/50 backdrop-blur-sm transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-cyan-500/20 rounded-lg">
+                      <Activity className="h-6 w-6 text-cyan-300" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-white">Response Time Trends</CardTitle>
+                      <CardDescription className="text-gray-300">Average response time (seconds)</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {analyticsData?.usage.responseTimeData ? (
+                    <ResponseTimeChart data={analyticsData.usage.responseTimeData} />
+                  ) : (
+                    <div className="h-20 flex items-center justify-center">
+                      <span className="text-gray-500">No data available</span>
+                    </div>
+                  )}
+                  <div className="mt-4 text-sm text-gray-400">
+                    Avg: {Math.round(analyticsData?.overview.avgResponseTime / 1000 || 0)}s
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Additional Analytics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* User Growth */}
+              <Card className="bg-black/30 border-white/20 hover:border-emerald-400/50 backdrop-blur-sm transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-emerald-500/20 rounded-lg">
+                      <TrendingUp className="h-5 w-5 text-emerald-300" />
+                    </div>
+                    <CardTitle className="text-white text-sm">User Growth</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white mb-1">
+                    +{analyticsData?.overview.newUsers || 0}
+                  </div>
+                  <p className="text-gray-400 text-xs">New users today</p>
+                </CardContent>
+              </Card>
+
+              {/* Success Rates */}
+              <Card className="bg-black/30 border-white/20 hover:border-violet-400/50 backdrop-blur-sm transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-violet-500/20 rounded-lg">
+                      <BarChart3 className="h-5 w-5 text-violet-300" />
+                    </div>
+                    <CardTitle className="text-white text-sm">Success Rate</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white mb-1">
+                    {analyticsData ? Math.round(
+                      ((analyticsData.features.codeGeneration.success + analyticsData.features.imageGeneration.success) /
+                       (analyticsData.features.codeGeneration.total + analyticsData.features.imageGeneration.total)) * 100
+                    ) : 0}%
+                  </div>
+                  <p className="text-gray-400 text-xs">Overall task success</p>
+                </CardContent>
+              </Card>
+
+              {/* Peak Performance */}
+              <Card className="bg-black/30 border-white/20 hover:border-amber-400/50 backdrop-blur-sm transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-amber-500/20 rounded-lg">
+                      <Zap className="h-5 w-5 text-amber-300" />
+                    </div>
+                    <CardTitle className="text-white text-sm">Peak Hour</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white mb-1">
+                    {analyticsData?.usage.peakHour || '--:--'}
+                  </div>
+                  <p className="text-gray-400 text-xs">Highest activity</p>
+                </CardContent>
+              </Card>
+
+              {/* System Health */}
+              <Card className="bg-black/30 border-white/20 hover:border-red-400/50 backdrop-blur-sm transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-red-500/20 rounded-lg">
+                      <AlertCircle className="h-5 w-5 text-red-300" />
+                    </div>
+                    <CardTitle className="text-white text-sm">System Health</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-400 mb-1">
+                    {error ? 'ERROR' : 'GOOD'}
+                  </div>
+                  <p className="text-gray-400 text-xs">
+                    {error ? 'Check logs' : 'All systems operational'}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
             </div>
           ) : null}
         </div>

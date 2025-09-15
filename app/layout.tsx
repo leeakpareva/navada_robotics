@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Suspense } from "react"
+import { SessionProvider } from "@/components/SessionProvider"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} pb-20 md:pb-0`}>
-        <Suspense fallback={null}>{children}</Suspense>
+        <SessionProvider>
+          <Suspense fallback={null}>{children}</Suspense>
+        </SessionProvider>
         <Analytics />
         <SpeedInsights />
       </body>

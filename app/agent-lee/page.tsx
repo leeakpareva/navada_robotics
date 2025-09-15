@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
+import { useSession, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -59,7 +60,6 @@ import {
   ArrowLeft,
   LogOut,
   History,
-  Trash2,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -74,12 +74,8 @@ interface Message {
 }
 
 export default function AgentLeePage() {
+  const { data: session, status } = useSession()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [authError, setAuthError] = useState("")
   const [apiProvider, setApiProvider] = useState<'openai' | 'deepseek'>('openai')
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -128,6 +124,13 @@ export default function AgentLeePage() {
       }
     }
   }, [])
+
+  // Load chat history when user is authenticated
+  useEffect(() => {
+    if (session && threadId) {
+      loadChatHistory()
+    }
+  }, [session, threadId])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -309,45 +312,24 @@ export default function AgentLeePage() {
     }
   }
 
-  const handleLogin = async () => {
-    if (username === "Agent Lee" && password === "Activate") {
-      setIsAuthenticated(true)
-      setAuthError("")
-
-      // Load previous chat history if threadId exists
-      await loadChatHistory()
-    } else {
-      setAuthError("Invalid credentials. Please try again.")
-    }
-  }
-
-  const handleLogout = async () => {
-    // End current session
-    if (threadId) {
-      try {
-        await fetch(`/api/agent-lee/session/${threadId}`, {
-          method: 'DELETE'
+  const handleSignOut = async () => {
+    try {
+      // End session if exists
+      if (threadId) {
+        await fetch('/api/agent-lee/end-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ threadId }),
         })
-      } catch (error) {
-        console.error('Error ending session:', error)
       }
+    } catch (error) {
+      console.error('Error ending session:', error)
     }
-
-    // Reset state
-    setIsAuthenticated(false)
-    setUsername("")
-    setPassword("")
-    setMessages([{
-      id: 1,
-      text: "🚀 Hello! I'm Agent Lee, your AI powerhouse for robotics, deep learning, and computer vision!\n\n✨ I can help you with:\n• 🤖 Robotics guidance and project tutorials\n• 🐍 Python programming instruction\n• 👁️ Computer vision and OpenCV help\n• 🖼️ DALL-E 3 image generation (just say \"generate image\")\n• 🌐 NextJS website creation (just say \"create website\")\n• 💾 All conversations are automatically saved\n\nWhat amazing things shall we build today?",
-      sender: "agent",
-      timestamp: new Date(),
-    }])
-    setThreadId(null)
-    setInputMessage("")
-    setIsTyping(false)
-    setLastGeneratedImage(null)
+    await signOut({ callbackUrl: '/' })
   }
+
 
   const loadChatHistory = async () => {
     if (!threadId) return
@@ -388,11 +370,6 @@ export default function AgentLeePage() {
     }
   }
 
-  const handleKeyPressLogin = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleLogin()
-    }
-  }
 
   const downloadContent = (content: string, filename: string, type: string = 'text/plain') => {
     const blob = new Blob([content], { type })
@@ -526,8 +503,25 @@ export default function AgentLeePage() {
     { icon: <Network className="h-3 w-3" />, text: "Create a portfolio website", color: "from-blue-500 to-indigo-500" },
   ]
 
-  // Login page UI
-  if (!isAuthenticated) {
+  // Loading state
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <BeamsBackground intensity="subtle" className="absolute inset-0" />
+        <div className="relative z-10 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-cyan-600 p-4 rounded-xl shadow-xl shadow-purple-500/50 animate-pulse">
+              <BrainCircuit className="h-8 w-8 text-white" />
+            </div>
+          </div>
+          <p className="text-white text-lg">Loading Agent Lee...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Redirect to signin if not authenticated
+  if (!session) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <BeamsBackground intensity="subtle" className="absolute inset-0" />
@@ -544,72 +538,38 @@ export default function AgentLeePage() {
                   </div>
                 </div>
                 <h2 className="text-3xl font-bold text-white mb-2">
-                  Agent Lee Access
+                  Authentication Required
                 </h2>
-                <p className="text-white text-sm">Enter your credentials to continue</p>
+                <p className="text-white/70 text-sm">Please sign in to access Agent Lee</p>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2">Username</label>
-                  <Input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    onKeyPress={handleKeyPressLogin}
-                    placeholder="Enter username"
-                    className="bg-black/30 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 transition-all duration-300"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-white mb-2">Password</label>
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      onKeyPress={handleKeyPressLogin}
-                      placeholder="Enter password"
-                      className="bg-black/30 border-white/20 text-white placeholder-gray-400 focus:border-purple-400 transition-all duration-300 pr-10"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
-
-                {authError && (
-                  <div className="text-red-400 text-sm text-center bg-red-900/20 border border-red-400/50 rounded-lg p-2">
-                    {authError}
-                  </div>
-                )}
-
-                <div className="space-y-3">
-                  <Button
-                    onClick={handleLogin}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105"
-                  >
+              <div className="space-y-3">
+                <Link href="/auth/signin">
+                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105">
                     <Unlock className="h-4 w-4 mr-2" />
-                    Access Agent Lee
+                    Sign In to Access Agent Lee
                   </Button>
+                </Link>
 
-                  <Link href="/">
-                    <Button
-                      variant="outline"
-                      className="w-full border-purple-400/50 text-purple-300 hover:bg-purple-600/20 hover:border-purple-400 hover:text-white transition-all duration-300"
-                    >
-                      <Home className="h-4 w-4 mr-2" />
-                      Return to Home
-                    </Button>
-                  </Link>
-                </div>
+                <Link href="/auth/signup">
+                  <Button
+                    variant="outline"
+                    className="w-full border-purple-400/50 text-purple-300 hover:bg-purple-600/20 hover:border-purple-400 hover:text-white transition-all duration-300"
+                  >
+                    <UserCircle2 className="h-4 w-4 mr-2" />
+                    Create New Account
+                  </Button>
+                </Link>
+
+                <Link href="/">
+                  <Button
+                    variant="ghost"
+                    className="w-full text-white/60 hover:text-white hover:bg-white/10 transition-all duration-300"
+                  >
+                    <Home className="h-4 w-4 mr-2" />
+                    Return to Home
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
@@ -655,30 +615,35 @@ export default function AgentLeePage() {
               <Link href="/agent-lee" className="text-purple-400 font-medium">
                 Agent Lee
               </Link>
+              <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
+                Dashboard
+              </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
 
-              {/* Session Management */}
-              <div className="flex items-center space-x-2">
+              {/* User Welcome & Session Management */}
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                    <UserCircle2 className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="text-sm">
+                    <p className="text-white font-medium">Welcome back!</p>
+                    <p className="text-purple-300 text-xs">{session?.user?.name || session?.user?.email}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
                 <Button
-                  onClick={clearChatHistory}
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-400 hover:text-red-400 transition-colors"
-                  title="Clear Chat History"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-                <Button
-                  onClick={handleLogout}
+                  onClick={handleSignOut}
                   variant="ghost"
                   size="sm"
                   className="text-gray-400 hover:text-purple-400 transition-colors"
-                  title="Logout"
+                  title="Sign Out"
                 >
                   <LogOut className="h-4 w-4" />
                 </Button>
+                </div>
               </div>
             </nav>
           </div>
@@ -702,9 +667,37 @@ export default function AgentLeePage() {
                 <Link href="/agent-lee" className="text-purple-400 font-medium">
                   Agent Lee
                 </Link>
+                <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
+                  Dashboard
+                </Link>
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
                 </Link>
+
+                {/* Mobile User Info */}
+                <div className="pt-3 border-t border-gray-700">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                      <UserCircle2 className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="text-sm">
+                      <p className="text-white font-medium">Welcome back!</p>
+                      <p className="text-purple-300 text-xs">{session?.user?.name || session?.user?.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button
+                      onClick={handleSignOut}
+                      variant="ghost"
+                      size="sm"
+                      className="text-gray-400 hover:text-purple-400 transition-colors"
+                      title="Sign Out"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </div>
+                </div>
               </div>
             </nav>
           )}
@@ -877,7 +870,7 @@ export default function AgentLeePage() {
                         )}
                         <div className="flex items-center justify-between mt-3">
                           <p className="text-xs opacity-60">
-                            {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                            {new Date(message.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                           </p>
                           <div className="flex gap-2">
                             {message.sender === "agent" && (
@@ -1012,6 +1005,9 @@ export default function AgentLeePage() {
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
             <BrainCircuit className="h-5 w-5 text-purple-400 mb-1" />
             <span className="text-purple-400">Agent Lee</span>
+          </Link>
+          <Link href="/dashboard" className="flex flex-col items-center py-2 px-3 text-xs">
+            <span className="text-purple-400">Dashboard</span>
           </Link>
           <Link href="/contact" className="flex flex-col items-center py-2 px-3 text-xs">
             <Satellite className="h-5 w-5 text-gray-400 mb-1" />

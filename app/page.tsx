@@ -4,9 +4,10 @@ import { useState, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Brain, Cpu, Sparkles, Folder, Newspaper } from "lucide-react"
+import { Menu, X, Cog, Microscope as Microchip, Wrench, Shield, Phone, Brain, Cpu, Sparkles, Folder, Newspaper } from "lucide-react"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/ui/optimized-image"
+import { useSession } from "next-auth/react"
 
 // Dynamic import for Vortex to prevent hydration issues
 const Vortex = dynamic(() => import("@/components/ui/vortex").then(mod => ({ default: mod.Vortex })), {
@@ -14,6 +15,7 @@ const Vortex = dynamic(() => import("@/components/ui/vortex").then(mod => ({ def
 })
 
 export default function NavadaRoboticsApp() {
+  const { data: session } = useSession()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
@@ -62,6 +64,11 @@ export default function NavadaRoboticsApp() {
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200">
                 Agent Lee
               </Link>
+              {session && (
+                <Link href="/dashboard" className="text-purple-400 hover:text-purple-300 transition-all duration-200">
+                  Dashboard
+                </Link>
+              )}
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200">
                 Contact
               </Link>
@@ -90,6 +97,11 @@ export default function NavadaRoboticsApp() {
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200">
                 Agent Lee
               </Link>
+              {session && (
+                <Link href="/dashboard" className="text-purple-400 hover:text-purple-300 transition-all duration-200">
+                  Dashboard
+                </Link>
+              )}
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200">
                 Contact
               </Link>
@@ -149,7 +161,6 @@ export default function NavadaRoboticsApp() {
               <Link href="/solutions">
                 <Button size="lg" className="text-lg px-8 bg-purple-600 hover:bg-purple-700 transition-all duration-200">
                   Explore Innovation
-                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link href="/about">
@@ -201,7 +212,6 @@ export default function NavadaRoboticsApp() {
                 <Link href="/solutions">
                   <Button size="lg" className="text-lg px-8 bg-purple-600 hover:bg-purple-700 transition-all duration-200">
                     Explore Innovation
-                    <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link href="/about">
@@ -359,6 +369,11 @@ export default function NavadaRoboticsApp() {
             <Brain className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Agent Lee</span>
           </Link>
+          {session && (
+            <Link href="/dashboard" className="flex flex-col items-center py-2 px-3 text-xs transition-all duration-200">
+              <span className="text-purple-400">Dashboard</span>
+            </Link>
+          )}
           <Link href="/about" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Shield className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">About</span>

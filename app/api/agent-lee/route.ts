@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { getServerSession } from 'next-auth'
 
 export const runtime = 'nodejs'
 import OpenAI from "openai"
@@ -7,6 +8,7 @@ import { RAGService } from "@/lib/rag-service"
 import { mcpClient } from "@/lib/mcp/client"
 import { parseUserRequest, formatWebsitePreview } from "@/lib/website-generator/utils"
 import { WebsiteGenerator } from "@/lib/website-generator/generator"
+import { prisma } from '@/lib/prisma'
 
 // Analytics wrapper functions
 async function trackChatSession(data: any) {
@@ -487,6 +489,19 @@ export async function POST(request: NextRequest) {
   try {
     console.log("[v0] Agent Lee API called")
 
+    // Get user session for authenticated requests
+    const session = await getServerSession()
+    let userId: string | null = null
+
+    if (session?.user?.email) {
+      const user = await prisma.users.findUnique({
+        where: { email: session.user.email },
+        select: { id: true }
+      })
+      userId = user?.id || null
+      console.log("[v0] Authenticated user:", userId)
+    }
+
     const { message, threadId, lastImage, apiProvider = 'openai' } = await request.json()
     console.log("[v0] Received message:", message, "threadId:", threadId)
     console.log("[v0] Has last image for context:", !!lastImage)
@@ -860,7 +875,7 @@ export async function POST(request: NextRequest) {
     sessionId = await trackChatSession({
       threadId: currentThreadId,
       apiProvider,
-      userId: 'user_' + (currentThreadId || Date.now()),
+      userId: userId, // Use authenticated user ID or null for anonymous
       sessionData: {
         startTime: new Date().toISOString(),
         initialMessage: message
