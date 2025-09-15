@@ -448,7 +448,7 @@ export default function AgentLeePage() {
     { icon: <Orbit className="h-3 w-3" />, text: "How do I start with robotics?", color: "from-purple-500 to-pink-500" },
     { icon: <ScanFace className="h-3 w-3" />, text: "Explain computer vision basics", color: "from-cyan-500 to-blue-500" },
     { icon: <Binary className="h-3 w-3" />, text: "Python for deep learning", color: "from-green-500 to-emerald-500" },
-    { icon: <CircuitBoard className="h-3 w-3" />, text: "Raspberry Pi robot projects", color: "from-orange-500 to-red-500" },
+    { icon: <CircuitBoard className="h-3 w-3" />, text: "Raspberry Pi robot projects", color: "from-purple-500 to-violet-500" },
     { icon: <Wand2 className="h-3 w-3" />, text: "Generate image of a robot", color: "from-pink-500 to-rose-500" },
     { icon: <Network className="h-3 w-3" />, text: "Create a portfolio website", color: "from-blue-500 to-indigo-500" },
   ]
@@ -530,7 +530,7 @@ export default function AgentLeePage() {
                   <Link href="/">
                     <Button
                       variant="outline"
-                      className="w-full border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-300"
+                      className="w-full border-purple-400/50 text-purple-300 hover:bg-purple-600/20 hover:border-purple-400 hover:text-white transition-all duration-300"
                     >
                       <Home className="h-4 w-4 mr-2" />
                       Return to Home
@@ -707,10 +707,17 @@ export default function AgentLeePage() {
                 <Button
                   key={index}
                   variant="outline"
-                  className={`relative overflow-hidden text-xs bg-black/50 border-white/20 text-white hover:border-purple-400/50 transition-all duration-300 hover:scale-105 group cursor-pointer`}
-                  onClick={() => setInputMessage(action.text)}
+                  className={`relative overflow-hidden text-xs bg-black/50 border-white/20 text-white hover:border-purple-400 transition-all duration-300 hover:scale-105 group cursor-pointer active:bg-purple-600/40 active:border-purple-300 active:scale-95`}
+                  onClick={() => {
+                    setInputMessage(action.text)
+                    // Visual feedback for selection
+                    setTimeout(() => {
+                      const button = document.activeElement as HTMLElement
+                      button?.blur()
+                    }, 150)
+                  }}
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-r ${action.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
+                  <div className={`absolute inset-0 bg-gradient-to-r from-purple-500 to-violet-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
                   <span className="relative flex items-center gap-2">
                     <span className={`bg-gradient-to-r ${action.color} bg-clip-text text-transparent`}>
                       {action.icon}

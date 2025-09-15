@@ -677,16 +677,33 @@ export async function POST(request: NextRequest) {
       // Initialize tools array
       runParams.tools = []
 
-      // Attach vector store if available
+      // Attach vector store if available and model supports it
       if (VECTOR_STORE_ID) {
-        console.log("[v0] Attaching vector store:", VECTOR_STORE_ID)
-        runParams.tools.push({
-          type: "file_search"
-        })
-        runParams.tool_resources = {
-          file_search: {
-            vector_store_ids: [VECTOR_STORE_ID]
+        try {
+          // First check if the assistant supports file_search
+          const assistant = await openai.beta.assistants.retrieve(ASSISTANT_ID)
+          console.log("[v0] Assistant model:", assistant.model)
+
+          // Only add file_search for compatible models
+          const compatibleModels = ['gpt-4-turbo-preview', 'gpt-3.5-turbo', 'gpt-4-turbo', 'gpt-4o', 'gpt-4o-mini']
+          const isCompatible = compatibleModels.some(model => assistant.model.includes(model))
+
+          if (isCompatible) {
+            console.log("[v0] Attaching vector store:", VECTOR_STORE_ID)
+            runParams.tools.push({
+              type: "file_search"
+            })
+            runParams.tool_resources = {
+              file_search: {
+                vector_store_ids: [VECTOR_STORE_ID]
+              }
+            }
+          } else {
+            console.log("[v0] Skipping file_search - model", assistant.model, "not compatible")
           }
+        } catch (assistantError) {
+          console.error("[v0] Error checking assistant model:", assistantError)
+          // Skip file_search if we can't determine compatibility
         }
       }
 
