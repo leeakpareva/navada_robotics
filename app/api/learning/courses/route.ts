@@ -118,21 +118,30 @@ export async function POST(request: NextRequest) {
 
       // Create lessons if modules are provided
       if (modules && Array.isArray(modules) && modules.length > 0) {
-        const lessonsData = modules.map((module: any, index: number) => ({
-          id: uuidv4(),
-          courseId: newCourse.id,
-          title: module.title || `Lesson ${index + 1}`,
-          description: module.description || null,
-          content: module.content || "",
-          orderIndex: module.orderIndex !== undefined ? module.orderIndex : index,
-          duration: parseInt(module.duration) || 30, // Default 30 minutes
-          lessonType: module.lessonType || "text",
-          videoUrl: module.videoUrl || null,
-          resources: module.resources ? JSON.stringify(module.resources) : null,
-          published: published || false,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }))
+        const lessonsData = modules.map((module: any, index: number) => {
+          // Prepare enhanced resources that include quiz and images
+          const enhancedResources = {
+            quiz: module.quiz || [],
+            images: module.images || [],
+            originalResources: module.resources || []
+          }
+
+          return {
+            id: uuidv4(),
+            courseId: newCourse.id,
+            title: module.title || `Lesson ${index + 1}`,
+            description: module.description || null,
+            content: module.content || "",
+            orderIndex: module.orderIndex !== undefined ? module.orderIndex : index,
+            duration: parseInt(module.duration) || 30, // Default 30 minutes
+            lessonType: module.lessonType || "text",
+            videoUrl: module.videoUrl || null,
+            resources: JSON.stringify(enhancedResources), // Store quiz and images in resources
+            published: published || false,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+        })
 
         await tx.lessons.createMany({
           data: lessonsData

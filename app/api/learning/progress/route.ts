@@ -10,11 +10,31 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required" },
         { status: 401 }
       )
+    }
+
+    // Use email as fallback identifier for admin user
+    const userId = session.user.id || session.user.email
+    if (!userId) {
+      return NextResponse.json(
+        { error: "User identification required" },
+        { status: 401 }
+      )
+    }
+
+    // For admin user, find user by email if no direct ID
+    let actualUserId = userId
+    if (session.user.email === "leeakpareva@gmail.com" && typeof userId === 'string' && userId.includes('@')) {
+      const adminUser = await prisma.users.findUnique({
+        where: { email: userId }
+      })
+      if (adminUser) {
+        actualUserId = adminUser.id
+      }
     }
 
     const body = await request.json()
@@ -31,7 +51,7 @@ export async function POST(request: NextRequest) {
     const userProgress = await prisma.user_progress.findUnique({
       where: {
         userId_courseId: {
-          userId: session.user.id,
+          userId: actualUserId,
           courseId: courseId
         }
       },
@@ -98,7 +118,7 @@ export async function POST(request: NextRequest) {
     await prisma.learning_analytics.create({
       data: {
         id: uuidv4(),
-        userId: session.user.id,
+        userId: actualUserId,
         courseId: courseId,
         eventType: completed ? "lesson_complete" : "lesson_progress",
         eventData: JSON.stringify({
@@ -117,7 +137,7 @@ export async function POST(request: NextRequest) {
         where: {
           courseId_userId: {
             courseId: courseId,
-            userId: session.user.id
+            userId: actualUserId
           }
         }
       })
@@ -127,7 +147,7 @@ export async function POST(request: NextRequest) {
           data: {
             id: uuidv4(),
             courseId: courseId,
-            userId: session.user.id,
+            userId: actualUserId,
             template: "default",
             badgeData: JSON.stringify({
               completedAt: new Date(),
@@ -140,7 +160,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log(`[Progress] User ${session.user.id} updated progress for lesson ${lessonId}`)
+    console.log(`[Progress] User ${actualUserId} updated progress for lesson ${lessonId}`)
 
     return NextResponse.json({
       success: true,
@@ -166,11 +186,31 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required" },
         { status: 401 }
       )
+    }
+
+    // Use email as fallback identifier for admin user
+    const userId = session.user.id || session.user.email
+    if (!userId) {
+      return NextResponse.json(
+        { error: "User identification required" },
+        { status: 401 }
+      )
+    }
+
+    // For admin user, find user by email if no direct ID
+    let actualUserId = userId
+    if (session.user.email === "leeakpareva@gmail.com" && typeof userId === 'string' && userId.includes('@')) {
+      const adminUser = await prisma.users.findUnique({
+        where: { email: userId }
+      })
+      if (adminUser) {
+        actualUserId = adminUser.id
+      }
     }
 
     const { searchParams } = new URL(request.url)
@@ -186,7 +226,7 @@ export async function GET(request: NextRequest) {
     const userProgress = await prisma.user_progress.findUnique({
       where: {
         userId_courseId: {
-          userId: session.user.id,
+          userId: actualUserId,
           courseId: courseId
         }
       },

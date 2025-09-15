@@ -57,8 +57,13 @@ Please generate:
    - Module title
    - Module description
    - Duration for each module
-   - Detailed content outline (500+ words per module)
+   - Detailed content outline with proper paragraphs and sections (500+ words per module)
    - Lesson type (text, video, quiz, assignment)
+   - 3 quiz questions per module with multiple choice answers
+   - 3 image descriptions for visual learning materials
+
+Format content with proper paragraphs using double line breaks (\\n\\n) for readability.
+Use markdown-style headings (##) for section titles within content.
 
 Format the response as valid JSON with the following structure:
 {
@@ -73,7 +78,24 @@ Format the response as valid JSON with the following structure:
       "duration": "...",
       "content": "...",
       "lessonType": "...",
-      "orderIndex": 0
+      "orderIndex": 0,
+      "quiz": [
+        {
+          "id": "q1",
+          "question": "...",
+          "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
+          "correctAnswer": 0,
+          "explanation": "..."
+        }
+      ],
+      "images": [
+        {
+          "id": "img1",
+          "url": "/placeholder-course-image.jpg",
+          "caption": "...",
+          "alt": "..."
+        }
+      ]
     }
   ]
 }`
@@ -132,7 +154,25 @@ Format the response as valid JSON with the following structure:
         duration: module.duration || "1 week",
         content: module.content || "",
         lessonType: module.lessonType || "text",
-        orderIndex: index
+        orderIndex: index,
+        quiz: Array.isArray(module.quiz) ? module.quiz.map((q: any, qIndex: number) => ({
+          id: q.id || `q${index}_${qIndex}`,
+          question: q.question || `Sample question ${qIndex + 1}`,
+          options: Array.isArray(q.options) ? q.options : [
+            "Option A",
+            "Option B",
+            "Option C",
+            "Option D"
+          ],
+          correctAnswer: typeof q.correctAnswer === 'number' ? q.correctAnswer : 0,
+          explanation: q.explanation || "This is the correct answer explanation."
+        })) : [],
+        images: Array.isArray(module.images) ? module.images.map((img: any, imgIndex: number) => ({
+          id: img.id || `img${index}_${imgIndex}`,
+          url: img.url || "/placeholder-course-image.jpg",
+          caption: img.caption || `Visual learning material ${imgIndex + 1}`,
+          alt: img.alt || `Course illustration for ${module.title}`
+        })) : []
       })) : []
     }
 

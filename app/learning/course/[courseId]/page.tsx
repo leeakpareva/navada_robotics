@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
 import { BeamsBackground } from "@/components/ui/beams-background"
 import {
   BookOpen,
@@ -26,10 +28,30 @@ import {
   Download,
   Share2,
   Star,
-  ChevronRight
+  ChevronRight,
+  Image,
+  HelpCircle,
+  Brain,
+  Target,
+  Lightbulb
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+
+interface QuizQuestion {
+  id: string
+  question: string
+  options: string[]
+  correctAnswer: number
+  explanation: string
+}
+
+interface LessonImage {
+  id: string
+  url: string
+  caption: string
+  alt: string
+}
 
 interface Lesson {
   id: string
@@ -41,6 +63,8 @@ interface Lesson {
   videoUrl?: string
   resources?: string
   orderIndex: number
+  quiz?: QuizQuestion[]
+  images?: LessonImage[]
 }
 
 interface Course {
@@ -74,6 +98,11 @@ export default function CourseViewerPage() {
   const [loading, setLoading] = useState(true)
   const [savingProgress, setSavingProgress] = useState(false)
   const [activeTab, setActiveTab] = useState("content")
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({})
+  const [quizSubmitted, setQuizSubmitted] = useState(false)
+  const [quizScore, setQuizScore] = useState<number | null>(null)
+  const [generatingQuiz, setGeneratingQuiz] = useState(false)
+  const [generatedQuestions, setGeneratedQuestions] = useState<QuizQuestion[]>([])
 
   useEffect(() => {
     if (!session) {
@@ -162,6 +191,116 @@ export default function CourseViewerPage() {
     return progress?.lesson_progress?.some(lp => lp.lessonId === lessonId && lp.completed) ?? false
   }
 
+  const handleLessonChange = (lesson: Lesson) => {
+    setCurrentLesson(lesson)
+    // Reset quiz state when changing lessons
+    setQuizAnswers({})
+    setQuizSubmitted(false)
+    setQuizScore(null)
+    setGeneratedQuestions([])
+  }
+
+  const generateQuizQuestions = async () => {
+    if (!currentLesson) return
+
+    setGeneratingQuiz(true)
+    try {
+      const response = await fetch("/api/learning/generate-quiz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lessonTitle: currentLesson.title,
+          lessonContent: currentLesson.content,
+          difficulty: course?.difficulty?.toLowerCase() || "medium",
+          questionCount: 3
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setGeneratedQuestions(data.questions || [])
+        toast.success("Quiz questions generated successfully!")
+      } else {
+        throw new Error("Failed to generate quiz questions")
+      }
+    } catch (error) {
+      console.error("Error generating quiz:", error)
+      toast.error("Failed to generate quiz questions")
+    } finally {
+      setGeneratingQuiz(false)
+    }
+  }
+
+  const submitQuiz = () => {
+    const questions = generatedQuestions.length > 0 ? generatedQuestions : (currentLesson?.quiz || [])
+    if (questions.length === 0) return
+
+    let correct = 0
+
+    questions.forEach(question => {
+      if (quizAnswers[question.id] === question.correctAnswer) {
+        correct++
+      }
+    })
+
+    const score = Math.round((correct / questions.length) * 100)
+    setQuizScore(score)
+    setQuizSubmitted(true)
+
+    if (score >= 70) {
+      toast.success(`Great job! You scored ${score}%`)
+    } else {
+      toast.error(`You scored ${score}%. Try again to improve your understanding.`)
+    }
+  }
+
+  const resetQuiz = () => {
+    setQuizAnswers({})
+    setQuizSubmitted(false)
+    setQuizScore(null)
+    // Don't reset generated questions, just reset the answers
+  }
+
+  // Enhanced lesson content formatter
+  const formatLessonContent = (content: string) => {
+    // Split content into paragraphs and format
+    const paragraphs = content.split('\n\n').filter(p => p.trim())
+
+    return paragraphs.map((paragraph, index) => {
+      // Check if it's a heading (starts with ##)
+      if (paragraph.trim().startsWith('##')) {
+        return (
+          <h3 key={index} className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <Target className="h-5 w-5 text-purple-400" />
+            {paragraph.replace('##', '').trim()}
+          </h3>
+        )
+      }
+
+      // Check if it's a bullet point list
+      if (paragraph.includes('•') || paragraph.includes('-')) {
+        const items = paragraph.split('\n').filter(item => item.trim())
+        return (
+          <ul key={index} className="space-y-2 mb-6">
+            {items.map((item, itemIndex) => (
+              <li key={itemIndex} className="flex items-start gap-3 text-gray-300">
+                <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                <span className="leading-relaxed">{item.replace(/^[•-]\s*/, '')}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      // Regular paragraph
+      return (
+        <p key={index} className="text-gray-300 leading-relaxed mb-6 text-lg">
+          {paragraph.trim()}
+        </p>
+      )
+    })
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black">
@@ -211,7 +350,7 @@ export default function CourseViewerPage() {
                 </span>
               </div>
               <Link href="/agent-lee">
-                <Button variant="outline" size="sm" className="border-purple-400 text-purple-300">
+                <Button size="sm" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                   <Bot className="h-4 w-4 mr-2" />
                   Ask Agent Lee
                 </Button>
@@ -242,7 +381,7 @@ export default function CourseViewerPage() {
                       return (
                         <button
                           key={lesson.id}
-                          onClick={() => setCurrentLesson(lesson)}
+                          onClick={() => handleLessonChange(lesson)}
                           className={`w-full text-left px-4 py-3 transition-colors ${
                             isCurrent
                               ? "bg-purple-600/20 border-l-4 border-purple-500"
@@ -336,81 +475,337 @@ export default function CourseViewerPage() {
                   </CardHeader>
                   <CardContent>
                     <Tabs value={activeTab} onValueChange={setActiveTab}>
-                      <TabsList className="grid w-full grid-cols-3 bg-gray-800">
-                        <TabsTrigger value="content">Content</TabsTrigger>
-                        <TabsTrigger value="resources">Resources</TabsTrigger>
-                        <TabsTrigger value="discussion">Discussion</TabsTrigger>
+                      <TabsList className="grid w-full grid-cols-4 bg-gray-800">
+                        <TabsTrigger value="content" className="flex items-center gap-2">
+                          <FileText className="h-4 w-4" />
+                          Content
+                        </TabsTrigger>
+                        <TabsTrigger value="quiz" className="flex items-center gap-2" disabled={!isLessonCompleted(currentLesson.id)}>
+                          {!isLessonCompleted(currentLesson.id) ? <Lock className="h-4 w-4" /> : <HelpCircle className="h-4 w-4" />}
+                          Quiz {!isLessonCompleted(currentLesson.id) && "(Complete lesson first)"}
+                        </TabsTrigger>
+                        <TabsTrigger value="resources" className="flex items-center gap-2">
+                          <Download className="h-4 w-4" />
+                          Resources
+                        </TabsTrigger>
+                        <TabsTrigger value="discussion" className="flex items-center gap-2">
+                          <MessageSquare className="h-4 w-4" />
+                          Discussion
+                        </TabsTrigger>
                       </TabsList>
 
                       <TabsContent value="content" className="mt-6">
                         {currentLesson.videoUrl ? (
-                          <div className="aspect-video bg-black rounded-lg flex items-center justify-center mb-6">
-                            <PlayCircle className="h-16 w-16 text-gray-600" />
-                            <p className="ml-4 text-gray-400">Video player would load here</p>
+                          <div className="aspect-video bg-gradient-to-br from-gray-900 to-black rounded-lg flex items-center justify-center mb-8 border border-gray-700">
+                            <div className="text-center">
+                              <PlayCircle className="h-16 w-16 text-purple-400 mx-auto mb-4" />
+                              <p className="text-gray-400 text-lg">Interactive Video Player</p>
+                              <p className="text-gray-500 text-sm">Click to start learning</p>
+                            </div>
                           </div>
                         ) : null}
 
-                        <div className="prose prose-invert max-w-none">
-                          <div className="text-gray-300 whitespace-pre-wrap">
-                            {currentLesson.content}
+                        {/* Enhanced Content with Better Formatting */}
+                        <div className="space-y-6">
+                          {formatLessonContent(currentLesson.content)}
+                        </div>
+
+                        {/* Lesson Images Section */}
+                        {currentLesson.images && currentLesson.images.length > 0 && (
+                          <div className="mt-8">
+                            <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                              <Image className="h-5 w-5 text-purple-400" />
+                              Visual Learning Materials
+                            </h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              {currentLesson.images.map((image, index) => (
+                                <Card key={index} className="bg-gray-800/50 border-gray-700 overflow-hidden hover:border-purple-400 transition-colors">
+                                  <div className="aspect-video bg-gradient-to-br from-purple-900/20 to-pink-900/20 flex items-center justify-center">
+                                    <Image className="h-12 w-12 text-purple-400" />
+                                  </div>
+                                  <CardContent className="p-4">
+                                    <p className="text-white font-medium text-sm mb-1">{image.caption}</p>
+                                    <p className="text-gray-400 text-xs">{image.alt}</p>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                            </div>
                           </div>
+                        )}
+
+                        {/* Key Learning Points */}
+                        <div className="mt-8 p-6 bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-lg border border-purple-500/30">
+                          <h4 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                            <Lightbulb className="h-5 w-5 text-yellow-400" />
+                            Key Takeaways
+                          </h4>
+                          <ul className="space-y-2">
+                            <li className="flex items-start gap-3 text-gray-300">
+                              <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
+                              <span>Apply the concepts learned in this lesson to real-world scenarios</span>
+                            </li>
+                            <li className="flex items-start gap-3 text-gray-300">
+                              <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
+                              <span>Practice the techniques through hands-on exercises</span>
+                            </li>
+                            <li className="flex items-start gap-3 text-gray-300">
+                              <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
+                              <span>Review and test your understanding with the quiz</span>
+                            </li>
+                          </ul>
                         </div>
 
                         <div className="mt-8 flex items-center justify-between">
                           <Button
-                            variant="outline"
                             onClick={() => {
                               const currentIndex = course.lessons.findIndex(l => l.id === currentLesson.id)
                               if (currentIndex > 0) {
-                                setCurrentLesson(course.lessons[currentIndex - 1])
+                                handleLessonChange(course.lessons[currentIndex - 1])
                               }
                             }}
                             disabled={course.lessons[0].id === currentLesson.id}
-                            className="text-white border-gray-600"
+                            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                           >
                             <ArrowLeft className="h-4 w-4 mr-2" />
                             Previous
                           </Button>
 
-                          {!isLessonCompleted(currentLesson.id) ? (
-                            <Button
-                              onClick={() => markLessonComplete(currentLesson.id)}
-                              disabled={savingProgress}
-                              className="bg-green-600 hover:bg-green-700"
-                            >
-                              {savingProgress ? (
-                                <>
-                                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                  Saving...
-                                </>
-                              ) : (
-                                <>
-                                  <CheckCircle className="h-4 w-4 mr-2" />
-                                  Mark as Complete
-                                </>
-                              )}
-                            </Button>
-                          ) : (
-                            <Badge className="bg-green-600 text-white px-4 py-2">
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Completed
-                            </Badge>
-                          )}
+                          <div className="flex items-center gap-3">
+                            {(currentLesson.quiz?.length > 0 || generatedQuestions.length > 0 || isLessonCompleted(currentLesson.id)) && (
+                              <Button
+                                onClick={() => {
+                                  if (currentLesson.quiz?.length > 0 || generatedQuestions.length > 0) {
+                                    setActiveTab("quiz")
+                                  } else {
+                                    generateQuizQuestions()
+                                  }
+                                }}
+                                disabled={!isLessonCompleted(currentLesson.id) || generatingQuiz}
+                                variant="outline"
+                                className={isLessonCompleted(currentLesson.id)
+                                  ? "border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white"
+                                  : "border-gray-600 text-gray-500 cursor-not-allowed"
+                                }
+                              >
+                                {generatingQuiz ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    Generating...
+                                  </>
+                                ) : !isLessonCompleted(currentLesson.id) ? (
+                                  <>
+                                    <Lock className="h-4 w-4 mr-2" />
+                                    Take Quiz (Complete first)
+                                  </>
+                                ) : (currentLesson.quiz?.length > 0 || generatedQuestions.length > 0) ? (
+                                  <>
+                                    <Brain className="h-4 w-4 mr-2" />
+                                    Take Quiz
+                                  </>
+                                ) : (
+                                  <>
+                                    <Brain className="h-4 w-4 mr-2" />
+                                    Generate Quiz
+                                  </>
+                                )}
+                              </Button>
+                            )}
+
+                            {!isLessonCompleted(currentLesson.id) ? (
+                              <Button
+                                onClick={() => markLessonComplete(currentLesson.id)}
+                                disabled={savingProgress}
+                                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6"
+                              >
+                                {savingProgress ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    Saving...
+                                  </>
+                                ) : (
+                                  <>
+                                    <CheckCircle className="h-4 w-4 mr-2" />
+                                    Mark as Complete
+                                  </>
+                                )}
+                              </Button>
+                            ) : (
+                              <Badge className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-2">
+                                <CheckCircle className="h-4 w-4 mr-2" />
+                                Completed ✓
+                              </Badge>
+                            )}
+                          </div>
 
                           <Button
                             onClick={() => {
                               const currentIndex = course.lessons.findIndex(l => l.id === currentLesson.id)
                               if (currentIndex < course.lessons.length - 1) {
-                                setCurrentLesson(course.lessons[currentIndex + 1])
+                                handleLessonChange(course.lessons[currentIndex + 1])
                               }
                             }}
                             disabled={course.lessons[course.lessons.length - 1].id === currentLesson.id}
-                            className="bg-purple-600 hover:bg-purple-700"
+                            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                           >
                             Next
                             <ArrowRight className="h-4 w-4 ml-2" />
                           </Button>
                         </div>
+                      </TabsContent>
+
+                      {/* Quiz Tab Content */}
+                      <TabsContent value="quiz" className="mt-6">
+                        {(currentLesson.quiz && currentLesson.quiz.length > 0) || generatedQuestions.length > 0 ? (
+                          <div className="space-y-6">
+                            <div className="text-center mb-8">
+                              <div className="flex items-center justify-between mb-4">
+                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 px-4 py-2 rounded-full border border-purple-400/50">
+                                  <Brain className="h-5 w-5 text-purple-300" />
+                                  <span className="text-purple-300 font-medium">Knowledge Check</span>
+                                </div>
+                                {isLessonCompleted(currentLesson.id) && (
+                                  <Button
+                                    onClick={generateQuizQuestions}
+                                    disabled={generatingQuiz}
+                                    variant="outline"
+                                    size="sm"
+                                    className="border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white"
+                                  >
+                                    {generatingQuiz ? (
+                                      <>
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                        Generating...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Brain className="h-4 w-4 mr-2" />
+                                        {generatedQuestions.length > 0 || (currentLesson.quiz && currentLesson.quiz.length > 0) ? "Regenerate Quiz" : "Generate Quiz"}
+                                      </>
+                                    )}
+                                  </Button>
+                                )}
+                              </div>
+                              <h3 className="text-2xl font-bold text-white">Test Your Understanding</h3>
+                              <p className="text-gray-400 mt-2">
+                                {generatedQuestions.length > 0 ? "AI-generated questions based on lesson content" : "Answer all questions to check your learning progress"}
+                              </p>
+                            </div>
+
+                            {(generatedQuestions.length > 0 ? generatedQuestions : currentLesson.quiz || []).map((question, index) => (
+                              <Card key={question.id} className="bg-gray-800/50 border-gray-700">
+                                <CardHeader>
+                                  <CardTitle className="text-white text-lg flex items-center gap-2">
+                                    <span className="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">
+                                      {index + 1}
+                                    </span>
+                                    {question.question}
+                                  </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                  <RadioGroup
+                                    value={quizAnswers[question.id]?.toString()}
+                                    onValueChange={(value) =>
+                                      setQuizAnswers(prev => ({
+                                        ...prev,
+                                        [question.id]: parseInt(value)
+                                      }))
+                                    }
+                                    disabled={quizSubmitted}
+                                    className="space-y-3"
+                                  >
+                                    {question.options.map((option, optionIndex) => (
+                                      <div key={optionIndex} className="flex items-center space-x-3">
+                                        <RadioGroupItem
+                                          value={optionIndex.toString()}
+                                          id={`${question.id}-${optionIndex}`}
+                                          className="border-gray-600 text-purple-400"
+                                        />
+                                        <Label
+                                          htmlFor={`${question.id}-${optionIndex}`}
+                                          className={`text-gray-300 cursor-pointer flex-1 p-3 rounded-lg border transition-colors ${
+                                            quizSubmitted
+                                              ? optionIndex === question.correctAnswer
+                                                ? "border-green-500 bg-green-500/10 text-green-300"
+                                                : quizAnswers[question.id] === optionIndex && optionIndex !== question.correctAnswer
+                                                ? "border-red-500 bg-red-500/10 text-red-300"
+                                                : "border-gray-600 bg-gray-800/30"
+                                              : "border-gray-600 bg-gray-800/30 hover:border-purple-400 hover:bg-purple-400/10"
+                                          }`}
+                                        >
+                                          {option}
+                                        </Label>
+                                      </div>
+                                    ))}
+                                  </RadioGroup>
+
+                                  {quizSubmitted && (
+                                    <div className="mt-4 p-4 bg-blue-900/20 border border-blue-400/30 rounded-lg">
+                                      <p className="text-blue-300 text-sm">
+                                        <strong>Explanation:</strong> {question.explanation}
+                                      </p>
+                                    </div>
+                                  )}
+                                </CardContent>
+                              </Card>
+                            ))}
+
+                            <div className="flex items-center justify-between pt-6">
+                              {!quizSubmitted ? (
+                                <Button
+                                  onClick={submitQuiz}
+                                  disabled={Object.keys(quizAnswers).length !== (generatedQuestions.length > 0 ? generatedQuestions.length : (currentLesson.quiz?.length || 0))}
+                                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8"
+                                >
+                                  <Brain className="h-4 w-4 mr-2" />
+                                  Submit Quiz
+                                </Button>
+                              ) : (
+                                <div className="flex items-center gap-4">
+                                  <div className={`px-4 py-2 rounded-lg border ${
+                                    quizScore >= 70
+                                      ? "border-green-500 bg-green-500/10 text-green-300"
+                                      : "border-red-500 bg-red-500/10 text-red-300"
+                                  }`}>
+                                    <span className="font-semibold">Score: {quizScore}%</span>
+                                  </div>
+                                  <Button
+                                    onClick={resetQuiz}
+                                    variant="outline"
+                                    className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                                  >
+                                    Retake Quiz
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-center py-8">
+                            <Brain className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+                            <p className="text-gray-400 mb-4">No quiz available for this lesson</p>
+                            {isLessonCompleted(currentLesson.id) ? (
+                              <Button
+                                onClick={generateQuizQuestions}
+                                disabled={generatingQuiz}
+                                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                              >
+                                {generatingQuiz ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    Generating Quiz...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Brain className="h-4 w-4 mr-2" />
+                                    Generate AI Quiz
+                                  </>
+                                )}
+                              </Button>
+                            ) : (
+                              <p className="text-gray-500 text-sm">Complete the lesson to generate a quiz</p>
+                            )}
+                          </div>
+                        )}
                       </TabsContent>
 
                       <TabsContent value="resources" className="mt-6">
@@ -433,15 +828,17 @@ export default function CourseViewerPage() {
                             </Card>
                           )}
 
-                          {currentLesson.resources && (
+                          {currentLesson.resources && Array.isArray(currentLesson.resources) && currentLesson.resources.length > 0 && (
                             <Card className="bg-gray-800/50 border-gray-700">
                               <CardContent className="pt-6">
                                 <h3 className="text-white font-medium mb-2">Additional Resources</h3>
                                 <div className="space-y-2">
-                                  {JSON.parse(currentLesson.resources).map((resource: any, idx: number) => (
+                                  {currentLesson.resources.map((resource: any, idx: number) => (
                                     <div key={idx} className="flex items-center space-x-2">
                                       <Download className="h-4 w-4 text-purple-400" />
-                                      <span className="text-gray-300 text-sm">{resource}</span>
+                                      <span className="text-gray-300 text-sm">
+                                        {typeof resource === 'string' ? resource : JSON.stringify(resource)}
+                                      </span>
                                     </div>
                                   ))}
                                 </div>

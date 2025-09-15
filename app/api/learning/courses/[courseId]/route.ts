@@ -34,7 +34,41 @@ export async function GET(
       )
     }
 
-    return NextResponse.json({ course })
+    // Parse quiz and image data from lesson resources
+    const enhancedCourse = {
+      ...course,
+      lessons: course.lessons.map(lesson => {
+        let quiz = []
+        let images = []
+        let originalResources = []
+
+        if (lesson.resources) {
+          try {
+            const parsedResources = JSON.parse(lesson.resources)
+            if (typeof parsedResources === 'object') {
+              quiz = parsedResources.quiz || []
+              images = parsedResources.images || []
+              originalResources = parsedResources.originalResources || []
+            } else {
+              // Fallback for old format
+              originalResources = [parsedResources]
+            }
+          } catch (error) {
+            console.warn("Failed to parse lesson resources:", error)
+            originalResources = lesson.resources ? [lesson.resources] : []
+          }
+        }
+
+        return {
+          ...lesson,
+          quiz,
+          images,
+          resources: originalResources
+        }
+      })
+    }
+
+    return NextResponse.json({ course: enhancedCourse })
   } catch (error) {
     console.error("[Course API] Error fetching course:", error)
     return NextResponse.json(

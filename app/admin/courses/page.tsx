@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 import { BeamsBackground } from "@/components/ui/beams-background"
@@ -38,7 +39,8 @@ import {
   Video,
   CheckCircle,
   Upload,
-  File
+  File,
+  Loader2
 } from "lucide-react"
 import Link from "next/link"
 
@@ -815,7 +817,7 @@ export default function AdminCoursesPage() {
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-400">Total Revenue</span>
-                          <span className="text-white">${analytics.totalRevenue}</span>
+                          <span className="text-white">£{analytics.totalRevenue}</span>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-400">Free Tier Users</span>
@@ -833,6 +835,206 @@ export default function AdminCoursesPage() {
             </TabsContent>
           </Tabs>
         </div>
+
+        {/* Course Edit Modal */}
+        {selectedCourse && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <Card className="bg-gray-900 border-gray-700 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Edit className="h-6 w-6 text-purple-400" />
+                    Edit Course: {selectedCourse.title}
+                  </CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedCourse(null)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                <CardDescription className="text-gray-400">
+                  Update course information and content
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-title" className="text-white">Course Title</Label>
+                    <Input
+                      id="edit-title"
+                      value={selectedCourse.title}
+                      onChange={(e) => setSelectedCourse(prev => prev ? {...prev, title: e.target.value} : null)}
+                      className="bg-black/30 border-gray-600 text-white"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-difficulty" className="text-white">Difficulty</Label>
+                    <Select
+                      value={selectedCourse.difficulty}
+                      onValueChange={(value) => setSelectedCourse(prev => prev ? {...prev, difficulty: value} : null)}
+                    >
+                      <SelectTrigger className="bg-black/30 border-gray-600 text-white">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-900 border-gray-700">
+                        <SelectItem value="Beginner">Beginner</SelectItem>
+                        <SelectItem value="Intermediate">Intermediate</SelectItem>
+                        <SelectItem value="Advanced">Advanced</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-duration" className="text-white">Duration</Label>
+                    <Input
+                      id="edit-duration"
+                      value={selectedCourse.duration}
+                      onChange={(e) => setSelectedCourse(prev => prev ? {...prev, duration: e.target.value} : null)}
+                      className="bg-black/30 border-gray-600 text-white"
+                      placeholder="e.g., 4 weeks"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-category" className="text-white">Category</Label>
+                    <Input
+                      id="edit-category"
+                      value={selectedCourse.category}
+                      onChange={(e) => setSelectedCourse(prev => prev ? {...prev, category: e.target.value} : null)}
+                      className="bg-black/30 border-gray-600 text-white"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="edit-short-description" className="text-white">Short Description</Label>
+                  <Input
+                    id="edit-short-description"
+                    value={selectedCourse.shortDescription || ''}
+                    onChange={(e) => setSelectedCourse(prev => prev ? {...prev, shortDescription: e.target.value} : null)}
+                    className="bg-black/30 border-gray-600 text-white"
+                    placeholder="Brief course description (150 characters max)"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="edit-description" className="text-white">Course Description</Label>
+                  <Textarea
+                    id="edit-description"
+                    value={selectedCourse.description}
+                    onChange={(e) => setSelectedCourse(prev => prev ? {...prev, description: e.target.value} : null)}
+                    className="bg-black/30 border-gray-600 text-white min-h-[100px]"
+                    placeholder="Detailed course description..."
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="edit-learning-outcomes" className="text-white">Learning Outcomes</Label>
+                  <Textarea
+                    id="edit-learning-outcomes"
+                    value={selectedCourse.learningOutcomes || ''}
+                    onChange={(e) => setSelectedCourse(prev => prev ? {...prev, learningOutcomes: e.target.value} : null)}
+                    className="bg-black/30 border-gray-600 text-white min-h-[80px]"
+                    placeholder="What students will learn..."
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="edit-prerequisites" className="text-white">Prerequisites</Label>
+                  <Input
+                    id="edit-prerequisites"
+                    value={selectedCourse.prerequisites || ''}
+                    onChange={(e) => setSelectedCourse(prev => prev ? {...prev, prerequisites: e.target.value} : null)}
+                    className="bg-black/30 border-gray-600 text-white"
+                    placeholder="Required knowledge or skills..."
+                  />
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="edit-is-free-tier"
+                    checked={selectedCourse.isFreeTier}
+                    onCheckedChange={(checked) => setSelectedCourse(prev => prev ? {...prev, isFreeTier: checked as boolean} : null)}
+                    className="border-gray-600"
+                  />
+                  <Label htmlFor="edit-is-free-tier" className="text-white">Free Tier Course</Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="edit-published"
+                    checked={selectedCourse.published}
+                    onCheckedChange={(checked) => setSelectedCourse(prev => prev ? {...prev, published: checked as boolean} : null)}
+                    className="border-gray-600"
+                  />
+                  <Label htmlFor="edit-published" className="text-white">Published</Label>
+                </div>
+
+                <div className="flex items-center justify-between pt-6 border-t border-gray-700">
+                  <Button
+                    variant="outline"
+                    onClick={() => setSelectedCourse(null)}
+                    className="text-white border-gray-600"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      try {
+                        setLoading(true)
+                        const response = await fetch(`/api/learning/courses/${selectedCourse.id}`, {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            title: selectedCourse.title,
+                            description: selectedCourse.description,
+                            shortDescription: selectedCourse.shortDescription,
+                            duration: selectedCourse.duration,
+                            difficulty: selectedCourse.difficulty,
+                            category: selectedCourse.category,
+                            isFreeTier: selectedCourse.isFreeTier,
+                            prerequisites: selectedCourse.prerequisites,
+                            learningOutcomes: selectedCourse.learningOutcomes,
+                            published: selectedCourse.published
+                          })
+                        })
+
+                        if (response.ok) {
+                          toast.success("Course updated successfully!")
+                          setSelectedCourse(null)
+                          fetchCourses() // Refresh the course list
+                        } else {
+                          const error = await response.json()
+                          toast.error(error.error || "Failed to update course")
+                        }
+                      } catch (error) {
+                        console.error('Update error:', error)
+                        toast.error("Failed to update course")
+                      } finally {
+                        setLoading(false)
+                      }
+                    }}
+                    disabled={loading}
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Updating...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-4 w-4 mr-2" />
+                        Update Course
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </BeamsBackground>
     </div>
   )
