@@ -94,6 +94,9 @@ export default function SolutionsPage() {
               <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
                 Learning
               </Link>
+              <Link href="/analytics" className="text-white hover:text-purple-400 transition-colors">
+                Analytics
+              </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                 Agent Lee
               </Link>
@@ -118,6 +121,9 @@ export default function SolutionsPage() {
                 </Link>
                 <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
                   Learning
+                </Link>
+                <Link href="/analytics" className="text-white hover:text-purple-400 transition-colors">
+                  Analytics
                 </Link>
                 <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                   Agent Lee
