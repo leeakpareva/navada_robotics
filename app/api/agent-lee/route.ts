@@ -1,11 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server"
 import OpenAI from "openai"
 import { trackChatSession, updateChatSession, trackImageGeneration } from "@/lib/analytics"
+import { mcpClient } from "@/lib/mcp/client"
 
 const API_KEY = process.env.OPENAI_API_KEY
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID
 const VOICE_PROMPT_ID = process.env.VOICE_PROMPT_ID
 const VECTOR_STORE_ID = process.env.VECTOR_STORE_ID
+const BRAVE_SEARCH_API_KEY = process.env.BRAVE_SEARCH_API_KEY
 
 console.log("[v0] Environment debug:")
 console.log("[v0] OPENAI_API_KEY exists:", !!API_KEY)
@@ -18,6 +20,10 @@ console.log("[v0] VECTOR_STORE_ID exists:", !!VECTOR_STORE_ID)
 console.log("[v0] VECTOR_STORE_ID value:", VECTOR_STORE_ID || "Not set")
 if (VECTOR_STORE_ID) {
   console.log("[v0] Vector store configured for file search capabilities")
+}
+console.log("[v0] BRAVE_SEARCH_API_KEY exists:", !!BRAVE_SEARCH_API_KEY)
+if (BRAVE_SEARCH_API_KEY) {
+  console.log("[v0] Brave Search MCP server available")
 }
 console.log(
   "[v0] All env vars:",
@@ -481,17 +487,48 @@ export async function POST(request: NextRequest) {
         assistant_id: ASSISTANT_ID,
       }
 
+      // Initialize tools array
+      runParams.tools = []
+
       // Attach vector store if available
       if (VECTOR_STORE_ID) {
         console.log("[v0] Attaching vector store:", VECTOR_STORE_ID)
-        runParams.tools = [{
+        runParams.tools.push({
           type: "file_search"
-        }]
+        })
         runParams.tool_resources = {
           file_search: {
             vector_store_ids: [VECTOR_STORE_ID]
           }
         }
+      }
+
+      // Add MCP tools if available
+      try {
+        // Ensure Brave Search is connected if API key is available
+        if (BRAVE_SEARCH_API_KEY) {
+          await mcpClient.connectServer('brave-search')
+        }
+
+        const mcpTools = mcpClient.getAvailableTools()
+        console.log("[v0] Available MCP tools:", mcpTools.length)
+
+        for (const tool of mcpTools) {
+          runParams.tools.push({
+            type: "function",
+            function: {
+              name: tool.name,
+              description: tool.description,
+              parameters: tool.parameters
+            }
+          })
+        }
+
+        if (mcpTools.length > 0) {
+          console.log("[v0] Added MCP tools to assistant:", mcpTools.map(t => t.name))
+        }
+      } catch (mcpError) {
+        console.error("[v0] Error setting up MCP tools:", mcpError)
       }
 
       run = await openai.beta.threads.runs.create(currentThreadId, runParams)
@@ -553,6 +590,93 @@ export async function POST(request: NextRequest) {
     if (attempts >= maxAttempts) {
       console.log("[v0] Run timed out after", maxAttempts, "seconds")
       return NextResponse.json({ error: "Assistant response timed out" }, { status: 500 })
+    }
+
+    // Handle tool calls if the run requires action
+    if (runStatus.status === "requires_action" && runStatus.required_action) {
+      console.log("[v0] Run requires action - processing tool calls")
+
+      try {
+        const toolCalls = runStatus.required_action.submit_tool_outputs.tool_calls
+        const toolOutputs = []
+
+        for (const toolCall of toolCalls) {
+          console.log("[v0] Processing tool call:", toolCall.function.name)
+
+          let output = "Tool call failed"
+
+          try {
+            // Check if this is an MCP tool
+            const mcpTools = mcpClient.getAvailableTools()
+            const mcpTool = mcpTools.find(tool => tool.name === toolCall.function.name)
+
+            if (mcpTool) {
+              console.log("[v0] Executing MCP tool:", toolCall.function.name)
+              const parameters = JSON.parse(toolCall.function.arguments)
+
+              const result = await mcpClient.callTool({
+                serverId: 'brave-search', // For now, we know it's Brave Search
+                toolName: toolCall.function.name,
+                parameters,
+                sessionId: sessionId || 'unknown'
+              })
+
+              if (result.success) {
+                output = JSON.stringify(result.data)
+                console.log("[v0] MCP tool call successful:", toolCall.function.name)
+              } else {
+                output = `Tool error: ${result.error}`
+                console.error("[v0] MCP tool call failed:", result.error)
+              }
+            } else {
+              output = `Unknown tool: ${toolCall.function.name}`
+              console.warn("[v0] Unknown tool requested:", toolCall.function.name)
+            }
+          } catch (toolError) {
+            console.error("[v0] Tool execution error:", toolError)
+            output = `Tool execution failed: ${toolError instanceof Error ? toolError.message : 'Unknown error'}`
+          }
+
+          toolOutputs.push({
+            tool_call_id: toolCall.id,
+            output: output
+          })
+        }
+
+        // Submit tool outputs
+        console.log("[v0] Submitting", toolOutputs.length, "tool outputs")
+        await openai.beta.threads.runs.submitToolOutputs(
+          currentThreadId,
+          run.id,
+          { tool_outputs: toolOutputs }
+        )
+
+        // Wait for the run to complete after submitting tool outputs
+        let toolCompletionAttempts = 0
+        const maxToolAttempts = 30
+
+        while (runStatus.status !== "completed" && toolCompletionAttempts < maxToolAttempts) {
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+          try {
+            runStatus = await openai.beta.threads.runs.retrieve(run.id, currentThreadId)
+          } catch (err) {
+            runStatus = await openai.beta.threads.runs.retrieve(run.id as any, {
+              thread_id: currentThreadId
+            } as any)
+          }
+          toolCompletionAttempts++
+          console.log("[v0] Tool completion check", toolCompletionAttempts, ":", runStatus.status)
+        }
+
+        if (toolCompletionAttempts >= maxToolAttempts) {
+          console.log("[v0] Tool processing timed out")
+          return NextResponse.json({ error: "Tool processing timed out" }, { status: 500 })
+        }
+
+      } catch (toolError) {
+        console.error("[v0] Tool processing error:", toolError)
+        return NextResponse.json({ error: "Failed to process tool calls" }, { status: 500 })
+      }
     }
 
     if (runStatus.status === "completed") {
