@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import crypto from 'crypto'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const { name, email, password } = await request.json()

@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getServerSession } from 'next-auth'
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 import OpenAI from "openai"
 import { DatabaseAnalytics } from "@/lib/database-analytics"
 import { RAGService } from "@/lib/rag-service"
