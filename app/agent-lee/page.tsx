@@ -692,7 +692,7 @@ export default function AgentLeePage() {
         intensity="subtle"
         className="flex-1 flex flex-col"
       >
-        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-4 py-8 pb-safe">
+        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-4 py-6 md:py-8">
           {/* Agent Lee Header */}
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -931,22 +931,22 @@ export default function AgentLeePage() {
       </BeamsBackground>
 
       {/* Bottom Navigation for Mobile */}
-      <nav className="bg-black/95 backdrop-blur md:hidden flex-shrink-0 safe-area-inset-bottom border-t border-gray-800">
-        <div className="flex justify-around py-1 pb-safe">
-          <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Dna className="h-4 w-4 text-gray-400 mb-1" />
+      <nav className="bg-black/95 backdrop-blur md:hidden flex-shrink-0 border-t border-gray-800">
+        <div className="flex justify-around py-1">
+          <Link href="/solutions" className="flex flex-col items-center py-1.5 px-3 text-xs">
+            <Dna className="h-4 w-4 text-gray-400 mb-0.5" />
             <span className="text-gray-400">Research</span>
           </Link>
-          <Link href="/news" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Newspaper className="h-4 w-4 text-gray-400 mb-1" />
+          <Link href="/news" className="flex flex-col items-center py-1.5 px-3 text-xs">
+            <Newspaper className="h-4 w-4 text-gray-400 mb-0.5" />
             <span className="text-gray-400">News</span>
           </Link>
-          <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
-            <BrainCircuit className="h-4 w-4 text-purple-400 mb-1" />
+          <Link href="/agent-lee" className="flex flex-col items-center py-1.5 px-3 text-xs">
+            <BrainCircuit className="h-4 w-4 text-purple-400 mb-0.5" />
             <span className="text-purple-400 text-xs">Agent</span>
           </Link>
-          <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
-            <ShieldCheck className="h-4 w-4 text-gray-400 mb-1" />
+          <Link href="/about" className="flex flex-col items-center py-1.5 px-3 text-xs">
+            <ShieldCheck className="h-4 w-4 text-gray-400 mb-0.5" />
             <span className="text-gray-400">About</span>
           </Link>
         </div>

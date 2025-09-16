@@ -338,11 +338,11 @@ export default function ComputerVisionPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 px-4">
+      <section className="py-8 md:py-12 px-4">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Transform Your Vision Into Reality</h2>
-          <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-            Ready to implement computer vision in your organization? Let's build intelligent visual systems 
+          <p className="text-gray-300 text-lg mb-6 md:mb-8 max-w-2xl mx-auto">
+            Ready to implement computer vision in your organization? Let's build intelligent visual systems
             that see, understand, and act on visual information.
           </p>
           <Link href="/contact">
@@ -355,9 +355,9 @@ export default function ComputerVisionPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black py-4 px-4">
+      <footer className="bg-black py-2 md:py-4 px-4">
         <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-2">
+          <div className="flex items-center justify-center space-x-2 mb-1 md:mb-2">
             <span className="text-xl font-bold text-white">NAVADA</span>
           </div>
           <p className="text-gray-300 mb-1 text-sm">© 2024 NAVADA. All rights reserved.</p>
