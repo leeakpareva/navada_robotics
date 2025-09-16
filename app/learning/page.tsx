@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -55,6 +56,7 @@ export default function LearningPage() {
   const [enrolling, setEnrolling] = useState<string | null>(null)
   const [showSignupModal, setShowSignupModal] = useState(false)
   const [selectedCourseForSignup, setSelectedCourseForSignup] = useState<any>(null)
+  const [isUpgrading, setIsUpgrading] = useState(false)
   const router = useRouter()
   const { data: session } = useSession()
 
@@ -108,6 +110,40 @@ export default function LearningPage() {
       alert('Failed to enroll in course')
     } finally {
       setEnrolling(null)
+    }
+  }
+
+  const handleUpgradeToPremium = async () => {
+    if (!session) {
+      setShowSignupModal(true)
+      return
+    }
+
+    setIsUpgrading(true)
+    try {
+      const response = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lookup_key: 'Consulting_Services_(Ai)-acfea00',
+          customer_email: session.user?.email,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        toast.error('Failed to create checkout session')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      toast.error('An error occurred while processing your request')
+    } finally {
+      setIsUpgrading(false)
     }
   }
 
@@ -352,9 +388,20 @@ export default function LearningPage() {
                 <Button
                   variant="outline"
                   className="border-purple-400 text-purple-300 hover:bg-purple-600 hover:text-white px-8 py-3 text-lg"
+                  onClick={handleUpgradeToPremium}
+                  disabled={isUpgrading}
                 >
-                  <Crown className="h-5 w-5 mr-2" />
-                  Upgrade to Premium
+                  {isUpgrading ? (
+                    <>
+                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Crown className="h-5 w-5 mr-2" />
+                      Upgrade to Premium
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
@@ -548,9 +595,22 @@ export default function LearningPage() {
             </div>
 
             <div className="text-center">
-              <Button className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-8 py-3 text-lg">
-                <Crown className="h-5 w-5 mr-2" />
-                Upgrade to Premium - £100/month
+              <Button
+                className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-8 py-3 text-lg"
+                onClick={handleUpgradeToPremium}
+                disabled={isUpgrading}
+              >
+                {isUpgrading ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Crown className="h-5 w-5 mr-2" />
+                    Upgrade to Premium - £100/month
+                  </>
+                )}
               </Button>
               <p className="text-sm text-gray-400 mt-3">
                 Includes monthly 1-on-1 calls with Lee Akpareva • Cancel anytime

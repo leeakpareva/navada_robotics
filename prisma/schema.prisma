@@ -135,6 +135,7 @@ model users {
   notes              notes[]
   bookmarks          bookmarks[]
   reading_progress   reading_progress[]
+  stripe_activities  StripeActivity[]
 }
 
 model EmailSubscriber {
@@ -551,4 +552,38 @@ model subscriptions {
   user            users     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("subscriptions")
+}
+
+// Stripe Activities Tracking
+model StripeActivity {
+  id                    String    @id @default(cuid())
+  userId                String?   // Optional - some activities might not have a user
+  stripeCustomerId      String?   // Stripe customer ID
+  stripeSubscriptionId  String?   // Stripe subscription ID
+  stripePaymentIntentId String?   // Stripe payment intent ID
+  stripeInvoiceId       String?   // Stripe invoice ID
+  stripeSessionId       String?   // Stripe checkout session ID
+  eventType             String    // checkout_session_created, payment_succeeded, subscription_created, etc.
+  eventSource           String    // api, webhook, manual
+  amount                Float?    // Amount in the currency's smallest unit
+  currency              String?   // Currency code (GBP, USD, etc.)
+  status                String?   // Status of the activity (succeeded, failed, pending, etc.)
+  description           String?   // Human readable description
+  metadata              String?   // JSON metadata from Stripe
+  webhookEventId        String?   // Stripe webhook event ID
+  errorMessage          String?   // Error message if the activity failed
+  processedAt           DateTime? // When the activity was processed
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relation to user (optional)
+  user                  users?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("stripe_activities")
+  @@index([userId])
+  @@index([stripeCustomerId])
+  @@index([stripeSubscriptionId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@index([status])
 }

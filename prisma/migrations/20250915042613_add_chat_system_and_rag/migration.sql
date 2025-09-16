@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "accounts" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "provider" TEXT NOT NULL,
@@ -12,12 +12,13 @@ CREATE TABLE "accounts" (
     "scope" TEXT,
     "id_token" TEXT,
     "session_state" TEXT,
-    CONSTRAINT "accounts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+
+    CONSTRAINT "accounts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "courses" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "shortDescription" TEXT NOT NULL,
@@ -27,56 +28,58 @@ CREATE TABLE "courses" (
     "isFreeTier" BOOLEAN NOT NULL DEFAULT false,
     "prerequisites" TEXT,
     "learningOutcomes" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "courses_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "lesson_progress" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "userProgressId" TEXT NOT NULL,
     "lessonId" TEXT NOT NULL,
     "completed" BOOLEAN NOT NULL DEFAULT false,
-    "completedAt" DATETIME,
+    "completedAt" TIMESTAMP(3),
     "timeSpent" INTEGER NOT NULL DEFAULT 0,
-    CONSTRAINT "lesson_progress_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "lesson_progress_userProgressId_fkey" FOREIGN KEY ("userProgressId") REFERENCES "user_progress" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+
+    CONSTRAINT "lesson_progress_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "lessons" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
     "content" TEXT NOT NULL,
     "orderIndex" INTEGER NOT NULL,
     "duration" INTEGER NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     CONSTRAINT "lessons_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "sessions" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "sessionToken" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "expires" DATETIME NOT NULL,
+    "expires" TIMESTAMP(3) NOT NULL,
     CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "user_progress" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
-    "enrolledAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "lastAccessedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "enrolledAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "lastAccessedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "completedLessons" INTEGER NOT NULL DEFAULT 0,
     "totalLessons" INTEGER NOT NULL DEFAULT 0,
     "progressPercentage" INTEGER NOT NULL DEFAULT 0,
-    "completedAt" DATETIME,
+    "completedAt" TIMESTAMP(3),
     "certificateEarned" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "user_progress_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "user_progress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
@@ -84,13 +87,13 @@ CREATE TABLE "user_progress" (
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
     "password" TEXT,
     "image" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "subscriptionTier" TEXT NOT NULL DEFAULT 'free',
     "subscriptionStatus" TEXT NOT NULL DEFAULT 'inactive',
     "stripeCustomerId" TEXT
@@ -98,32 +101,34 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "email_subscribers" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "source" TEXT,
-    "subscribedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "isActive" BOOLEAN NOT NULL DEFAULT true
+    "subscribedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+
+    CONSTRAINT "email_subscribers_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "chat_sessions" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "threadId" TEXT NOT NULL,
     "userId" TEXT,
-    "startTime" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "endTime" DATETIME,
-    "lastActivity" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "startTime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "endTime" TIMESTAMP(3),
+    "lastActivity" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "messageCount" INTEGER NOT NULL DEFAULT 0,
     "status" TEXT NOT NULL DEFAULT 'active',
     "sessionData" TEXT,
     "apiProvider" TEXT NOT NULL DEFAULT 'openai',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "chat_messages" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "sessionId" TEXT NOT NULL,
     "threadId" TEXT NOT NULL,
     "messageIndex" INTEGER NOT NULL,
@@ -133,26 +138,26 @@ CREATE TABLE "chat_messages" (
     "websiteData" TEXT,
     "codeData" TEXT,
     "metadata" TEXT,
-    "timestamp" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "chat_messages_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "chat_sessions" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "session_analytics" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "sessionId" TEXT NOT NULL,
     "eventType" TEXT NOT NULL,
     "eventData" TEXT,
     "responseTime" INTEGER,
     "success" BOOLEAN NOT NULL DEFAULT true,
     "errorDetails" TEXT,
-    "timestamp" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "session_analytics_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "chat_sessions" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "code_generations" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "sessionId" TEXT,
     "threadId" TEXT,
     "instruction" TEXT NOT NULL,
@@ -162,12 +167,12 @@ CREATE TABLE "code_generations" (
     "generationTime" INTEGER NOT NULL,
     "errorDetails" TEXT,
     "filesList" TEXT,
-    "timestamp" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable
 CREATE TABLE "image_generations" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "sessionId" TEXT,
     "threadId" TEXT,
     "prompt" TEXT NOT NULL,
@@ -176,12 +181,12 @@ CREATE TABLE "image_generations" (
     "generationTime" INTEGER NOT NULL,
     "imageUrl" TEXT,
     "errorDetails" TEXT,
-    "timestamp" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable
 CREATE TABLE "knowledge_base" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "summary" TEXT,
@@ -190,8 +195,8 @@ CREATE TABLE "knowledge_base" (
     "tags" TEXT,
     "embeddings" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateIndex
