@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { BeamsBackground } from "@/components/ui/beams-background"
-import { Menu, X, Cog, Microscope as Microchip, Shield, Phone } from "lucide-react"
+import { Menu, X, Microscope as Microchip, Shield, Phone } from "lucide-react"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/ui/optimized-image"
 

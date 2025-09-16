@@ -2,32 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BeamsBackground } from "@/components/ui/beams-background"
-import {
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
-  Users,
-  BookOpen,
-  GraduationCap,
-  BarChart3,
-  MessageSquare,
-  Award,
-  Settings,
-  Save,
-  Upload,
-  ChevronRight,
-  Star,
-  Clock,
-  DollarSign,
-  Shield,
-  ArrowLeft
-} from "lucide-react"
+import { BarChart3, Plus, Edit, Trash2, Eye, Users, BookOpen, MessageSquare, Award, Save, Star, Clock, DollarSign, Shield, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 interface Course {
@@ -50,27 +30,13 @@ interface Course {
   completionRate?: number
 }
 
-interface Lesson {
-  id: string
-  courseId: string
-  title: string
-  description?: string
-  content: string
-  orderIndex: number
-  duration: number
-  lessonType: string
-  videoUrl?: string
-  published: boolean
-}
+
 
 export default function LMSAdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
   const [courses, setCourses] = useState<Course[]>([])
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
-  const [lessons, setLessons] = useState<Lesson[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [showCourseForm, setShowCourseForm] = useState(false)
-  const [showLessonForm, setShowLessonForm] = useState(false)
 
   // Mock data for demonstration
   useEffect(() => {
@@ -128,7 +94,6 @@ export default function LMSAdminDashboard() {
     ]
 
     setCourses(mockCourses)
-    setIsLoading(false)
   }, [])
 
   const stats = {

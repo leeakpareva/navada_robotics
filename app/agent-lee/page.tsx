@@ -8,60 +8,29 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { BeamsBackground } from "@/components/ui/beams-background"
-import {
-  Menu,
-  X,
-  Cog,
-  CircuitBoard,
-  Hammer,
-  ShieldCheck,
-  PhoneCall,
-  SendHorizonal,
-  UserCircle2,
-  Mic2,
-  MicOff,
-  AudioLines,
-  VolumeX,
-  BrainCircuit,
-  Sparkles,
-  Zap,
-  MessagesSquare,
-  Code2,
-  Globe2,
-  ImagePlus,
-  RocketIcon,
-  BotMessageSquare,
-  Cpu,
-  Atom,
-  Binary,
-  Dna,
-  Fingerprint,
-  GitBranch,
-  Infinity,
-  Network,
-  Orbit,
-  QrCode,
-  Radio,
-  Satellite,
-  ScanFace,
-  Terminal,
-  Wand2,
-  Workflow,
-  Activity,
-  Lock,
-  Eye,
-  EyeOff,
-  Download,
-  FileDown,
-  Settings2,
-  Home,
-  ArrowLeft,
-  LogOut,
-  Newspaper,
-  History,
-} from "lucide-react"
+import { Menu, X, ShieldCheck, SendHorizonal, UserCircle2, Mic2, MicOff, AudioLines, VolumeX, BrainCircuit, Dna, Fingerprint, Radio, Lock, Download, FileDown, Home, ArrowLeft, LogOut, Newspaper, Infinity as InfinityIcon } from "lucide-react"
 import Link from "next/link"
 
+
+interface SpeechSynthesisErrorEvent extends Event {
+  readonly error: string;
+}
+
+interface SpeechRecognitionEvent extends Event {
+  readonly resultIndex: number;
+  readonly results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void) | null;
+  onerror: ((this: SpeechRecognition, ev: Event) => void) | null;
+  onend: ((this: SpeechRecognition, ev: Event) => void) | null;
+  start(): void;
+  stop(): void;
+}
 
 interface Message {
   id: number
@@ -69,7 +38,7 @@ interface Message {
   sender: "user" | "agent"
   timestamp: Date
   image?: string // Base64 data URL for images
-  website?: any // Website generation data
+  website?: Record<string, unknown> // Website generation data
 }
 
 export default function AgentLeePage() {
@@ -93,13 +62,13 @@ export default function AgentLeePage() {
   const [isMuted, setIsMuted] = useState(false)
   const [lastGeneratedImage, setLastGeneratedImage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const recognitionRef = useRef<any>(null)
+  const recognitionRef = useRef<SpeechRecognition | null>(null)
   const currentAudioRef = useRef<HTMLAudioElement | null>(null)
   const isPlayingRef = useRef<boolean>(false)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
       if (SpeechRecognition && window.speechSynthesis) {
         setSpeechSupported(true)
         recognitionRef.current = new SpeechRecognition()
@@ -107,7 +76,7 @@ export default function AgentLeePage() {
         recognitionRef.current.interimResults = false
         recognitionRef.current.lang = "en-US"
 
-        recognitionRef.current.onresult = (event: any) => {
+        recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
           const transcript = event.results[0][0].transcript
           setInputMessage(transcript)
           setIsListening(false)
@@ -258,7 +227,7 @@ export default function AgentLeePage() {
         isPlayingRef.current = false
       }
 
-      utterance.onerror = (event) => {
+      utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
         console.log("[v0] Browser TTS error:", event.error)
         setIsSpeaking(false)
         isPlayingRef.current = false
@@ -347,27 +316,7 @@ export default function AgentLeePage() {
     }
   }
 
-  const clearChatHistory = async () => {
-    if (!threadId) return
-
-    try {
-      const response = await fetch(`/api/agent-lee/history/${threadId}`, {
-        method: 'DELETE'
-      })
-
-      if (response.ok) {
-        setMessages([{
-          id: 1,
-          text: "Chat history cleared! I'm Agent Lee, ready to help you with robotics, AI, and more!\n\nWhat would you like to work on?",
-          sender: "agent",
-          timestamp: new Date(),
-        }])
-        setThreadId(null)
-      }
-    } catch (error) {
-      console.error('Error clearing chat history:', error)
-    }
-  }
+  
 
 
   const downloadContent = (content: string, filename: string, type: string = 'text/plain') => {
@@ -493,8 +442,7 @@ export default function AgentLeePage() {
     }
   }
 
-  const quickActions = [
-  ]
+  
 
   // Loading state
   if (status === "loading") {
@@ -795,7 +743,7 @@ export default function AgentLeePage() {
                           <div className="mt-4 p-4 bg-black/50 rounded-xl border border-cyan-400/50">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
-                                <Infinity className="h-5 w-5 text-cyan-400" />
+                                <InfinityIcon className="h-5 w-5 text-cyan-400" />
                                 <span className="text-cyan-300 font-semibold">Website Generated!</span>
                               </div>
                               <Button

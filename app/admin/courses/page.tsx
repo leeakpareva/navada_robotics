@@ -18,23 +18,16 @@ import { BeamsBackground } from "@/components/ui/beams-background"
 import {
   BookOpen,
   Users,
-  Star,
-  Clock,
-  Plus,
   Edit,
-  Trash2,
   Save,
   X,
   Shield,
   ArrowLeft,
-  Play,
   Sparkles,
   Bot,
-  Wand2,
   BarChart3,
   DollarSign,
   TrendingUp,
-  Award,
   FileText,
   Video,
   CheckCircle,
@@ -58,7 +51,7 @@ interface Course {
   price?: number
   featured: boolean
   published: boolean
-  lessons?: any[]
+  lessons?: CourseModule[]
 }
 
 interface CourseModule {
@@ -68,6 +61,14 @@ interface CourseModule {
   content: string
   orderIndex: number
   lessonType: string
+}
+
+interface GeneratedCourseContent {
+  description: string
+  shortDescription: string
+  learningOutcomes: string
+  prerequisites: string
+  modules: CourseModule[]
 }
 
 export default function AdminCoursesPage() {
@@ -129,8 +130,8 @@ export default function AdminCoursesPage() {
     try {
       const response = await fetch("/api/learning/courses")
       if (response.ok) {
-        const data = await response.json()
-        setCourses(data.courses || [])
+        const courses = await response.json()
+        setCourses(courses.courses || [])
       }
     } catch (error) {
       console.error("Error fetching courses:", error)
@@ -181,7 +182,7 @@ export default function AdminCoursesPage() {
 
       if (!response.ok) throw new Error("Generation failed")
 
-      const data = await response.json()
+      const data: GeneratedCourseContent = await response.json()
 
       // Update course details with generated content
       setNewCourse(prev => ({
@@ -232,7 +233,6 @@ export default function AdminCoursesPage() {
 
       if (!response.ok) throw new Error("Save failed")
 
-      const data = await response.json()
       toast.success("Course saved successfully to database!")
 
       // Reset form and refresh courses

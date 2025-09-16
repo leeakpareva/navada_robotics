@@ -10,7 +10,6 @@ import {
   MessageSquare,
   Clock,
   Users,
-  Brain,
   BarChart3,
   Activity,
   Zap,
@@ -21,7 +20,6 @@ import {
   Server,
   LineChart,
   Image,
-  TrendingDown,
   AlertCircle,
 } from "lucide-react"
 import Link from "next/link"

@@ -61,7 +61,8 @@
       "Bash(start http://localhost:3004)",
       "Bash(npm i:*)",
       "Bash(npx vercel env:*)",
-      "Bash(timeout 60s npm run build)"
+      "Bash(timeout 60s npm run build)",
+      "Bash(TASKKILL /F /PID 258080)"
     ],
     "deny": [],
     "ask": []

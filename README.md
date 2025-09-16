@@ -1,3 +1,4 @@
+
 # NAVADA Robotics
 
 **Navigating Artistic Vision with Advanced Digital Assistance**
@@ -90,6 +91,30 @@ navada_robotics/
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
+- `npm run test` - Run tests with Vitest
+- `npm run test:run` - Run tests once with Vitest
+
+## Testing
+
+This project uses [Vitest](https://vitest.dev/) for unit and component testing. The tests are located in the `app` directory, alongside the components they test.
+
+To run the tests, use the following command:
+
+```bash
+npm run test
+```
+
+This will start the Vitest test runner in watch mode, which will re-run the tests whenever a file is changed.
+
+To run the tests once and generate a coverage report, use the following command:
+
+```bash
+npm run test:run
+```
+
+### Test Results
+
+The test results will be displayed in the console. If there are any failing tests, they will be highlighted in the output. The output will also show a summary of the test run, including the number of passed and failed tests.
 
 ## Pages
 
