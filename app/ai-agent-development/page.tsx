@@ -206,7 +206,7 @@ export default function AIAgentDevelopmentPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {aiAgentProjects.map((project, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:border-purple-400/50 bg-black/30 border-white/20 overflow-hidden backdrop-blur-sm hover:bg-black/40">
+              <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:border-purple-400/50 bg-black/30 border-white/20 overflow-hidden backdrop-blur-sm hover:bg-black/40 cursor-glow">
                 <div className="relative overflow-hidden">
                   <OptimizedImage
                     src={project.image || `/placeholder.svg?height=192&width=400&text=${encodeURIComponent(project.title)}`}
@@ -304,7 +304,7 @@ export default function AIAgentDevelopmentPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-black">
+      <section className="py-12 px-4 bg-black">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Deploy AI Agents?</h2>
           <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
@@ -328,14 +328,14 @@ export default function AIAgentDevelopmentPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black py-6 px-4">
+      <footer className="bg-black py-4 px-4">
         <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-3">
+          <div className="flex items-center justify-center space-x-2 mb-2">
             <span className="text-xl font-bold text-white">NAVADA</span>
           </div>
-          <p className="text-gray-300 mb-2 text-sm">© 2024 NAVADA. All rights reserved.</p>
-          <p className="text-gray-400 text-xs mb-2">Navigating Artistic Vision with Advanced Digital Assistance</p>
-          <p className="text-purple-400 text-xs">Designed & Developed by Lee Akpareva MBA, MA</p>
+          <p className="text-gray-300 mb-1 text-sm">© 2024 NAVADA. All rights reserved.</p>
+          <p className="text-gray-400 text-xs mb-1">Navigating Artistic Vision with Advanced Digital Assistance</p>
+          <p className="text-purple-400 text-xs mb-0">Designed & Developed by Lee Akpareva MBA, MA</p>
         </div>
       </footer>
     </div>

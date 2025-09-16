@@ -51,11 +51,11 @@ function NewsLoading() {
         <div className="max-w-4xl mx-auto">
           {/* Header Skeleton */}
           <div className="mb-12 text-center">
-            <div className="h-14 bg-gradient-to-r from-gray-800 to-gray-700 rounded-lg mb-6 animate-pulse" />
-            <div className="h-6 bg-gray-800 rounded w-3/4 mx-auto mb-6 animate-pulse" />
+            <div className="h-14 bg-gradient-to-r from-gray-800 to-gray-700 rounded-lg mb-6" />
+            <div className="h-6 bg-gray-800 rounded w-3/4 mx-auto mb-6" />
             <div className="flex justify-center gap-3 mb-8">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-8 w-24 bg-gray-800 rounded-full animate-pulse" />
+                <div key={i} className="h-8 w-24 bg-gray-800 rounded-full" />
               ))}
             </div>
           </div>
@@ -63,10 +63,10 @@ function NewsLoading() {
           {/* Controls Skeleton */}
           <div className="mb-8">
             <div className="flex gap-4 mb-6">
-              <div className="h-12 bg-gray-800/50 rounded-xl flex-1 animate-pulse" />
-              <div className="h-12 w-40 bg-gray-800/50 rounded-xl animate-pulse" />
+              <div className="h-12 bg-gray-800/50 rounded-xl flex-1" />
+              <div className="h-12 w-40 bg-gray-800/50 rounded-xl" />
             </div>
-            <div className="h-16 bg-gray-900/40 rounded-lg animate-pulse" />
+            <div className="h-16 bg-gray-900/40 rounded-lg" />
           </div>
 
           {/* Articles Skeleton */}
@@ -74,17 +74,17 @@ function NewsLoading() {
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="bg-gray-900/40 border border-gray-800/50 rounded-xl p-6">
                 <div className="flex gap-3 mb-4">
-                  <div className="h-6 w-24 bg-gray-800 rounded-full animate-pulse" />
-                  <div className="h-6 w-20 bg-gray-800 rounded animate-pulse" />
+                  <div className="h-6 w-24 bg-gray-800 rounded-full" />
+                  <div className="h-6 w-20 bg-gray-800 rounded" />
                 </div>
-                <div className="h-8 bg-gray-800 rounded mb-3 animate-pulse" />
+                <div className="h-8 bg-gray-800 rounded mb-3" />
                 <div className="space-y-2 mb-4">
-                  <div className="h-4 bg-gray-800 rounded animate-pulse" />
-                  <div className="h-4 bg-gray-800 rounded w-3/4 animate-pulse" />
+                  <div className="h-4 bg-gray-800 rounded" />
+                  <div className="h-4 bg-gray-800 rounded w-3/4" />
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t border-gray-800/50">
-                  <div className="h-4 w-24 bg-gray-800 rounded animate-pulse" />
-                  <div className="h-10 w-32 bg-gray-800 rounded-lg animate-pulse" />
+                  <div className="h-4 w-24 bg-gray-800 rounded" />
+                  <div className="h-10 w-32 bg-gray-800 rounded-lg" />
                 </div>
               </div>
             ))}

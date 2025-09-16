@@ -57,6 +57,7 @@ import {
   Home,
   ArrowLeft,
   LogOut,
+  Newspaper,
   History,
 } from "lucide-react"
 import Link from "next/link"
@@ -930,27 +931,23 @@ export default function AgentLeePage() {
       </BeamsBackground>
 
       {/* Bottom Navigation for Mobile */}
-      <nav className="bg-black/95 backdrop-blur md:hidden flex-shrink-0 safe-area-inset-bottom">
-        <div className="flex justify-around py-2 pb-safe">
+      <nav className="bg-black/95 backdrop-blur md:hidden flex-shrink-0 safe-area-inset-bottom border-t border-gray-800">
+        <div className="flex justify-around py-1 pb-safe">
           <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
             <Dna className="h-4 w-4 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
           </Link>
-          <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
-            <ShieldCheck className="h-4 w-4 text-gray-400 mb-1" />
-            <span className="text-gray-400">About</span>
+          <Link href="/news" className="flex flex-col items-center py-2 px-3 text-xs">
+            <Newspaper className="h-4 w-4 text-gray-400 mb-1" />
+            <span className="text-gray-400">News</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
             <BrainCircuit className="h-4 w-4 text-purple-400 mb-1" />
-            <span className="text-purple-400 text-xs">Agent Lee</span>
+            <span className="text-purple-400 text-xs">Agent</span>
           </Link>
-          <Link href="/dashboard" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Settings2 className="h-4 w-4 text-gray-400 mb-1" />
-            <span className="text-gray-400">Dashboard</span>
-          </Link>
-          <Link href="/contact" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Satellite className="h-4 w-4 text-gray-400 mb-1" />
-            <span className="text-gray-400">Contact</span>
+          <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
+            <ShieldCheck className="h-4 w-4 text-gray-400 mb-1" />
+            <span className="text-gray-400">About</span>
           </Link>
         </div>
       </nav>
