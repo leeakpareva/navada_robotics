@@ -1,0 +1,16 @@
+{
+  "env": {
+    "NEXTAUTH_URL": "https://navada-robotics.vercel.app",
+    "NEXTAUTH_SECRET": "@nextauth-secret"
+  },
+  "build": {
+    "env": {
+      "NEXTAUTH_URL": "https://navada-robotics.vercel.app"
+    }
+  },
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}

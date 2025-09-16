@@ -32,27 +32,6 @@ export default function ComputerVisionPage() {
       image: "/placeholder-vision-3.jpg",
       tags: ["Medical Imaging", "Healthcare", "Diagnostics"],
       status: "Research"
-    },
-    {
-      title: "Autonomous Vehicle Vision",
-      description: "Computer vision systems for autonomous vehicle navigation and safety.",
-      image: "/placeholder-vision-4.jpg",
-      tags: ["Autonomous Vehicles", "Navigation", "Safety"],
-      status: "Development"
-    },
-    {
-      title: "Quality Control Inspection",
-      description: "Automated visual inspection system for manufacturing quality assurance.",
-      image: "/placeholder-vision-5.jpg",
-      tags: ["Quality Control", "Manufacturing", "Automation"],
-      status: "Beta"
-    },
-    {
-      title: "Augmented Reality Vision",
-      description: "Computer vision pipeline for AR applications with real-time tracking and recognition.",
-      image: "/placeholder-vision-6.jpg",
-      tags: ["Augmented Reality", "Tracking", "Real-time"],
-      status: "Prototype"
     }
   ]
 

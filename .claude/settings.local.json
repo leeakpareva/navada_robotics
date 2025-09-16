@@ -58,7 +58,9 @@
       "Bash(start http://localhost:3002/learning)",
       "Bash(start http://localhost:3002)",
       "Bash(start http://localhost:3003)",
-      "Bash(start http://localhost:3004)"
+      "Bash(start http://localhost:3004)",
+      "Bash(npm i:*)",
+      "Bash(npx vercel env:*)"
     ],
     "deny": [],
     "ask": []

@@ -25,7 +25,7 @@ export default function NavadaRoboticsApp() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black overflow-x-hidden">
+    <div className="min-h-screen bg-black overflow-hidden">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60">
         <div className="container mx-auto px-4 py-4">
@@ -221,8 +221,8 @@ export default function NavadaRoboticsApp() {
       </section>
 
       {/* Innovation Showcase Section */}
-      <section className="py-16 px-4 bg-black">
-        <div className="container mx-auto">
+      <section className="py-16 px-4 bg-black overflow-x-hidden cursor-glow">
+        <div className="container mx-auto relative z-10">
           <div className="text-center mb-12">
             <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Innovation Showcase</h3>
             <p className="text-gray-100 max-w-2xl mx-auto">
@@ -231,7 +231,7 @@ export default function NavadaRoboticsApp() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
+            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
               <OptimizedImage
                 src="/AiCreative.png"
                 alt="Artistic vision meets robotic precision"
@@ -245,7 +245,7 @@ export default function NavadaRoboticsApp() {
               </div>
             </div>
 
-            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
+            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
               <OptimizedImage
                 src="/NextGenAuto.png"
                 alt="Advanced digital assistance for the future"
@@ -259,7 +259,7 @@ export default function NavadaRoboticsApp() {
               </div>
             </div>
 
-            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
+            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
               <OptimizedImage
                 src="/ManvsMachine.png"
                 alt="Empowering the next generation of innovators"
@@ -277,8 +277,8 @@ export default function NavadaRoboticsApp() {
       </section>
 
       {/* Active Projects Section */}
-      <section id="active-projects" className="py-16 px-4 bg-black">
-        <div className="container mx-auto">
+      <section id="active-projects" className="py-16 px-4 bg-black overflow-x-hidden cursor-glow">
+        <div className="container mx-auto relative z-10">
           <div className="text-center mb-12">
             <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Active Projects</h3>
             <p className="text-gray-100 max-w-2xl mx-auto">
@@ -287,8 +287,8 @@ export default function NavadaRoboticsApp() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <Link href="/robotics" className="group cursor-pointer transition-all duration-300 hover:scale-105 h-full">
-              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60">
+            <Link href="/robotics" className="group cursor-pointer transition-all duration-300 hover:scale-[1.02] h-full cursor-glow">
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60 relative z-10">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center backdrop-blur-sm">
                   <Folder className="w-8 h-8 text-purple-300 group-hover:text-purple-200 transition-colors duration-300" />
                 </div>
@@ -301,8 +301,8 @@ export default function NavadaRoboticsApp() {
               </div>
             </Link>
 
-            <Link href="/ai-agent-development" className="group cursor-pointer transition-all duration-300 hover:scale-105 h-full">
-              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60">
+            <Link href="/ai-agent-development" className="group cursor-pointer transition-all duration-300 hover:scale-[1.02] h-full cursor-glow">
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60 relative z-10">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center backdrop-blur-sm">
                   <Folder className="w-8 h-8 text-purple-300 group-hover:text-purple-200 transition-colors duration-300" />
                 </div>
@@ -315,8 +315,8 @@ export default function NavadaRoboticsApp() {
               </div>
             </Link>
 
-            <Link href="/computer-vision" className="group cursor-pointer transition-all duration-300 hover:scale-105 h-full">
-              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60">
+            <Link href="/computer-vision" className="group cursor-pointer transition-all duration-300 hover:scale-[1.02] h-full cursor-glow">
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60 relative z-10">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center backdrop-blur-sm">
                   <Folder className="w-8 h-8 text-purple-300 group-hover:text-purple-200 transition-colors duration-300" />
                 </div>

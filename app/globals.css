@@ -234,4 +234,57 @@
   .no-overscroll {
     overscroll-behavior: none;
   }
+
+  /* Prevent horizontal overflow from containers */
+  .container {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Ensure sections don't create horizontal scroll */
+  section {
+    overflow-x: hidden;
+  }
+
+  /* Prevent grid items from overflowing */
+  .grid {
+    max-width: 100%;
+  }
+
+  .grid > * {
+    max-width: 100%;
+  }
+
+  /* Hide scrollbar in Webkit browsers (Chrome, Safari, Edge) */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar in Firefox */
+  html {
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Purple cursor glow effect for interactive sections */
+  .cursor-glow {
+    position: relative;
+  }
+
+  .cursor-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(168, 85, 247, 0.4) 0%, transparent 50%);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+
+  .cursor-glow:hover::before {
+    opacity: 1;
+  }
 }

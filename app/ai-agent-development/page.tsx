@@ -32,27 +32,6 @@ export default function AIAgentDevelopmentPage() {
       image: "/placeholder-ai-3.jpg",
       tags: ["Multi-Modal", "Computer Vision", "Speech Recognition"],
       status: "Beta"
-    },
-    {
-      title: "Knowledge Base Assistant",
-      description: "AI agent that learns from documentation and provides intelligent knowledge retrieval.",
-      image: "/placeholder-ai-4.jpg",
-      tags: ["Knowledge Management", "Learning", "Retrieval"],
-      status: "Active"
-    },
-    {
-      title: "Autonomous Decision Agent",
-      description: "Advanced AI system capable of making complex decisions with minimal human intervention.",
-      image: "/placeholder-ai-5.jpg",
-      tags: ["Decision Making", "Autonomous", "Machine Learning"],
-      status: "Research"
-    },
-    {
-      title: "Collaborative AI Framework",
-      description: "Multi-agent system where AI agents collaborate to solve complex problems.",
-      image: "/placeholder-ai-6.jpg",
-      tags: ["Multi-Agent", "Collaboration", "Distributed AI"],
-      status: "Prototype"
     }
   ]
 

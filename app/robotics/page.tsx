@@ -32,27 +32,6 @@ export default function RoboticsPage() {
       image: "/placeholder-robot-3.jpg",
       tags: ["Educational", "Open Source", "Research"],
       status: "Active"
-    },
-    {
-      title: "Collaborative Robot Arm",
-      description: "Safe human-robot collaboration system for laboratory and workspace applications.",
-      image: "/placeholder-robot-4.jpg",
-      tags: ["Collaborative", "Safety", "Workspace"],
-      status: "Planning"
-    },
-    {
-      title: "Multi-Robot Coordination",
-      description: "Distributed robotic systems working together for complex task completion.",
-      image: "/placeholder-robot-5.jpg",
-      tags: ["Multi-Robot", "Coordination", "Swarm"],
-      status: "Research"
-    },
-    {
-      title: "Robotic Vision System",
-      description: "Advanced computer vision integration for robotic perception and interaction.",
-      image: "/placeholder-robot-6.jpg",
-      tags: ["Computer Vision", "Perception", "AI"],
-      status: "Testing"
     }
   ]
 
