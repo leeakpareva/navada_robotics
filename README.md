@@ -105,6 +105,12 @@ navada_robotics/
 - `POST /api/agent-lee` - Main AI assistant endpoint
 - `POST /api/agent-lee/tts` - Text-to-speech conversion
 
+## Knowledge Base & Vector Search
+
+- Knowledge entries saved through the RAG service automatically generate vector embeddings (via OpenAI by default) that are stored directly in the database for semantic retrieval.
+- The `search` API first performs cosine similarity lookups against the stored vectors and gracefully falls back to keyword search when embeddings are unavailable.
+- Unit tests in `tests/rag-service.test.ts` demonstrate how embeddings influence ranking. Run `npm run test` to verify the vector search pipeline end-to-end.
+
 ## Environment Variables
 
 | Variable | Description | Required |
@@ -112,6 +118,7 @@ navada_robotics/
 | `OPENAI_API_KEY` | OpenAI API key for AI features | Yes |
 | `OPENAI_ASSISTANT_ID` | OpenAI Assistant ID for Agent Lee | Yes |
 | `VOICE_PROMPT_ID` | Voice prompt configuration ID | Yes |
+| `OPENAI_EMBEDDING_MODEL` | Optional embedding model used for knowledge vectorization (defaults to `text-embedding-3-small`) | No |
 
 ## Deployment
 

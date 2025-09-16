@@ -1,3 +1,4 @@
+import OpenAI from 'openai'
 import { prisma } from './prisma'
 
 export interface KnowledgeEntry {
@@ -9,6 +10,8 @@ export interface KnowledgeEntry {
   category?: string
   tags?: string[]
 }
+
+type EmbeddingProvider = (input: string) => Promise<number[]>
 
 export interface RAGQuery {
   query: string
@@ -28,10 +31,144 @@ export interface RAGResult {
 
 export class RAGService {
   private static readonly DEFAULT_LIMIT = 5
+  private static readonly VECTOR_CANDIDATE_LIMIT = 200
+  private static embeddingProvider: EmbeddingProvider | null = null
+  private static openAIClient: OpenAI | null = null
+  private static embeddingWarningLogged = false
+
+  /**
+   * Allow tests or alternative providers to supply a custom embedding generator.
+   */
+  static configureEmbeddingProvider(provider: EmbeddingProvider | null) {
+    this.embeddingProvider = provider
+    if (provider) {
+      this.embeddingWarningLogged = false
+    }
+  }
+
+  private static buildEmbeddingInput(...parts: Array<string | undefined | null>): string {
+    return parts
+      .map(part => part?.trim())
+      .filter((part): part is string => Boolean(part && part.length > 0))
+      .join('\n\n')
+  }
+
+  private static async getEmbeddingProvider(): Promise<EmbeddingProvider | null> {
+    if (this.embeddingProvider) {
+      return this.embeddingProvider
+    }
+
+    const apiKey = process.env.OPENAI_API_KEY
+    if (!apiKey) {
+      return null
+    }
+
+    try {
+      if (!this.openAIClient) {
+        this.openAIClient = new OpenAI({ apiKey })
+      }
+
+      const model = process.env.OPENAI_EMBEDDING_MODEL || 'text-embedding-3-small'
+      this.embeddingProvider = async (input: string) => {
+        const response = await this.openAIClient!.embeddings.create({
+          model,
+          input
+        })
+
+        const vector = response.data?.[0]?.embedding
+        if (!vector || vector.length === 0) {
+          throw new Error('Embedding provider returned an empty vector')
+        }
+
+        return vector
+      }
+
+      return this.embeddingProvider
+    } catch (error) {
+      console.error('[RAG Service] Failed to initialize embedding provider:', error)
+      return null
+    }
+  }
+
+  private static async generateEmbedding(text: string): Promise<number[] | null> {
+    const input = text.trim()
+    if (!input) {
+      return null
+    }
+
+    try {
+      const provider = await this.getEmbeddingProvider()
+      if (!provider) {
+        if (!this.embeddingWarningLogged) {
+          console.warn('[RAG Service] Embedding provider not configured. Falling back to keyword search.')
+          this.embeddingWarningLogged = true
+        }
+        return null
+      }
+
+      return await provider(input)
+    } catch (error) {
+      console.error('[RAG Service] Error generating embedding:', error)
+      return null
+    }
+  }
+
+  private static normalizeEmbedding(embedding: unknown): number[] | null {
+    if (!embedding) {
+      return null
+    }
+
+    if (Array.isArray(embedding)) {
+      const values = embedding
+        .map(value => (typeof value === 'number' ? value : Number(value)))
+        .filter(value => Number.isFinite(value))
+
+      return values.length > 0 ? values : null
+    }
+
+    if (typeof embedding === 'string') {
+      try {
+        const parsed = JSON.parse(embedding)
+        return this.normalizeEmbedding(parsed)
+      } catch (error) {
+        console.warn('[RAG Service] Failed to parse stored embedding string:', error)
+      }
+    }
+
+    return null
+  }
+
+  private static cosineSimilarity(a: number[], b: number[]): number {
+    const length = Math.min(a.length, b.length)
+    if (length === 0) {
+      return 0
+    }
+
+    let dot = 0
+    let normA = 0
+    let normB = 0
+
+    for (let i = 0; i < length; i++) {
+      const valA = a[i]
+      const valB = b[i]
+      dot += valA * valB
+      normA += valA * valA
+      normB += valB * valB
+    }
+
+    if (normA === 0 || normB === 0) {
+      return 0
+    }
+
+    return dot / (Math.sqrt(normA) * Math.sqrt(normB))
+  }
 
   // Add knowledge to the knowledge base
   static async addKnowledge(data: KnowledgeEntry): Promise<string> {
     try {
+      const embeddingInput = this.buildEmbeddingInput(data.title, data.summary, data.content)
+      const embeddings = await this.generateEmbedding(embeddingInput)
+
       const knowledge = await prisma.knowledgeBase.create({
         data: {
           title: data.title,
@@ -40,8 +177,7 @@ export class RAGService {
           source: data.source,
           category: data.category || 'general',
           tags: data.tags ? JSON.stringify(data.tags) : undefined,
-          // TODO: Add embeddings when we integrate with vector search
-          embeddings: undefined
+          embeddings: embeddings ?? undefined
         }
       })
 
@@ -58,7 +194,47 @@ export class RAGService {
     try {
       const limit = query.limit || this.DEFAULT_LIMIT
 
-      // For now, use simple text search. In production, replace with vector similarity
+      const queryEmbedding = await this.generateEmbedding(query.query)
+
+      if (queryEmbedding) {
+        const vectorCandidates = await prisma.knowledgeBase.findMany({
+          where: {
+            AND: [
+              { isActive: true },
+              query.category ? { category: query.category } : {}
+            ]
+          },
+          take: this.VECTOR_CANDIDATE_LIMIT
+        })
+
+        const vectorResults = vectorCandidates
+          .map(candidate => {
+            const embedding = this.normalizeEmbedding(candidate.embeddings)
+            if (!embedding) {
+              return null
+            }
+
+            const similarity = this.cosineSimilarity(queryEmbedding, embedding)
+
+            return {
+              id: candidate.id,
+              title: candidate.title,
+              content: candidate.content,
+              summary: candidate.summary || undefined,
+              source: candidate.source || undefined,
+              category: candidate.category,
+              relevanceScore: similarity
+            }
+          })
+          .filter((result): result is RAGResult => result !== null)
+          .sort((a, b) => b.relevanceScore - a.relevanceScore)
+          .slice(0, limit)
+
+        if (vectorResults.length > 0) {
+          return vectorResults
+        }
+      }
+
       const results = await prisma.knowledgeBase.findMany({
         where: {
           AND: [
@@ -66,9 +242,9 @@ export class RAGService {
             query.category ? { category: query.category } : {},
             {
               OR: [
-                { title: { contains: query.query } },
-                { content: { contains: query.query } },
-                { summary: { contains: query.query } }
+                { title: { contains: query.query, mode: 'insensitive' } },
+                { content: { contains: query.query, mode: 'insensitive' } },
+                { summary: { contains: query.query, mode: 'insensitive' } }
               ]
             }
           ]
@@ -77,25 +253,24 @@ export class RAGService {
         orderBy: { updatedAt: 'desc' }
       })
 
-      // Calculate simple relevance score based on text matches
-      const scoredResults = results.map(result => {
-        const titleMatch = result.title.toLowerCase().includes(query.query.toLowerCase()) ? 3 : 0
-        const summaryMatch = result.summary?.toLowerCase().includes(query.query.toLowerCase()) ? 2 : 0
-        const contentMatch = result.content.toLowerCase().includes(query.query.toLowerCase()) ? 1 : 0
+      const normalizedQuery = query.query.toLowerCase()
+      return results
+        .map(result => {
+          const titleMatch = result.title.toLowerCase().includes(normalizedQuery) ? 3 : 0
+          const summaryMatch = result.summary?.toLowerCase().includes(normalizedQuery) ? 2 : 0
+          const contentMatch = result.content.toLowerCase().includes(normalizedQuery) ? 1 : 0
 
-        return {
-          id: result.id,
-          title: result.title,
-          content: result.content,
-          summary: result.summary || undefined,
-          source: result.source || undefined,
-          category: result.category,
-          relevanceScore: titleMatch + summaryMatch + contentMatch
-        }
-      })
-
-      // Sort by relevance score
-      return scoredResults.sort((a, b) => b.relevanceScore - a.relevanceScore)
+          return {
+            id: result.id,
+            title: result.title,
+            content: result.content,
+            summary: result.summary || undefined,
+            source: result.source || undefined,
+            category: result.category,
+            relevanceScore: titleMatch + summaryMatch + contentMatch
+          }
+        })
+        .sort((a, b) => b.relevanceScore - a.relevanceScore)
     } catch (error) {
       console.error('[RAG Service] Error searching knowledge:', error)
       throw error
@@ -132,6 +307,18 @@ export class RAGService {
   // Update knowledge
   static async updateKnowledge(id: string, data: Partial<KnowledgeEntry>): Promise<void> {
     try {
+      const existing = await prisma.knowledgeBase.findUnique({ where: { id } })
+      if (!existing) {
+        throw new Error(`Knowledge entry not found: ${id}`)
+      }
+
+      const embeddingInput = this.buildEmbeddingInput(
+        data.title ?? existing.title,
+        data.summary ?? existing.summary ?? undefined,
+        data.content ?? existing.content
+      )
+      const embeddings = await this.generateEmbedding(embeddingInput)
+
       await prisma.knowledgeBase.update({
         where: { id },
         data: {
@@ -141,6 +328,7 @@ export class RAGService {
           source: data.source,
           category: data.category,
           tags: data.tags ? JSON.stringify(data.tags) : undefined,
+          embeddings: embeddings ?? undefined,
           updatedAt: new Date()
         }
       })
