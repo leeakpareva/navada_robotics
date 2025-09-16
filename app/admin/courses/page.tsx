@@ -337,7 +337,7 @@ export default function AdminCoursesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black overflow-x-hidden">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-black/95 backdrop-blur border-b border-gray-800">
         <div className="container mx-auto px-4 py-4">
@@ -360,61 +360,61 @@ export default function AdminCoursesPage() {
         </div>
       </header>
 
-      <BeamsBackground intensity="subtle" className="py-8 px-4">
+      <BeamsBackground intensity="subtle" className="py-8 px-4 pb-0">
         <div className="container mx-auto">
           {/* Stats Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
             <Card className="bg-gray-900/95 border-gray-700/50">
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-400 text-sm">Total Courses</p>
-                    <p className="text-2xl font-bold text-white">{courses.length}</p>
+                    <p className="text-gray-400 text-xs md:text-sm">Total Courses</p>
+                    <p className="text-xl md:text-2xl font-bold text-white">{courses.length}</p>
                   </div>
-                  <BookOpen className="h-8 w-8 text-purple-400" />
+                  <BookOpen className="h-6 w-6 md:h-8 md:w-8 text-purple-400" />
                 </div>
               </CardContent>
             </Card>
 
             <Card className="bg-gray-900/95 border-gray-700/50">
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-400 text-sm">Total Students</p>
-                    <p className="text-2xl font-bold text-white">{analytics.totalStudents}</p>
+                    <p className="text-gray-400 text-xs md:text-sm">Total Students</p>
+                    <p className="text-xl md:text-2xl font-bold text-white">{analytics.totalStudents}</p>
                   </div>
-                  <Users className="h-8 w-8 text-cyan-400" />
+                  <Users className="h-6 w-6 md:h-8 md:w-8 text-cyan-400" />
                 </div>
               </CardContent>
             </Card>
 
             <Card className="bg-gray-900/95 border-gray-700/50">
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-400 text-sm">Revenue</p>
-                    <p className="text-2xl font-bold text-white">${analytics.totalRevenue}</p>
+                    <p className="text-gray-400 text-xs md:text-sm">Revenue</p>
+                    <p className="text-xl md:text-2xl font-bold text-white">${analytics.totalRevenue}</p>
                   </div>
-                  <DollarSign className="h-8 w-8 text-green-400" />
+                  <DollarSign className="h-6 w-6 md:h-8 md:w-8 text-green-400" />
                 </div>
               </CardContent>
             </Card>
 
             <Card className="bg-gray-900/95 border-gray-700/50">
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-400 text-sm">Completion Rate</p>
-                    <p className="text-2xl font-bold text-white">{analytics.completionRate}%</p>
+                    <p className="text-gray-400 text-xs md:text-sm">Completion Rate</p>
+                    <p className="text-xl md:text-2xl font-bold text-white">{analytics.completionRate}%</p>
                   </div>
-                  <TrendingUp className="h-8 w-8 text-yellow-400" />
+                  <TrendingUp className="h-6 w-6 md:h-8 md:w-8 text-yellow-400" />
                 </div>
               </CardContent>
             </Card>
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 bg-gray-900/95">
+            <TabsList className="grid w-full grid-cols-3 bg-gray-900/95 h-auto p-1">
               <TabsTrigger value="courses">All Courses</TabsTrigger>
               <TabsTrigger value="create">Create with AI</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -441,9 +441,9 @@ export default function AdminCoursesPage() {
                     <div className="space-y-4">
                       {courses.map((course) => (
                         <div key={course.id} className="border border-gray-700 rounded-lg p-4 hover:bg-gray-800/50 transition-colors">
-                          <div className="flex items-start justify-between">
+                          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                             <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
                                 <h3 className="font-semibold text-lg text-white">{course.title}</h3>
                                 {course.featured && (
                                   <Badge className="bg-purple-600 text-white">Featured</Badge>
@@ -465,7 +465,7 @@ export default function AdminCoursesPage() {
                                 <span>Lessons: {course.lessons?.length || 0}</span>
                               </div>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-2">
                               <Button
                                 variant="outline"
                                 size="sm"
@@ -511,7 +511,7 @@ export default function AdminCoursesPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="title" className="text-white">Course Title *</Label>
                       <Input

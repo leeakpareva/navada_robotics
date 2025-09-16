@@ -69,7 +69,7 @@ export default function AIAgentDevelopmentPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-black relative">
+    <div className="min-h-screen bg-black relative overflow-x-hidden">
       <BeamsBackground />
       
       {/* Header */}
@@ -328,14 +328,14 @@ export default function AIAgentDevelopmentPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black py-8 px-4">
+      <footer className="bg-black py-6 px-4">
         <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
+          <div className="flex items-center justify-center space-x-2 mb-3">
             <span className="text-xl font-bold text-white">NAVADA</span>
           </div>
-          <p className="text-gray-300 mb-2">© 2024 NAVADA. All rights reserved.</p>
-          <p className="text-gray-400 text-sm mb-2">Navigating Artistic Vision with Advanced Digital Assistance</p>
-          <p className="text-purple-400 text-sm">Designed & Developed by Lee Akpareva MBA, MA</p>
+          <p className="text-gray-300 mb-2 text-sm">© 2024 NAVADA. All rights reserved.</p>
+          <p className="text-gray-400 text-xs mb-2">Navigating Artistic Vision with Advanced Digital Assistance</p>
+          <p className="text-purple-400 text-xs">Designed & Developed by Lee Akpareva MBA, MA</p>
         </div>
       </footer>
     </div>
