@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { prisma } from "@/lib/prisma"
 import { v4 as uuidv4 } from "uuid"
 
@@ -9,7 +10,7 @@ export const dynamic = 'force-dynamic'
 // POST - Enroll in a course
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required to enroll in courses" },
@@ -170,7 +171,7 @@ export async function POST(request: NextRequest) {
 // GET - Get user's enrolled courses
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required" },

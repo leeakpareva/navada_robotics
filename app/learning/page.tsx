@@ -416,7 +416,7 @@ export default function LearningPage() {
                         </Button>
                       </Link>
                     </div>
-                    <CardTitle className="text-white group-hover:text-purple-200 transition-colors text-lg font-bold">
+                    <CardTitle className="text-white group-hover:text-purple-200 transition-colors text-lg font-bold px-2">
                       {course.title}
                     </CardTitle>
                     <CardDescription className="text-gray-100 text-sm leading-relaxed mb-4">
