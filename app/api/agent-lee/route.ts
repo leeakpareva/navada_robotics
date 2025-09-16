@@ -561,9 +561,28 @@ export async function POST(request: NextRequest) {
       console.log("[v0] Authenticated user:", userId)
     }
 
-    const { message, threadId, lastImage, apiProvider = 'openai' } = await request.json()
+    const requestBody = await request.json()
+    const { message, threadId, lastImage } = requestBody
+    const requestedProvider =
+      typeof requestBody.apiProvider === 'string' && requestBody.apiProvider.trim().length > 0
+        ? requestBody.apiProvider.trim().toLowerCase()
+        : 'openai'
+
+    if (requestedProvider !== 'openai' && requestedProvider !== 'mistral') {
+      console.log("[v0] Unsupported API provider requested:", requestBody.apiProvider)
+      return NextResponse.json({
+        error: "Unsupported API provider",
+        details: {
+          requested: requestBody.apiProvider ?? 'unknown',
+          supported: ['openai', 'mistral']
+        }
+      }, { status: 400 })
+    }
+
+    const apiProvider = requestedProvider as 'openai' | 'mistral'
     console.log("[v0] Received message:", message, "threadId:", threadId)
     console.log("[v0] Has last image for context:", !!lastImage)
+    console.log("[v0] API provider in use:", apiProvider)
 
     if (!message || typeof message !== "string") {
       console.log("[v0] Invalid message format")

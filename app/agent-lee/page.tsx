@@ -44,7 +44,7 @@ interface Message {
 export default function AgentLeePage() {
   const { data: session, status } = useSession()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [apiProvider, setApiProvider] = useState<'openai' | 'deepseek'>('openai')
+  const [apiProvider, setApiProvider] = useState<'openai' | 'mistral'>('openai')
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -694,11 +694,11 @@ export default function AgentLeePage() {
                 </Button>
                 <Button
                   size="sm"
-                  variant={apiProvider === 'deepseek' ? 'default' : 'outline'}
-                  onClick={() => setApiProvider('deepseek')}
-                  className={apiProvider === 'deepseek' ? 'bg-blue-600 hover:bg-blue-700' : 'border-gray-600 text-gray-300'}
+                  variant={apiProvider === 'mistral' ? 'default' : 'outline'}
+                  onClick={() => setApiProvider('mistral')}
+                  className={apiProvider === 'mistral' ? 'bg-blue-600 hover:bg-blue-700' : 'border-gray-600 text-gray-300'}
                 >
-                  DeepSeek
+                  Mistral
                 </Button>
               </div>
             </div>
