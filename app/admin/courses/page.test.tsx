@@ -1,6 +1,6 @@
 // Import necessary functions and components
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import AdminCoursesPage from './page'
 
 // Mock the useSession hook
@@ -14,9 +14,11 @@ vi.mock('next-auth/react', () => ({
 // Group tests for the AdminCoursesPage component
 describe('AdminCoursesPage', () => {
   // Test case: Check if the main heading is rendered for an admin user
-  it('should render the main heading for admin', () => {
+  it('should render the main heading for admin', async () => {
     // Render the component with an admin session
-    render(<AdminCoursesPage />)
+    await act(async () => {
+      render(<AdminCoursesPage />)
+    })
     // Find the heading element
     const heading = screen.getByRole('heading', { name: /Course Administration/i, level: 1 })
     // Assert that the heading is in the document
