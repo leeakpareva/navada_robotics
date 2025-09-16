@@ -1,7 +1,6 @@
 {
   "env": {
-    "NEXTAUTH_URL": "https://navada-robotics.vercel.app",
-    "NEXTAUTH_SECRET": "@nextauth-secret"
+    "NEXTAUTH_URL": "https://navada-robotics.vercel.app"
   },
   "build": {
     "env": {
