@@ -47,7 +47,11 @@ interface AnalyticsData {
     peakHour: string
     avgSessionLength: number
   }
-  satisfaction: { excellent: number; good: number; fair: number; poor: number }
+  satisfaction: {
+    percentages: { excellent: number; good: number; fair: number; poor: number }
+    rawCounts: { excellent: number; good: number; fair: number; poor: number }
+    totalFeedback: number
+  }
   features: {
     codeGeneration: {
       total: number
@@ -114,14 +118,34 @@ export default function AnalyticsPage() {
 
   // Transform satisfaction data for display
   const satisfactionData = analyticsData?.satisfaction ? [
-    { label: "Excellent", value: analyticsData.satisfaction.excellent, color: "#8b5cf6" },
-    { label: "Good", value: analyticsData.satisfaction.good, color: "#a855f7" },
-    { label: "Fair", value: analyticsData.satisfaction.fair, color: "#c084fc" },
-    { label: "Poor", value: analyticsData.satisfaction.poor, color: "#ddd6fe" },
+    { 
+      label: "Excellent", 
+      percentage: analyticsData.satisfaction.percentages.excellent, 
+      rawCount: analyticsData.satisfaction.rawCounts.excellent,
+      color: "#8b5cf6" 
+    },
+    { 
+      label: "Good", 
+      percentage: analyticsData.satisfaction.percentages.good, 
+      rawCount: analyticsData.satisfaction.rawCounts.good,
+      color: "#a855f7" 
+    },
+    { 
+      label: "Fair", 
+      percentage: analyticsData.satisfaction.percentages.fair, 
+      rawCount: analyticsData.satisfaction.rawCounts.fair,
+      color: "#c084fc" 
+    },
+    { 
+      label: "Poor", 
+      percentage: analyticsData.satisfaction.percentages.poor, 
+      rawCount: analyticsData.satisfaction.rawCounts.poor,
+      color: "#ddd6fe" 
+    },
   ] : []
 
   const satisfactionPercentage = analyticsData?.satisfaction
-    ? analyticsData.satisfaction.excellent + analyticsData.satisfaction.good
+    ? analyticsData.satisfaction.percentages.excellent + analyticsData.satisfaction.percentages.good
     : 0
 
   // MCP Server Controls
@@ -446,14 +470,20 @@ export default function AnalyticsPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-2">
+                    <div className="text-xs text-gray-400 mb-2">
+                      Total Feedback: {analyticsData?.satisfaction?.totalFeedback || 0}
+                    </div>
                     {satisfactionData.map((item, i) => (
                       <div key={i} className="flex items-center justify-between text-xs">
                         <div className="flex items-center space-x-2">
                           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
                           <span className="text-gray-300">{item.label}</span>
                         </div>
-                        <span className="text-white">{item.value}%</span>
+                        <div className="text-right">
+                          <div className="text-white">{item.percentage}%</div>
+                          <div className="text-gray-400 text-[10px]">({item.rawCount} votes)</div>
+                        </div>
                       </div>
                     ))}
                   </div>
