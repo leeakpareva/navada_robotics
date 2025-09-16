@@ -15,42 +15,42 @@ export default function ComputerVisionPage() {
     {
       title: "Real-time Object Detection",
       description: "Advanced object detection and classification system for real-time applications.",
-      image: "/placeholder-vision-1.jpg",
+      image: "/ManvsMachine.png",
       tags: ["Object Detection", "Real-time", "Deep Learning"],
       status: "Production"
     },
     {
       title: "Facial Recognition System",
       description: "Secure and accurate facial recognition technology for access control and identification.",
-      image: "/placeholder-vision-2.jpg",
+      image: "/Profileimage.png",
       tags: ["Facial Recognition", "Security", "Biometrics"],
       status: "Active"
     },
     {
       title: "Medical Image Analysis",
       description: "AI-powered analysis of medical images for diagnostic assistance and research.",
-      image: "/placeholder-vision-3.jpg",
+      image: "/ResearchConsultation.png",
       tags: ["Medical Imaging", "Healthcare", "Diagnostics"],
       status: "Research"
     },
     {
       title: "Autonomous Vehicle Vision",
       description: "Computer vision systems for autonomous vehicle navigation and safety.",
-      image: "/placeholder-vision-4.jpg",
+      image: "/NextGenAuto.png",
       tags: ["Autonomous Vehicles", "Navigation", "Safety"],
       status: "Development"
     },
     {
       title: "Quality Control Inspection",
       description: "Automated visual inspection system for manufacturing quality assurance.",
-      image: "/placeholder-vision-5.jpg",
+      image: "/IoTIntegration.png",
       tags: ["Quality Control", "Manufacturing", "Automation"],
       status: "Beta"
     },
     {
       title: "Augmented Reality Vision",
       description: "Computer vision pipeline for AR applications with real-time tracking and recognition.",
-      image: "/placeholder-vision-6.jpg",
+      image: "/InnovavtionShowCase.png",
       tags: ["Augmented Reality", "Tracking", "Real-time"],
       status: "Prototype"
     }

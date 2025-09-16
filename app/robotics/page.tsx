@@ -15,42 +15,42 @@ export default function RoboticsPage() {
     {
       title: "Autonomous Navigation Robot",
       description: "Advanced robotic system with AI-powered navigation and obstacle avoidance capabilities.",
-      image: "/placeholder-robot-1.jpg",
+      image: "/NextGenAuto.png",
       tags: ["AI Navigation", "Computer Vision", "Autonomous"],
       status: "In Development"
     },
     {
       title: "Industrial Automation System",
       description: "Precision robotics for manufacturing and assembly line automation.",
-      image: "/placeholder-robot-2.jpg",
+      image: "/PrototypeDev.png",
       tags: ["Manufacturing", "Precision", "Industrial"],
       status: "Prototype"
     },
     {
       title: "Raspberry Pi Robot Platform",
       description: "Educational and research platform for robotics development using Raspberry Pi.",
-      image: "/placeholder-robot-3.jpg",
+      image: "/RaspPiRobot.png",
       tags: ["Educational", "Open Source", "Research"],
       status: "Active"
     },
     {
       title: "Collaborative Robot Arm",
       description: "Safe human-robot collaboration system for laboratory and workspace applications.",
-      image: "/placeholder-robot-4.jpg",
+      image: "/Robcop.png",
       tags: ["Collaborative", "Safety", "Workspace"],
       status: "Planning"
     },
     {
       title: "Multi-Robot Coordination",
       description: "Distributed robotic systems working together for complex task completion.",
-      image: "/placeholder-robot-5.jpg",
+      image: "/RaspberryPiAutomation.png",
       tags: ["Multi-Robot", "Coordination", "Swarm"],
       status: "Research"
     },
     {
       title: "Robotic Vision System",
       description: "Advanced computer vision integration for robotic perception and interaction.",
-      image: "/placeholder-robot-6.jpg",
+      image: "/IoTIntegration.png",
       tags: ["Computer Vision", "Perception", "AI"],
       status: "Testing"
     }

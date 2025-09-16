@@ -111,17 +111,56 @@ export default function AnalyticsPage() {
     fetchAnalytics()
   }
 
+  const satisfactionCounts = analyticsData?.satisfaction || null
+  const totalSatisfaction = satisfactionCounts
+    ? satisfactionCounts.excellent +
+      satisfactionCounts.good +
+      satisfactionCounts.fair +
+      satisfactionCounts.poor
+    : 0
 
   // Transform satisfaction data for display
-  const satisfactionData = analyticsData?.satisfaction ? [
-    { label: "Excellent", value: analyticsData.satisfaction.excellent, color: "#8b5cf6" },
-    { label: "Good", value: analyticsData.satisfaction.good, color: "#a855f7" },
-    { label: "Fair", value: analyticsData.satisfaction.fair, color: "#c084fc" },
-    { label: "Poor", value: analyticsData.satisfaction.poor, color: "#ddd6fe" },
-  ] : []
+  const satisfactionData = satisfactionCounts
+    ? [
+        {
+          label: "Excellent",
+          value: totalSatisfaction
+            ? Math.round((satisfactionCounts.excellent / totalSatisfaction) * 100)
+            : 0,
+          count: satisfactionCounts.excellent,
+          color: "#8b5cf6",
+        },
+        {
+          label: "Good",
+          value: totalSatisfaction
+            ? Math.round((satisfactionCounts.good / totalSatisfaction) * 100)
+            : 0,
+          count: satisfactionCounts.good,
+          color: "#a855f7",
+        },
+        {
+          label: "Fair",
+          value: totalSatisfaction
+            ? Math.round((satisfactionCounts.fair / totalSatisfaction) * 100)
+            : 0,
+          count: satisfactionCounts.fair,
+          color: "#c084fc",
+        },
+        {
+          label: "Poor",
+          value: totalSatisfaction
+            ? Math.round((satisfactionCounts.poor / totalSatisfaction) * 100)
+            : 0,
+          count: satisfactionCounts.poor,
+          color: "#ddd6fe",
+        },
+      ]
+    : []
 
-  const satisfactionPercentage = analyticsData?.satisfaction
-    ? analyticsData.satisfaction.excellent + analyticsData.satisfaction.good
+  const satisfactionPercentage = totalSatisfaction
+    ? Math.round(
+        (((satisfactionCounts?.excellent || 0) + (satisfactionCounts?.good || 0)) / totalSatisfaction) * 100,
+      )
     : 0
 
   // MCP Server Controls
@@ -453,7 +492,10 @@ export default function AnalyticsPage() {
                           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
                           <span className="text-gray-300">{item.label}</span>
                         </div>
-                        <span className="text-white">{item.value}%</span>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-white">{item.value}%</span>
+                          <span className="text-gray-400 text-[11px]">({item.count})</span>
+                        </div>
                       </div>
                     ))}
                   </div>

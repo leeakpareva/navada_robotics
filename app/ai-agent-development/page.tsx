@@ -15,42 +15,42 @@ export default function AIAgentDevelopmentPage() {
     {
       title: "Conversational AI Assistant",
       description: "Advanced natural language processing agent for customer service and support.",
-      image: "/placeholder-ai-1.jpg",
+      image: "/AiCreative.png",
       tags: ["NLP", "Conversational AI", "Customer Support"],
       status: "Production"
     },
     {
       title: "Intelligent Task Automation",
       description: "AI agents that automate complex business processes and workflows.",
-      image: "/placeholder-ai-2.jpg",
+      image: "/ResearchConsultation.png",
       tags: ["Automation", "Workflow", "Business Intelligence"],
       status: "In Development"
     },
     {
       title: "Multi-Modal AI Agent",
       description: "Agent capable of processing text, images, and voice inputs for comprehensive assistance.",
-      image: "/placeholder-ai-3.jpg",
+      image: "/AiResearchPlatform.png",
       tags: ["Multi-Modal", "Computer Vision", "Speech Recognition"],
       status: "Beta"
     },
     {
       title: "Knowledge Base Assistant",
       description: "AI agent that learns from documentation and provides intelligent knowledge retrieval.",
-      image: "/placeholder-ai-4.jpg",
+      image: "/EducationnalWorkshops.png",
       tags: ["Knowledge Management", "Learning", "Retrieval"],
       status: "Active"
     },
     {
       title: "Autonomous Decision Agent",
       description: "Advanced AI system capable of making complex decisions with minimal human intervention.",
-      image: "/placeholder-ai-5.jpg",
+      image: "/PrototypeDev.png",
       tags: ["Decision Making", "Autonomous", "Machine Learning"],
       status: "Research"
     },
     {
       title: "Collaborative AI Framework",
       description: "Multi-agent system where AI agents collaborate to solve complex problems.",
-      image: "/placeholder-ai-6.jpg",
+      image: "/InnovavtionShowCase.png",
       tags: ["Multi-Agent", "Collaboration", "Distributed AI"],
       status: "Prototype"
     }
