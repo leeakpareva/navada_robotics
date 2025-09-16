@@ -254,7 +254,7 @@ model KnowledgeBase {
   source          String?     // Source URL or file path
   category        String      @default("general")
   tags            String?     // JSON array of tags
-  embeddings      String?     // JSON vector embeddings
+  embeddings      Json?       // Stored vector embeddings for semantic search
   isActive        Boolean     @default(true)
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
