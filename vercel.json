@@ -7,9 +7,12 @@
       "NEXTAUTH_URL": "https://navada-robotics.vercel.app"
     }
   },
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 30
     }
-  }
+  },
+  "regions": ["iad1"]
 }

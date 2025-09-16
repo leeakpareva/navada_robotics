@@ -9,10 +9,7 @@ const nextConfig = {
   },
   experimental: {
     esmExternals: false,
-    optimizeCss: true,
-    serverComponentsExternalPackages: ['sharp'],
   },
-  poweredByHeader: false,
   output: 'standalone',
   images: {
     remotePatterns: [
