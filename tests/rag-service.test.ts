@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { RAGService } from '../lib/rag-service'
 
 interface KnowledgeRecord {
   id: string
@@ -156,21 +157,22 @@ vi.mock('../lib/prisma', () => ({
   }
 }))
 
-import { RAGService } from '../lib/rag-service'
+const resetTestEnvironment = () => {
+  knowledgeBaseStore.length = 0
+  createMock.mockClear()
+  findManyMock.mockClear()
+  updateMock.mockClear()
+  findFirstMock.mockClear()
+  findUniqueMock.mockClear()
+  countMock.mockClear()
+  groupByMock.mockClear()
+  chatMessageFindManyMock.mockClear()
+  chatMessageFindManyMock.mockImplementation(async () => [])
+  RAGService.configureEmbeddingProvider(null)
+}
 
 describe('RAGService vector search', () => {
-  beforeEach(() => {
-    knowledgeBaseStore.length = 0
-    createMock.mockClear()
-    findManyMock.mockClear()
-    updateMock.mockClear()
-    findFirstMock.mockClear()
-    findUniqueMock.mockClear()
-    countMock.mockClear()
-    groupByMock.mockClear()
-    chatMessageFindManyMock.mockClear()
-    RAGService.configureEmbeddingProvider(null)
-  })
+  beforeEach(resetTestEnvironment)
 
   afterEach(() => {
     RAGService.configureEmbeddingProvider(null)
@@ -234,5 +236,41 @@ describe('RAGService vector search', () => {
     expect(results[0].title).toContain('Robot')
     expect(results[0].relevanceScore).toBeGreaterThan(results[1].relevanceScore)
     expect(findManyMock).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('RAGService contextual responses', () => {
+  beforeEach(resetTestEnvironment)
+
+  afterEach(() => {
+    RAGService.configureEmbeddingProvider(null)
+  })
+
+  it('combines recent conversation and knowledge snippets into contextual output', async () => {
+    await RAGService.addKnowledge({
+      title: 'Sensor Fusion Basics',
+      summary: 'Combine sensor data for accuracy.',
+      content: 'Sensor fusion blends multiple sensor inputs to reduce noise and improve robustness.',
+      category: 'robotics'
+    })
+
+    chatMessageFindManyMock.mockResolvedValueOnce([
+      { role: 'user', content: 'How do I fuse sensor data?', messageIndex: 10 },
+      { role: 'assistant', content: 'Consider complementary filters.', messageIndex: 11 }
+    ])
+
+    const context = await RAGService.getRelevantContext('sensor fusion', 'thread_123')
+
+    expect(findManyMock).toHaveBeenCalled()
+    expect(chatMessageFindManyMock).toHaveBeenCalledWith(expect.objectContaining({
+      where: { threadId: 'thread_123' },
+      orderBy: { messageIndex: 'desc' },
+      take: 3
+    }))
+    expect(context).toContain('Recent conversation:')
+    expect(context).toContain('User: How do I fuse sensor data?')
+    expect(context).toContain('Relevant knowledge:')
+    expect(context).toContain('Sensor Fusion Basics')
+    expect(context).toContain('Combine sensor data for accuracy')
   })
 })
