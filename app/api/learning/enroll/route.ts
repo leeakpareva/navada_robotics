@@ -37,9 +37,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Convert courseId to string since the schema expects String IDs
+    const courseIdString = String(courseId)
+
     // Check if course exists and is published
     const course = await prisma.courses.findUnique({
-      where: { id: courseId },
+      where: { id: courseIdString },
       include: {
         lessons: true
       }
@@ -75,7 +78,7 @@ export async function POST(request: NextRequest) {
       where: {
         userId_courseId: {
           userId: actualUserId,
-          courseId: courseId
+          courseId: courseIdString
         }
       }
     })
@@ -110,7 +113,7 @@ export async function POST(request: NextRequest) {
         data: {
           id: uuidv4(),
           userId: actualUserId,
-          courseId: courseId,
+          courseId: courseIdString,
           totalLessons: course.lessons.length,
           enrolledAt: new Date(),
           lastAccessedAt: new Date()
@@ -137,7 +140,7 @@ export async function POST(request: NextRequest) {
         data: {
           id: uuidv4(),
           userId: actualUserId,
-          courseId: courseId,
+          courseId: courseIdString,
           eventType: "course_enrollment",
           eventData: JSON.stringify({
             courseTitle: course.title,
@@ -151,7 +154,7 @@ export async function POST(request: NextRequest) {
       return userProgress
     })
 
-    console.log(`[Enrollment] User ${actualUserId} enrolled in course ${courseId}`)
+    console.log(`[Enrollment] User ${actualUserId} enrolled in course ${courseIdString}`)
 
     return NextResponse.json({
       success: true,
