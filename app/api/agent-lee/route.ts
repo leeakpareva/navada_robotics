@@ -1044,19 +1044,29 @@ export async function POST(request: NextRequest) {
     // Check if we need to use MCP services
     let mcpResults = ''
     mcpResults = await handleMCPRequest(message, sessionId, currentThreadId)
+    const ragContext = await RAGService.getRelevantContext(message, currentThreadId)
 
     try {
-      // Construct the enhanced message with MCP results
+      // Construct the enhanced message with MCP results and retrieved context
       let enhancedMessage = message
-      if (mcpResults) {
-        enhancedMessage = `${message}\n\n--- Additional Information ---\n${mcpResults}`
+      const trimmedMcpResults = mcpResults.trim()
+      const trimmedRagContext = ragContext.trim()
+      const hasMcpResults = trimmedMcpResults.length > 0
+      const hasRagContext = trimmedRagContext.length > 0
+
+      if (hasMcpResults) {
+        enhancedMessage = `${enhancedMessage}\n\n--- Additional Information ---\n${trimmedMcpResults}`
+      }
+
+      if (hasRagContext) {
+        enhancedMessage = `${enhancedMessage}\n\n--- Curated Context ---\n${trimmedRagContext}`
       }
 
       await openai.beta.threads.messages.create(currentThreadId, {
         role: "user",
         content: enhancedMessage,
       })
-      console.log("[v0] Message added to thread", mcpResults ? "(with MCP results)" : "")
+      console.log("[v0] Message added to thread", hasMcpResults || hasRagContext ? "(with supplemental context)" : "")
 
       // Track the user message
       if (sessionId && currentThreadId) {
@@ -1067,7 +1077,7 @@ export async function POST(request: NextRequest) {
             messageIndex: 0,
             role: 'user',
             content: message,
-            metadata: { hasMCPResults: !!mcpResults }
+            metadata: { hasMCPResults: hasMcpResults, hasRAGContext: hasRagContext }
           })
         } catch (trackErr) {
           console.error('[Analytics] Error tracking user message:', trackErr)
