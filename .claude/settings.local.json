@@ -62,7 +62,9 @@
       "Bash(npm i:*)",
       "Bash(npx vercel env:*)",
       "Bash(timeout 60s npm run build)",
-      "Bash(TASKKILL /F /PID 258080)"
+      "Bash(TASKKILL /F /PID 258080)",
+      "Bash(npx playwright test:*)",
+      "Bash(npx playwright:*)"
     ],
     "deny": [],
     "ask": []

@@ -91,25 +91,34 @@ navada_robotics/
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
-- `npm run test` - Run tests with Vitest
-- `npm run test:run` - Run tests once with Vitest
+- `npm run test:unit` - Run unit tests with Vitest
+- `npm run test:e2e` - Run Playwright tests
+- `npm run test:e2e:headed` - Run Playwright tests with browser UI
+- `npm run test:e2e:report` - Show Playwright HTML report
 
 ## Testing
 
-This project uses [Vitest](https://vitest.dev/) for unit and component testing. The tests are located in the `app` directory, alongside the components they test.
+This project uses [Vitest](https://vitest.dev/) for unit testing and [Playwright](https://playwright.dev/) for end-to-end testing.
 
-To run the tests, use the following command:
+### Unit Tests
+
+Unit tests are located in the `app` directory, alongside the components they test.
+
+To run unit tests:
 
 ```bash
-npm run test
+npm run test:unit
 ```
 
-This will start the Vitest test runner in watch mode, which will re-run the tests whenever a file is changed.
+### End-to-End Tests
 
-To run the tests once and generate a coverage report, use the following command:
+E2E tests are located in the `tests/e2e` directory.
+
+To run E2E tests:
 
 ```bash
-npm run test:run
+npm run test:e2e          # Run headless
+npm run test:e2e:headed   # Run with browser UI
 ```
 
 ### Test Results
