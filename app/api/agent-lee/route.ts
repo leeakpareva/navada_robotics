@@ -131,34 +131,37 @@ const VOICE_PROMPT_ID = process.env.VOICE_PROMPT_ID
 const VECTOR_STORE_ID = process.env.VECTOR_STORE_ID
 const BRAVE_SEARCH_API_KEY = process.env.BRAVE_SEARCH_API_KEY
 
-console.log("[v0] Environment debug:")
-console.log("[v0] OPENAI_API_KEY exists:", !!API_KEY)
-console.log("[v0] OPENAI_API_KEY starts with sk-:", API_KEY ? API_KEY.startsWith('sk-') : false)
-console.log("[v0] OPENAI_API_KEY length:", API_KEY ? API_KEY.length : 0)
-console.log("[v0] OPENAI_ASSISTANT_ID exists:", !!ASSISTANT_ID)
-console.log("[v0] OPENAI_ASSISTANT_ID value:", ASSISTANT_ID || "Not set")
-console.log("[v0] VOICE_PROMPT_ID exists:", !!VOICE_PROMPT_ID)
-console.log("[v0] VECTOR_STORE_ID exists:", !!VECTOR_STORE_ID)
-console.log("[v0] VECTOR_STORE_ID value:", VECTOR_STORE_ID || "Not set")
-if (VECTOR_STORE_ID) {
-  console.log("[v0] Vector store configured for file search capabilities")
+if (process.env.NODE_ENV !== 'production') {
+  console.log("[v0] Environment debug:")
+  console.log("[v0] OPENAI_API_KEY exists:", !!API_KEY)
+  console.log("[v0] OPENAI_API_KEY starts with sk-:", API_KEY ? API_KEY.startsWith('sk-') : false)
+  console.log("[v0] OPENAI_API_KEY length:", API_KEY ? API_KEY.length : 0)
+  console.log("[v0] OPENAI_ASSISTANT_ID exists:", !!ASSISTANT_ID)
+  console.log("[v0] OPENAI_ASSISTANT_ID length:", ASSISTANT_ID ? ASSISTANT_ID.length : 0)
+  console.log("[v0] VOICE_PROMPT_ID exists:", !!VOICE_PROMPT_ID)
+  console.log("[v0] VOICE_PROMPT_ID length:", VOICE_PROMPT_ID ? VOICE_PROMPT_ID.length : 0)
+  console.log("[v0] VECTOR_STORE_ID exists:", !!VECTOR_STORE_ID)
+  console.log("[v0] VECTOR_STORE_ID length:", VECTOR_STORE_ID ? VECTOR_STORE_ID.length : 0)
+  if (VECTOR_STORE_ID) {
+    console.log("[v0] Vector store configured for file search capabilities")
+  }
+  console.log("[v0] BRAVE_SEARCH_API_KEY exists:", !!BRAVE_SEARCH_API_KEY)
+  if (BRAVE_SEARCH_API_KEY) {
+    console.log("[v0] Brave Search MCP server available")
+  }
+  console.log("[v0] DEEPSEEK_API_KEY exists:", !!DEEPSEEK_API_KEY)
+  if (DEEPSEEK_API_KEY) {
+    console.log("[v0] DeepSeek API available")
+  }
+  console.log("[v0] MISTRAL_API_KEY exists:", !!MISTRAL_API_KEY)
+  if (MISTRAL_API_KEY) {
+    console.log("[v0] Mistral API available")
+  }
+  console.log(
+    "[v0] Logged env var keys:",
+    Object.keys(process.env).filter((key) => key.includes("OPENAI")),
+  )
 }
-console.log("[v0] BRAVE_SEARCH_API_KEY exists:", !!BRAVE_SEARCH_API_KEY)
-if (BRAVE_SEARCH_API_KEY) {
-  console.log("[v0] Brave Search MCP server available")
-}
-console.log("[v0] DEEPSEEK_API_KEY exists:", !!DEEPSEEK_API_KEY)
-if (DEEPSEEK_API_KEY) {
-  console.log("[v0] DeepSeek API available")
-}
-console.log("[v0] MISTRAL_API_KEY exists:", !!MISTRAL_API_KEY)
-if (MISTRAL_API_KEY) {
-  console.log("[v0] Mistral API available")
-}
-console.log(
-  "[v0] All env vars:",
-  Object.keys(process.env).filter((key) => key.includes("OPENAI")),
-)
 
 const mockResponses = {
   robotics: `Getting started with robotics is exciting! The Raspberry Pi 4 makes an excellent foundation for your first robot. You'll want to begin with basic sensors like ultrasonic distance sensors and a camera module for vision.
