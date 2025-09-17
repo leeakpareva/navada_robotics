@@ -1,16 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not set');
-}
+// Initialize stripe only when the key is available
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-08-27.basil',
-});
+const getStripe = () => {
+  if (!stripeSecretKey) {
+    return null;
+  }
+  return new Stripe(stripeSecretKey, {
+    apiVersion: '2025-08-27.basil',
+  });
+};
 
 export async function POST(request: NextRequest) {
   try {
+    // Check for Stripe configuration at runtime
+    const stripe = getStripe();
+    if (!stripe) {
+      console.error('Stripe is not configured: STRIPE_SECRET_KEY is missing');
+      return NextResponse.json(
+        {
+          error: 'Payment system is not configured. Please contact support.',
+          details: 'Stripe configuration is missing'
+        },
+        { status: 503 }
+      );
+    }
     const body = await request.json();
     const { session_id } = body;
 

@@ -2,21 +2,33 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { headers } from 'next/headers';
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not set');
-}
-
-if (!process.env.STRIPE_WEBHOOK_SECRET) {
-  throw new Error('STRIPE_WEBHOOK_SECRET is not set');
-}
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-08-27.basil',
-});
-
+// Initialize stripe only when the key is available
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
+const getStripe = () => {
+  if (!stripeSecretKey) {
+    return null;
+  }
+  return new Stripe(stripeSecretKey, {
+    apiVersion: '2025-08-27.basil',
+  });
+};
+
 export async function POST(request: NextRequest) {
+  // Check for Stripe configuration at runtime
+  const stripe = getStripe();
+  if (!stripe) {
+    console.error('Stripe is not configured: STRIPE_SECRET_KEY is missing');
+    return NextResponse.json(
+      {
+        error: 'Webhook processing unavailable',
+        details: 'Stripe configuration is missing'
+      },
+      { status: 503 }
+    );
+  }
+
   const body = await request.text();
   const headersList = await headers();
   const sig = headersList.get('stripe-signature');
