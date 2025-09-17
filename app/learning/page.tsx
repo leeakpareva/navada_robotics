@@ -85,6 +85,13 @@ export default function LearningPage() {
       return
     }
 
+    // Handle demo courses
+    if (course?.isDemo) {
+      toast.info('This is a demo course. Upgrade to Premium to access full course content!')
+      handleUpgradeToPremium()
+      return
+    }
+
     setEnrolling(courseId)
     try {
       const response = await fetch('/api/learning/enroll', {
@@ -102,12 +109,12 @@ export default function LearningPage() {
           // If already enrolled, go directly to course
           router.push(`/learning/course/${courseId}`)
         } else {
-          alert(error.error || 'Failed to enroll')
+          toast.error(error.error || 'Failed to enroll')
         }
       }
     } catch (error) {
       console.error('Error enrolling:', error)
-      alert('Failed to enroll in course')
+      toast.error('Failed to enroll in course')
     } finally {
       setEnrolling(null)
     }
@@ -149,7 +156,7 @@ export default function LearningPage() {
 
   const defaultCourses = [
     {
-      id: 1,
+      id: "ai-fundamentals-ml",
       title: "AI Fundamentals & Machine Learning",
       description: "Master the complete foundation of artificial intelligence and machine learning from theory to practical applications",
       duration: "6 weeks",
@@ -159,6 +166,7 @@ export default function LearningPage() {
       level: "Beginner",
       tags: ["AI", "Machine Learning", "Python", "Theory"],
       featured: true,
+      isDemo: true,
       detailedDescription: "This comprehensive course covers everything from basic AI concepts to advanced machine learning algorithms. You'll learn linear regression, decision trees, neural networks, and how to implement them in Python. Includes hands-on projects with real datasets.",
       learningOutcomes: [
         "Understand fundamental AI and ML concepts",
@@ -177,7 +185,7 @@ export default function LearningPage() {
       ]
     },
     {
-      id: 2,
+      id: "computer-vision-processing",
       title: "Computer Vision & Image Processing",
       description: "Learn to build intelligent systems that can see and understand visual data using OpenCV and deep learning",
       duration: "5 weeks",
@@ -186,6 +194,7 @@ export default function LearningPage() {
       rating: 4.8,
       level: "Intermediate",
       tags: ["Computer Vision", "OpenCV", "Deep Learning", "Image Processing"],
+      isDemo: true,
       detailedDescription: "Dive deep into computer vision techniques from basic image processing to advanced deep learning models. Build real applications like face detection, object recognition, and image classification systems.",
       learningOutcomes: [
         "Master OpenCV for image processing",
@@ -203,7 +212,7 @@ export default function LearningPage() {
       ]
     },
     {
-      id: 3,
+      id: "ai-agent-development",
       title: "AI Agent Development & Deployment",
       description: "Build, customize, and deploy intelligent AI agents from scratch, including integration with modern frameworks",
       duration: "4 weeks",
@@ -212,6 +221,7 @@ export default function LearningPage() {
       rating: 4.9,
       level: "Advanced",
       tags: ["AI Agents", "Development", "Deployment", "APIs"],
+      isDemo: true,
       detailedDescription: "Learn to create sophisticated AI agents that can interact with users, process natural language, and integrate with various APIs. From concept to deployment, master the complete AI agent development lifecycle.",
       learningOutcomes: [
         "Design conversational AI agents",

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { prisma } from "@/lib/prisma"
-import { v4 as uuidv4 } from "uuid"
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 // GET - Fetch user notes for a lesson
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required" },
@@ -19,11 +19,10 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const lessonId = searchParams.get("lessonId")
-    const courseId = searchParams.get("courseId")
 
-    if (!lessonId || !courseId) {
+    if (!lessonId) {
       return NextResponse.json(
-        { error: "Lesson ID and Course ID are required" },
+        { error: "Lesson ID is required" },
         { status: 400 }
       )
     }
@@ -42,11 +41,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch notes for the lesson
-    const notes = await prisma.lesson_notes.findMany({
+    const notes = await prisma.notes.findMany({
       where: {
         userId: actualUserId,
-        lessonId: lessonId,
-        courseId: courseId
+        lessonId: lessonId
       },
       orderBy: {
         createdAt: 'desc'
@@ -54,14 +52,13 @@ export async function GET(request: NextRequest) {
     })
 
     // Fetch bookmarks for the lesson
-    const bookmarks = await prisma.lesson_bookmarks.findMany({
+    const bookmarks = await prisma.bookmarks.findMany({
       where: {
         userId: actualUserId,
-        lessonId: lessonId,
-        courseId: courseId
+        lessonId: lessonId
       },
       orderBy: {
-        position: 'asc'
+        createdAt: 'asc'
       }
     })
 
@@ -83,7 +80,7 @@ export async function GET(request: NextRequest) {
 // POST - Create a new note or bookmark
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required" },
@@ -92,11 +89,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { type, lessonId, courseId, content, position, title } = body
+    const { type, lessonId, content, title } = body
 
-    if (!type || !lessonId || !courseId) {
+    if (!type || !lessonId) {
       return NextResponse.json(
-        { error: "Type, lesson ID, and course ID are required" },
+        { error: "Type and lesson ID are required" },
         { status: 400 }
       )
     }
@@ -123,16 +120,11 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      const note = await prisma.lesson_notes.create({
+      const note = await prisma.notes.create({
         data: {
-          id: uuidv4(),
           userId: actualUserId,
-          courseId,
           lessonId,
-          content,
-          position: position || 0,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          content
         }
       })
 
@@ -143,24 +135,18 @@ export async function POST(request: NextRequest) {
 
     } else if (type === 'bookmark') {
       // Create a bookmark
-      if (!title) {
+      if (!content) {
         return NextResponse.json(
-          { error: "Title is required for bookmarks" },
+          { error: "Content is required for bookmarks" },
           { status: 400 }
         )
       }
 
-      const bookmark = await prisma.lesson_bookmarks.create({
+      const bookmark = await prisma.bookmarks.create({
         data: {
-          id: uuidv4(),
           userId: actualUserId,
-          courseId,
           lessonId,
-          title,
-          description: content || "",
-          position: position || 0,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          content: title || content
         }
       })
 
@@ -187,7 +173,7 @@ export async function POST(request: NextRequest) {
 // DELETE - Delete a note or bookmark
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required" },
@@ -220,14 +206,14 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (type === 'note') {
-      await prisma.lesson_notes.delete({
+      await prisma.notes.delete({
         where: {
           id: id,
           userId: actualUserId
         }
       })
     } else if (type === 'bookmark') {
-      await prisma.lesson_bookmarks.delete({
+      await prisma.bookmarks.delete({
         where: {
           id: id,
           userId: actualUserId

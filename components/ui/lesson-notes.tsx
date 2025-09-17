@@ -21,16 +21,13 @@ import { toast } from "sonner"
 interface Note {
   id: string
   content: string
-  position: number
   createdAt: string
   updatedAt: string
 }
 
 interface Bookmark {
   id: string
-  title: string
-  description: string
-  position: number
+  content: string
   createdAt: string
   updatedAt: string
 }
@@ -47,19 +44,63 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
   const [isAddingNote, setIsAddingNote] = useState(false)
   const [isAddingBookmark, setIsAddingBookmark] = useState(false)
   const [newNote, setNewNote] = useState("")
-  const [newBookmarkTitle, setNewBookmarkTitle] = useState("")
-  const [newBookmarkDescription, setNewBookmarkDescription] = useState("")
+  const [newBookmarkContent, setNewBookmarkContent] = useState("")
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null)
   const [editingBookmarkId, setEditingBookmarkId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
+  // Keys for localStorage
+  const noteStorageKey = `draft-note-${lessonId}`
+  const bookmarkStorageKey = `draft-bookmark-${lessonId}`
+
   useEffect(() => {
     fetchNotesAndBookmarks()
+    // Load draft content from localStorage
+    loadDrafts()
   }, [lessonId, courseId])
+
+  // Load draft content from localStorage
+  const loadDrafts = () => {
+    try {
+      const savedNote = localStorage.getItem(noteStorageKey)
+      const savedBookmark = localStorage.getItem(bookmarkStorageKey)
+
+      if (savedNote) {
+        setNewNote(savedNote)
+      }
+      if (savedBookmark) {
+        setNewBookmarkContent(savedBookmark)
+      }
+    } catch (error) {
+      console.error('Error loading drafts:', error)
+    }
+  }
+
+  // Save draft to localStorage
+  const saveDraft = (key: string, content: string) => {
+    try {
+      if (content.trim()) {
+        localStorage.setItem(key, content)
+      } else {
+        localStorage.removeItem(key)
+      }
+    } catch (error) {
+      console.error('Error saving draft:', error)
+    }
+  }
+
+  // Clear draft from localStorage
+  const clearDraft = (key: string) => {
+    try {
+      localStorage.removeItem(key)
+    } catch (error) {
+      console.error('Error clearing draft:', error)
+    }
+  }
 
   const fetchNotesAndBookmarks = async () => {
     try {
-      const response = await fetch(`/api/learning/notes?lessonId=${lessonId}&courseId=${courseId}`)
+      const response = await fetch(`/api/learning/notes?lessonId=${lessonId}`)
       if (response.ok) {
         const data = await response.json()
         setNotes(data.notes || [])
@@ -81,9 +122,7 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
         body: JSON.stringify({
           type: "note",
           lessonId,
-          courseId,
-          content: newNote,
-          position: Date.now()
+          content: newNote
         })
       })
 
@@ -92,6 +131,7 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
         setNotes(prev => [data.note, ...prev])
         setNewNote("")
         setIsAddingNote(false)
+        clearDraft(noteStorageKey) // Clear saved draft
         toast.success("Note added successfully!")
       } else {
         toast.error("Failed to add note")
@@ -105,7 +145,7 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
   }
 
   const addBookmark = async () => {
-    if (!newBookmarkTitle.trim()) return
+    if (!newBookmarkContent.trim()) return
 
     setLoading(true)
     try {
@@ -115,19 +155,16 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
         body: JSON.stringify({
           type: "bookmark",
           lessonId,
-          courseId,
-          title: newBookmarkTitle,
-          content: newBookmarkDescription,
-          position: Date.now()
+          content: newBookmarkContent
         })
       })
 
       if (response.ok) {
         const data = await response.json()
         setBookmarks(prev => [data.bookmark, ...prev])
-        setNewBookmarkTitle("")
-        setNewBookmarkDescription("")
+        setNewBookmarkContent("")
         setIsAddingBookmark(false)
+        clearDraft(bookmarkStorageKey) // Clear saved draft
         toast.success("Bookmark added successfully!")
       } else {
         toast.error("Failed to add bookmark")
@@ -215,7 +252,11 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => setIsAddingNote(false)}
+                onClick={() => {
+                  setIsAddingNote(false)
+                  setNewNote("")
+                  clearDraft(noteStorageKey)
+                }}
                 className="text-gray-400 hover:text-white"
               >
                 <X className="h-4 w-4" />
@@ -225,7 +266,11 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
           <CardContent className="space-y-4">
             <Textarea
               value={newNote}
-              onChange={(e) => setNewNote(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value
+                setNewNote(value)
+                saveDraft(noteStorageKey, value)
+              }}
               placeholder="Write your note here..."
               className="bg-black/30 border-gray-600 text-white min-h-[100px]"
             />
@@ -243,6 +288,7 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
                 onClick={() => {
                   setIsAddingNote(false)
                   setNewNote("")
+                  clearDraft(noteStorageKey)
                 }}
                 size="sm"
                 variant="outline"
@@ -267,7 +313,11 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => setIsAddingBookmark(false)}
+                onClick={() => {
+                  setIsAddingBookmark(false)
+                  setNewBookmarkContent("")
+                  clearDraft(bookmarkStorageKey)
+                }}
                 className="text-gray-400 hover:text-white"
               >
                 <X className="h-4 w-4" />
@@ -275,22 +325,20 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Input
-              value={newBookmarkTitle}
-              onChange={(e) => setNewBookmarkTitle(e.target.value)}
-              placeholder="Bookmark title..."
-              className="bg-black/30 border-gray-600 text-white"
-            />
             <Textarea
-              value={newBookmarkDescription}
-              onChange={(e) => setNewBookmarkDescription(e.target.value)}
-              placeholder="Optional description..."
-              className="bg-black/30 border-gray-600 text-white"
+              value={newBookmarkContent}
+              onChange={(e) => {
+                const value = e.target.value
+                setNewBookmarkContent(value)
+                saveDraft(bookmarkStorageKey, value)
+              }}
+              placeholder="Write your bookmark content..."
+              className="bg-black/30 border-gray-600 text-white min-h-[100px]"
             />
             <div className="flex items-center gap-2">
               <Button
                 onClick={addBookmark}
-                disabled={loading || !newBookmarkTitle.trim()}
+                disabled={loading || !newBookmarkContent.trim()}
                 size="sm"
                 className="bg-yellow-600 hover:bg-yellow-700"
               >
@@ -300,8 +348,8 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
               <Button
                 onClick={() => {
                   setIsAddingBookmark(false)
-                  setNewBookmarkTitle("")
-                  setNewBookmarkDescription("")
+                  setNewBookmarkContent("")
+                  clearDraft(bookmarkStorageKey)
                 }}
                 size="sm"
                 variant="outline"
@@ -326,10 +374,7 @@ export function LessonNotes({ lessonId, courseId, className }: LessonNotesProps)
               <CardContent className="pt-4">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h5 className="text-white font-medium mb-1">{bookmark.title}</h5>
-                    {bookmark.description && (
-                      <p className="text-gray-300 text-sm mb-2">{bookmark.description}</p>
-                    )}
+                    <p className="text-gray-300 text-sm mb-2 whitespace-pre-wrap">{bookmark.content}</p>
                     <div className="flex items-center gap-2 text-xs text-gray-500">
                       <Clock className="h-3 w-3" />
                       {formatDate(bookmark.createdAt)}
