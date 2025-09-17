@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { mcpServerManager } from '@/lib/mcp/server-manager'
 
-export const runtime = 'edge'
-
 export async function POST(request: NextRequest) {
   try {
     const { serverId, action } = await request.json()
