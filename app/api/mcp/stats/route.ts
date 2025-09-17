@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { mcpServerManager } from "@/lib/mcp/server-manager"
 
+export const runtime = 'edge'
+
 export async function GET() {
   try {
     const servers = await mcpServerManager.getServers()

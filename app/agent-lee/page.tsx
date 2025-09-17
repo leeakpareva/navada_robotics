@@ -44,7 +44,7 @@ interface Message {
 export default function AgentLeePage() {
   const { data: session, status } = useSession()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [apiProvider, setApiProvider] = useState<'openai' | 'mistral'>('openai')
+  const [apiProvider, setApiProvider] = useState<'openai' | 'mistral' | 'deepseek' | 'claude'>('openai')
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -683,7 +683,7 @@ export default function AgentLeePage() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 <Button
                   size="sm"
                   variant={apiProvider === 'openai' ? 'default' : 'outline'}
@@ -699,6 +699,22 @@ export default function AgentLeePage() {
                   className={apiProvider === 'mistral' ? 'bg-blue-600 hover:bg-blue-700' : 'border-gray-600 text-gray-300'}
                 >
                   Mistral
+                </Button>
+                <Button
+                  size="sm"
+                  variant={apiProvider === 'deepseek' ? 'default' : 'outline'}
+                  onClick={() => setApiProvider('deepseek')}
+                  className={apiProvider === 'deepseek' ? 'bg-purple-600 hover:bg-purple-700' : 'border-gray-600 text-gray-300'}
+                >
+                  Deepseek
+                </Button>
+                <Button
+                  size="sm"
+                  variant={apiProvider === 'claude' ? 'default' : 'outline'}
+                  onClick={() => setApiProvider('claude')}
+                  className={apiProvider === 'claude' ? 'bg-orange-600 hover:bg-orange-700' : 'border-gray-600 text-gray-300'}
+                >
+                  Claude
                 </Button>
               </div>
             </div>

@@ -23,6 +23,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preload" href="/api/auth/session" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/_next/static/css/app/layout.css" as="style" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="//vitals.vercel-insights.com" />
+        <link rel="dns-prefetch" href="//va.vercel-scripts.com" />
+      </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} pb-20 md:pb-0`}>
         <SessionProvider>
           <Suspense fallback={null}>{children}</Suspense>
