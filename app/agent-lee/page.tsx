@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { BeamsBackground } from "@/components/ui/beams-background"
-import { Menu, X, ShieldCheck, SendHorizonal, UserCircle2, Mic2, MicOff, AudioLines, VolumeX, BrainCircuit, Dna, Fingerprint, Radio, Lock, Download, FileDown, Home, ArrowLeft, LogOut, Newspaper, Infinity as InfinityIcon } from "lucide-react"
+import { Menu, X, ShieldCheck, SendHorizonal, UserCircle2, Mic2, MicOff, AudioLines, VolumeX, BrainCircuit, Dna, Fingerprint, Radio, Lock, Download, FileDown, Home, ArrowLeft, LogOut, Newspaper, Infinity as InfinityIcon, BarChart3 } from "lucide-react"
 import Link from "next/link"
 
 
@@ -61,6 +61,12 @@ export default function AgentLeePage() {
   const [speechSupported, setSpeechSupported] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [lastGeneratedImage, setLastGeneratedImage] = useState<string | null>(null)
+  const [modelStatus, setModelStatus] = useState<Record<string, 'available' | 'limited' | 'unavailable'>>({
+    openai: 'available',
+    mistral: 'available',
+    deepseek: 'available',
+    claude: 'available'
+  })
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const recognitionRef = useRef<SpeechRecognition | null>(null)
   const currentAudioRef = useRef<HTMLAudioElement | null>(null)
@@ -387,6 +393,14 @@ export default function AgentLeePage() {
         console.log("[v0] Image data preview:", data.image.substring(0, 50) + "...")
       }
 
+      // Update model status based on response
+      if (data.isError && data.errorDetails?.provider) {
+        setModelStatus(prev => ({
+          ...prev,
+          [data.errorDetails.provider]: 'unavailable'
+        }))
+      }
+
       if (data.threadId && !threadId) {
         setThreadId(data.threadId)
       }
@@ -543,9 +557,6 @@ export default function AgentLeePage() {
               <Link href="/agent-lee" className="text-purple-400 font-medium">
                 Agent Lee
               </Link>
-              <Link href="/agent-lee/analytics" className="text-white hover:text-purple-400 transition-colors">
-                Analytics
-              </Link>
               <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
                 Dashboard
               </Link>
@@ -594,9 +605,6 @@ export default function AgentLeePage() {
                 </Link>
                 <Link href="/agent-lee" className="text-purple-400 font-medium">
                   Agent Lee
-                </Link>
-                <Link href="/agent-lee/analytics" className="text-white hover:text-purple-400 transition-colors">
-                  Analytics
                 </Link>
                 <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
                   Dashboard
@@ -682,6 +690,16 @@ export default function AgentLeePage() {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
+                <Link href="/agent-lee/analytics">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-purple-600 text-purple-400 hover:bg-purple-600/20 hover:text-purple-300 transition-all duration-300"
+                  >
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Dashboard
+                  </Button>
+                </Link>
               </div>
               <div className="flex gap-2 flex-wrap">
                 <Button
@@ -696,9 +714,10 @@ export default function AgentLeePage() {
                   size="sm"
                   variant={apiProvider === 'mistral' ? 'default' : 'outline'}
                   onClick={() => setApiProvider('mistral')}
-                  className={apiProvider === 'mistral' ? 'bg-blue-600 hover:bg-blue-700' : 'border-gray-600 text-gray-300'}
+                  className={`${apiProvider === 'mistral' ? 'bg-blue-600 hover:bg-blue-700' : 'border-gray-600 text-gray-300'} ${modelStatus.mistral === 'unavailable' ? 'opacity-60' : ''}`}
+                  title={modelStatus.mistral === 'unavailable' ? 'Mistral is currently unavailable - try another model' : 'Mistral AI'}
                 >
-                  Mistral
+                  Mistral {modelStatus.mistral === 'unavailable' && '⚠️'}
                 </Button>
                 <Button
                   size="sm"

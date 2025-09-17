@@ -64,7 +64,16 @@
       "Bash(timeout 60s npm run build)",
       "Bash(TASKKILL /F /PID 258080)",
       "Bash(npx playwright test:*)",
-      "Bash(npx playwright:*)"
+      "Bash(npx playwright:*)",
+      "Bash(npm run test:unit:*)",
+      "Bash(npx vitest run:*)",
+      "Bash(start http://localhost:3000/agent-lee)",
+      "Bash(tasklist:*)",
+      "Bash(npx eslint:*)",
+      "Bash(start http://localhost:3001)",
+      "Bash(grep:*)",
+      "Bash(del /Q C:Usersleeaknavada_roboticsappanalyticspage.tsx)",
+      "Bash(start http://localhost:3002/agent-lee)"
     ],
     "deny": [],
     "ask": []

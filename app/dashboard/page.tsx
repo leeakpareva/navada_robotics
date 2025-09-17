@@ -96,9 +96,6 @@ export default function Dashboard() {
               <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
                 Learning
               </Link>
-              <Link href="/analytics" className="text-white hover:text-purple-400 transition-colors">
-                Analytics
-              </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                 Agent Lee
               </Link>
@@ -121,9 +118,6 @@ export default function Dashboard() {
                 </Link>
                 <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
                   Learning
-                </Link>
-                <Link href="/analytics" className="text-white hover:text-purple-400 transition-colors">
-                  Analytics
                 </Link>
                 <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                   Agent Lee
@@ -237,11 +231,6 @@ Welcome back, {mockUser.name}! Manage your AI interactions and explore NAVADA Ro
               <Link href="/agent-lee">
                 <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white transition-all duration-300 transform hover:scale-105">
                   Chat with Agent Lee
-                </Button>
-              </Link>
-              <Link href="/analytics">
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white transition-all duration-300 transform hover:scale-105">
-                  View Analytics
                 </Button>
               </Link>
               <Link href="/learning">

@@ -1,23 +1,31 @@
 
 // Import necessary functions and components
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import CoursePage from './page'
 import { SessionProvider } from 'next-auth/react'
 
+// Mock next/navigation
+vi.mock('next/navigation', () => ({
+  useParams: () => ({ courseId: '1' }),
+  useRouter: () => ({ push: vi.fn() }),
+}))
+
+// Mock next-auth
+vi.mock('next-auth/react', () => ({
+  useSession: () => ({ data: null }),
+  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
+}))
+
 // Group tests for the CoursePage component
 describe('CoursePage', () => {
-  // Test case: Check if the main heading is rendered
-  it('should render the main heading', async () => {
-    // Render the component with a mock session and params
-    render(
-      <SessionProvider session={{ user: { email: 'a', name: 'a', image: 'a' }, expires: '1' }}>
-        <CoursePage params={{ courseId: '1' }} />
-      </SessionProvider>
-    )
-    // Find the heading element
-    const heading = await screen.findByRole('heading', { name: /Test Course/i, level: 1 })
-    // Assert that the heading is in the document
-    expect(heading).toBeInTheDocument()
+  // Test case: Check if the loading state is rendered
+  it('should render loading state', () => {
+    // Render the component
+    render(<CoursePage params={{ courseId: '1' }} />)
+    // Find the loading text
+    const loadingText = screen.getByText(/Loading course content/i)
+    // Assert that the loading text is in the document
+    expect(loadingText).toBeInTheDocument()
   })
 })

@@ -15,9 +15,6 @@ import {
   Zap,
   Code,
   RefreshCw,
-  Play,
-  Square,
-  Server,
   LineChart,
   Image,
   AlertCircle,
@@ -59,7 +56,6 @@ export default function AgentLeeAnalytics() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
-  const [mcpServerStatus, setMcpServerStatus] = useState<'running' | 'stopped' | 'loading'>('running')
 
   // Real analytics data for demo
   useEffect(() => {
@@ -159,16 +155,6 @@ export default function AgentLeeAnalytics() {
     ? analyticsData.satisfaction.excellent + analyticsData.satisfaction.good
     : 0
 
-  // MCP Server Controls
-  const handleMcpServerStart = async () => {
-    setMcpServerStatus('loading')
-    setTimeout(() => setMcpServerStatus('running'), 2000)
-  }
-
-  const handleMcpServerStop = async () => {
-    setMcpServerStatus('loading')
-    setTimeout(() => setMcpServerStatus('stopped'), 1000)
-  }
 
   // Chart Component for Hourly Data
   const HourlyChart = ({ data }: { data: { time: string; value: number }[] }) => {
@@ -279,60 +265,6 @@ export default function AgentLeeAnalytics() {
             </div>
           ) : analyticsData ? (
             <div>
-              {/* MCP Server Management */}
-              <div className="mb-8">
-              <Card className="bg-black/30 border-white/20 hover:border-yellow-400/50 backdrop-blur-sm transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-yellow-500/20 rounded-lg">
-                        <Server className="h-6 w-6 text-yellow-300" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-white">MCP Server Management</CardTitle>
-                        <CardDescription className="text-gray-300">Control Model Context Protocol server</CardDescription>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-3 h-3 rounded-full ${
-                        mcpServerStatus === 'running' ? 'bg-green-400 animate-pulse' :
-                        mcpServerStatus === 'loading' ? 'bg-yellow-400 animate-pulse' :
-                        'bg-red-400'
-                      }`} />
-                      <span className={`text-sm font-medium ${
-                        mcpServerStatus === 'running' ? 'text-green-300' :
-                        mcpServerStatus === 'loading' ? 'text-yellow-300' :
-                        'text-red-300'
-                      }`}>
-                        {mcpServerStatus === 'running' ? 'Running' :
-                         mcpServerStatus === 'loading' ? 'Loading...' :
-                         'Stopped'}
-                      </span>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex space-x-3">
-                    <Button
-                      onClick={handleMcpServerStart}
-                      disabled={mcpServerStatus === 'running' || mcpServerStatus === 'loading'}
-                      className="bg-green-600 hover:bg-green-700 text-white flex-1"
-                    >
-                      <Play className="h-4 w-4 mr-2" />
-                      Start Server
-                    </Button>
-                    <Button
-                      onClick={handleMcpServerStop}
-                      disabled={mcpServerStatus === 'stopped' || mcpServerStatus === 'loading'}
-                      className="bg-red-600 hover:bg-red-700 text-white flex-1"
-                    >
-                      <Square className="h-4 w-4 mr-2" />
-                      Stop Server
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {/* Total Sessions */}

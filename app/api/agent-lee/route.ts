@@ -1021,10 +1021,25 @@ export async function POST(request: NextRequest) {
           })
         }
 
+        // Provide user-friendly error messages based on error type
+        let userMessage = "I'm currently having trouble with the Mistral AI service. Please try switching to another model (OpenAI, Claude, or Deepseek) for now."
+
+        if (mistralError instanceof Error) {
+          if (mistralError.message.includes("429") || mistralError.message.includes("Service tier capacity exceeded")) {
+            userMessage = "The Mistral AI service is currently at capacity. Please try OpenAI, Claude, or Deepseek instead - they're working great!"
+          } else if (mistralError.message.includes("401") || mistralError.message.includes("authentication")) {
+            userMessage = "There's an authentication issue with Mistral AI. Please use OpenAI, Claude, or Deepseek for now."
+          }
+        }
+
         return NextResponse.json({
-          error: "Failed to generate response with Mistral",
-          details: mistralError instanceof Error ? mistralError.message : "Unknown error"
-        }, { status: 500 })
+          message: userMessage,
+          isError: true,
+          errorDetails: {
+            provider: "mistral",
+            suggestion: "Try switching to OpenAI, Claude, or Deepseek"
+          }
+        })
       }
     }
 
