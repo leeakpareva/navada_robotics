@@ -73,7 +73,9 @@
       "Bash(start http://localhost:3001)",
       "Bash(grep:*)",
       "Bash(del /Q C:Usersleeaknavada_roboticsappanalyticspage.tsx)",
-      "Bash(start http://localhost:3002/agent-lee)"
+      "Bash(start http://localhost:3002/agent-lee)",
+      "Bash(npx vitest:*)",
+      "Bash(del pnpm-lock.yaml)"
     ],
     "deny": [],
     "ask": []

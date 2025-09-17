@@ -1,0 +1,16 @@
+[
+  {
+    "serverId": "brave-search",
+    "toolName": "web_search",
+    "success": true,
+    "responseTime": 150,
+    "input": {
+      "query": "test"
+    },
+    "output": {
+      "results": []
+    },
+    "id": "1758087461827ain6ckzrf",
+    "timestamp": "2025-09-17T05:37:41.827Z"
+  }
+]

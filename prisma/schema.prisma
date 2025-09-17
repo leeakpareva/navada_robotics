@@ -36,18 +36,18 @@ model courses {
   isFreeTier       Boolean         @default(false)
   prerequisites    String?
   learningOutcomes String
-  price            Float?          // Course price for paid tiers
-  featured         Boolean         @default(false)
-  published        Boolean         @default(false)
-  thumbnailUrl     String?
-  instructorId     String?         // Reference to instructor
   createdAt        DateTime        @default(now())
   updatedAt        DateTime
-  lessons          lessons[]
-  user_progress    user_progress[]
-  quizzes          quizzes[]
+  featured         Boolean         @default(false)
+  instructorId     String?
+  price            Float?
+  published        Boolean         @default(false)
+  thumbnailUrl     String?
   assignments      assignments[]
   certificates     certificates[]
+  lessons          lessons[]
+  quizzes          quizzes[]
+  user_progress    user_progress[]
 }
 
 model lesson_progress {
@@ -64,23 +64,23 @@ model lesson_progress {
 }
 
 model lessons {
-  id              String            @id
-  courseId        String
-  title           String
-  description     String?
-  content         String
-  orderIndex      Int
-  duration        Int
-  lessonType      String            @default("text") // text, video, quiz, assignment
-  videoUrl        String?
-  resources       String?           // JSON array of resources
-  published       Boolean           @default(false)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime
-  lesson_progress lesson_progress[]
-  courses         courses           @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  notes           notes[]
-  bookmarks       bookmarks[]
+  id               String             @id
+  courseId         String
+  title            String
+  description      String?
+  content          String
+  orderIndex       Int
+  duration         Int
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime
+  lessonType       String             @default("text")
+  published        Boolean            @default(false)
+  resources        String?
+  videoUrl         String?
+  bookmarks        bookmarks[]
+  lesson_progress  lesson_progress[]
+  courses          courses            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  notes            notes[]
   reading_progress reading_progress[]
 }
 
@@ -111,195 +111,182 @@ model user_progress {
 }
 
 model users {
-  id                 String          @id
-  email              String          @unique
-  name               String?
-  password           String?
-  image              String?
-  role               String          @default("student") // student, instructor, admin
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime
-  subscriptionTier   String          @default("free")
-  subscriptionStatus String          @default("inactive")
-  stripeCustomerId   String?
-  accounts           accounts[]
-  sessions           sessions[]
-  user_progress      user_progress[]
-  quiz_submissions   quiz_submissions[]
+  id                     String                   @id
+  email                  String                   @unique
+  name                   String?
+  password               String?
+  image                  String?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime
+  subscriptionTier       String                   @default("free")
+  subscriptionStatus     String                   @default("inactive")
+  stripeCustomerId       String?
+  role                   String                   @default("student")
+  accounts               accounts[]
   assignment_submissions assignment_submissions[]
-  forum_topics       forum_topics[]
-  forum_posts        forum_posts[]
-  certificates       certificates[]
-  learning_analytics learning_analytics[]
-  subscription       subscriptions?
-  notes              notes[]
-  bookmarks          bookmarks[]
-  reading_progress   reading_progress[]
-  stripe_activities  StripeActivity[]
+  bookmarks              bookmarks[]
+  certificates           certificates[]
+  forum_posts            forum_posts[]
+  forum_topics           forum_topics[]
+  learning_analytics     learning_analytics[]
+  notes                  notes[]
+  quiz_submissions       quiz_submissions[]
+  reading_progress       reading_progress[]
+  sessions               sessions[]
+  stripe_activities      StripeActivity[]
+  subscription           subscriptions?
+  user_progress          user_progress[]
 }
 
 model EmailSubscriber {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
-  source      String?  // Where the email was collected from (homepage, agent-lee, etc.)
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  source       String?
   subscribedAt DateTime @default(now())
-  isActive    Boolean  @default(true)
+  isActive     Boolean  @default(true)
 
   @@map("email_subscribers")
 }
 
-// Agent Lee Chat System
 model ChatSession {
-  id              String        @id @default(cuid())
-  threadId        String        @unique
-  userId          String?       // Optional - for authenticated users
-  startTime       DateTime      @default(now())
-  endTime         DateTime?
-  lastActivity    DateTime      @default(now())
-  messageCount    Int           @default(0)
-  status          String        @default("active") // active, completed, inactive
-  sessionData     String?       // JSON data for session context
-  apiProvider     String        @default("openai")
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
-  // Relations
-  messages        ChatMessage[]
-  analytics       SessionAnalytics[]
+  id           String             @id @default(cuid())
+  threadId     String             @unique
+  userId       String?
+  startTime    DateTime           @default(now())
+  endTime      DateTime?
+  lastActivity DateTime           @default(now())
+  messageCount Int                @default(0)
+  status       String             @default("active")
+  sessionData  String?
+  apiProvider  String             @default("openai")
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  messages     ChatMessage[]
+  analytics    SessionAnalytics[]
 
   @@map("chat_sessions")
 }
 
 model ChatMessage {
-  id              String      @id @default(cuid())
-  sessionId       String
-  threadId        String      // For quick lookups
-  messageIndex    Int         // Order in conversation
-  role            String      // user, assistant, system
-  content         String      // Message text
-  imageData       String?     // Base64 image data
-  websiteData     String?     // JSON website generation data
-  codeData        String?     // JSON code generation data
-  metadata        String?     // JSON metadata (response times, etc.)
-  timestamp       DateTime    @default(now())
+  id           String      @id @default(cuid())
+  sessionId    String
+  threadId     String
+  messageIndex Int
+  role         String
+  content      String
+  imageData    String?
+  websiteData  String?
+  codeData     String?
+  metadata     String?
+  timestamp    DateTime    @default(now())
+  session      ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  // Relations
-  session         ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-
-  @@map("chat_messages")
   @@index([threadId])
   @@index([sessionId, messageIndex])
+  @@map("chat_messages")
 }
 
 model SessionAnalytics {
-  id              String      @id @default(cuid())
-  sessionId       String
-  eventType       String      // message_sent, response_generated, image_created, etc.
-  eventData       String?     // JSON event data
-  responseTime    Int?        // Response time in milliseconds
-  success         Boolean     @default(true)
-  errorDetails    String?
-  timestamp       DateTime    @default(now())
+  id           String      @id @default(cuid())
+  sessionId    String
+  eventType    String
+  eventData    String?
+  responseTime Int?
+  success      Boolean     @default(true)
+  errorDetails String?
+  timestamp    DateTime    @default(now())
+  session      ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  // Relations
-  session         ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-
-  @@map("session_analytics")
   @@index([sessionId])
   @@index([eventType])
+  @@map("session_analytics")
 }
 
-// Code Generation Tracking
 model CodeGeneration {
-  id              String      @id @default(cuid())
-  sessionId       String?
-  threadId        String?
-  instruction     String
-  model           String      @default("claude-sonnet-4-20250514")
-  success         Boolean
-  filesCreated    Int         @default(0)
-  generationTime  Int         // milliseconds
-  errorDetails    String?
-  filesList       String?     // JSON array of created files
-  timestamp       DateTime    @default(now())
+  id             String   @id @default(cuid())
+  sessionId      String?
+  threadId       String?
+  instruction    String
+  model          String   @default("claude-sonnet-4-20250514")
+  success        Boolean
+  filesCreated   Int      @default(0)
+  generationTime Int
+  errorDetails   String?
+  filesList      String?
+  timestamp      DateTime @default(now())
 
+  @@index([sessionId])
+  @@index([timestamp])
   @@map("code_generations")
-  @@index([sessionId])
-  @@index([timestamp])
 }
 
-// Image Generation Tracking
 model ImageGeneration {
-  id              String      @id @default(cuid())
-  sessionId       String?
-  threadId        String?
-  prompt          String
-  model           String      @default("dall-e-3")
-  success         Boolean
-  generationTime  Int         // milliseconds
-  imageUrl        String?
-  errorDetails    String?
-  timestamp       DateTime    @default(now())
+  id             String   @id @default(cuid())
+  sessionId      String?
+  threadId       String?
+  prompt         String
+  model          String   @default("dall-e-3")
+  success        Boolean
+  generationTime Int
+  imageUrl       String?
+  errorDetails   String?
+  timestamp      DateTime @default(now())
 
-  @@map("image_generations")
   @@index([sessionId])
   @@index([timestamp])
+  @@map("image_generations")
 }
 
-// RAG Knowledge Base
 model KnowledgeBase {
-  id              String      @id @default(cuid())
-  title           String
-  content         String      // Full text content
-  summary         String?     // Summary for quick reference
-  source          String?     // Source URL or file path
-  category        String      @default("general")
-  tags            String?     // JSON array of tags
-  embeddings      Json?       // Stored vector embeddings for semantic search
-  isActive        Boolean     @default(true)
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  id         String   @id @default(cuid())
+  title      String
+  content    String
+  summary    String?
+  source     String?
+  category   String   @default("general")
+  tags       String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  embeddings Json?
 
-  @@map("knowledge_base")
   @@index([category])
   @@index([isActive])
+  @@map("knowledge_base")
 }
 
-// MCP Server Usage Tracking
 model MCPUsage {
-  id              String      @id @default(cuid())
-  sessionId       String?
-  threadId        String?
-  serverId        String      // brave-search, file-system, github, etc.
-  toolName        String      // web_search, news_search, read_file, etc.
-  success         Boolean
-  responseTime    Int         // milliseconds
-  inputData       String?     // JSON input parameters
-  outputData      String?     // JSON output data (truncated)
-  errorDetails    String?
-  timestamp       DateTime    @default(now())
+  id           String   @id @default(cuid())
+  sessionId    String?
+  threadId     String?
+  serverId     String
+  toolName     String
+  success      Boolean
+  responseTime Int
+  inputData    String?
+  outputData   String?
+  errorDetails String?
+  timestamp    DateTime @default(now())
 
-  @@map("mcp_usage")
   @@index([serverId])
   @@index([timestamp])
   @@index([sessionId])
+  @@map("mcp_usage")
 }
 
-// Learning Interest Comments
 model LearningComment {
-  id          String   @id @default(cuid())
-  comment     String
-  email       String?  // Optional email for follow-up
-  name        String?  // Optional name
-  source      String   @default("homepage") // Where the comment was submitted from
-  createdAt   DateTime @default(now())
-  isActive    Boolean  @default(true)
+  id        String   @id @default(cuid())
+  comment   String
+  email     String?
+  name      String?
+  source    String   @default("homepage")
+  createdAt DateTime @default(now())
+  isActive  Boolean  @default(true)
 
-  @@map("learning_comments")
   @@index([createdAt])
+  @@map("learning_comments")
 }
 
-// Notes and Bookmarks System
 model notes {
   id        String   @id @default(cuid())
   userId    String
@@ -307,12 +294,12 @@ model notes {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson    lessons  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("notes")
   @@index([userId])
   @@index([lessonId])
+  @@map("notes")
 }
 
 model bookmarks {
@@ -322,87 +309,83 @@ model bookmarks {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson    lessons  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("bookmarks")
   @@index([userId])
   @@index([lessonId])
+  @@map("bookmarks")
 }
 
-// Reading Progress Tracking
 model reading_progress {
   id             String   @id @default(cuid())
   userId         String
   lessonId       String
   scrollPosition Int      @default(0)
-  readingTime    Int      @default(0) // in minutes
+  readingTime    Int      @default(0)
   lastReadAt     DateTime @default(now())
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  user           users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson         lessons  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user           users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
-  @@map("reading_progress")
   @@index([userId])
   @@index([lessonId])
+  @@map("reading_progress")
 }
 
-// Enhanced LMS Models
-
-// Quizzes and Assessments
 model quizzes {
-  id              String            @id @default(cuid())
-  courseId        String
-  title           String
-  description     String?
-  passingScore    Int               @default(70)
-  timeLimit       Int?              // Minutes
-  attempts        Int               @default(3)
-  published       Boolean           @default(false)
-  orderIndex      Int               @default(0)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  course          courses           @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  questions       quiz_questions[]
-  submissions     quiz_submissions[]
+  id           String             @id @default(cuid())
+  courseId     String
+  title        String
+  description  String?
+  passingScore Int                @default(70)
+  timeLimit    Int?
+  attempts     Int                @default(3)
+  published    Boolean            @default(false)
+  orderIndex   Int                @default(0)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  questions    quiz_questions[]
+  submissions  quiz_submissions[]
+  course       courses            @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@map("quizzes")
 }
 
 model quiz_questions {
-  id          String        @id @default(cuid())
-  quizId      String
-  question    String
-  type        String        // multiple_choice, true_false, short_answer, essay
-  options     String?       // JSON array for multiple choice
-  correctAnswer String?     // Correct answer
-  points      Int           @default(1)
-  orderIndex  Int           @default(0)
-  createdAt   DateTime      @default(now())
-  quiz        quizzes       @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  answers     quiz_answers[]
+  id            String         @id @default(cuid())
+  quizId        String
+  question      String
+  type          String
+  options       String?
+  correctAnswer String?
+  points        Int            @default(1)
+  orderIndex    Int            @default(0)
+  createdAt     DateTime       @default(now())
+  answers       quiz_answers[]
+  quiz          quizzes        @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
   @@map("quiz_questions")
 }
 
 model quiz_submissions {
-  id          String        @id @default(cuid())
+  id          String         @id @default(cuid())
   quizId      String
   userId      String
-  score       Int           @default(0)
-  totalPoints Int           @default(0)
-  passed      Boolean       @default(false)
-  attempt     Int           @default(1)
-  timeSpent   Int?          // Minutes
-  submittedAt DateTime      @default(now())
-  quiz        quizzes       @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  user        users         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score       Int            @default(0)
+  totalPoints Int            @default(0)
+  passed      Boolean        @default(false)
+  attempt     Int            @default(1)
+  timeSpent   Int?
+  submittedAt DateTime       @default(now())
   answers     quiz_answers[]
+  quiz        quizzes        @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  user        users          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("quiz_submissions")
   @@unique([quizId, userId, attempt])
+  @@map("quiz_submissions")
 }
 
 model quiz_answers {
@@ -412,178 +395,170 @@ model quiz_answers {
   answer       String
   isCorrect    Boolean          @default(false)
   points       Int              @default(0)
-  submission   quiz_submissions @relation(fields: [submissionId], references: [id], onDelete: Cascade)
   question     quiz_questions   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  submission   quiz_submissions @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 
-  @@map("quiz_answers")
   @@unique([submissionId, questionId])
+  @@map("quiz_answers")
 }
 
-// Assignments and AI Grading
 model assignments {
-  id              String                @id @default(cuid())
-  courseId        String
-  title           String
-  description     String
-  instructions    String
-  dueDate         DateTime?
-  maxPoints       Int                   @default(100)
-  allowLateSubmission Boolean           @default(true)
-  published       Boolean               @default(false)
-  orderIndex      Int                   @default(0)
-  rubric          String?               // JSON rubric for AI grading
-  createdAt       DateTime              @default(now())
-  updatedAt       DateTime              @updatedAt
-  course          courses               @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  submissions     assignment_submissions[]
+  id                  String                   @id @default(cuid())
+  courseId            String
+  title               String
+  description         String
+  instructions        String
+  dueDate             DateTime?
+  maxPoints           Int                      @default(100)
+  allowLateSubmission Boolean                  @default(true)
+  published           Boolean                  @default(false)
+  orderIndex          Int                      @default(0)
+  rubric              String?
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  submissions         assignment_submissions[]
+  course              courses                  @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@map("assignments")
 }
 
 model assignment_submissions {
-  id              String      @id @default(cuid())
-  assignmentId    String
-  userId          String
-  content         String      // Student submission
-  files           String?     // JSON array of file URLs
-  status          String      @default("submitted") // submitted, graded, returned
-  score           Int?
-  feedback        String?     // AI generated feedback
-  aiGradeData     String?     // JSON with AI grading details
-  submittedAt     DateTime    @default(now())
-  gradedAt        DateTime?
-  assignment      assignments @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
-  user            users       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String      @id @default(cuid())
+  assignmentId String
+  userId       String
+  content      String
+  files        String?
+  status       String      @default("submitted")
+  score        Int?
+  feedback     String?
+  aiGradeData  String?
+  submittedAt  DateTime    @default(now())
+  gradedAt     DateTime?
+  assignment   assignments @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  user         users       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("assignment_submissions")
   @@unique([assignmentId, userId])
+  @@map("assignment_submissions")
 }
 
-// Message Board System
 model forum_categories {
-  id          String        @id @default(cuid())
+  id          String         @id @default(cuid())
   name        String
   description String?
-  orderIndex  Int           @default(0)
-  isActive    Boolean       @default(true)
-  createdAt   DateTime      @default(now())
+  orderIndex  Int            @default(0)
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
   topics      forum_topics[]
 
   @@map("forum_categories")
 }
 
 model forum_topics {
-  id          String            @id @default(cuid())
-  categoryId  String
-  userId      String
-  title       String
-  content     String
-  isPinned    Boolean           @default(false)
-  isLocked    Boolean           @default(false)
-  views       Int               @default(0)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  category    forum_categories  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  user        users             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  posts       forum_posts[]
+  id         String           @id @default(cuid())
+  categoryId String
+  userId     String
+  title      String
+  content    String
+  isPinned   Boolean          @default(false)
+  isLocked   Boolean          @default(false)
+  views      Int              @default(0)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  posts      forum_posts[]
+  category   forum_categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user       users            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("forum_topics")
 }
 
 model forum_posts {
-  id        String        @id @default(cuid())
+  id        String       @id @default(cuid())
   topicId   String
   userId    String
   content   String
-  isAnswer  Boolean       @default(false) // Mark as best answer
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  topic     forum_topics  @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  user      users         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isAnswer  Boolean      @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  topic     forum_topics @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  user      users        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("forum_posts")
 }
 
-// Certification System
 model certificates {
-  id          String    @id @default(cuid())
-  courseId    String
-  userId      String
-  template    String    // Certificate template design
-  badgeData   String?   // JSON badge information
-  issuedAt    DateTime  @default(now())
-  expiresAt   DateTime?
-  isActive    Boolean   @default(true)
-  course      courses   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  user        users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String    @id @default(cuid())
+  courseId  String
+  userId    String
+  template  String
+  badgeData String?
+  issuedAt  DateTime  @default(now())
+  expiresAt DateTime?
+  isActive  Boolean   @default(true)
+  course    courses   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user      users     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("certificates")
   @@unique([courseId, userId])
+  @@map("certificates")
 }
 
-// Learning Analytics
 model learning_analytics {
-  id              String    @id @default(cuid())
+  id              String   @id @default(cuid())
   userId          String
   courseId        String?
-  eventType       String    // login, lesson_start, lesson_complete, quiz_attempt, etc.
-  eventData       String?   // JSON event data
-  timeSpent       Int?      // Seconds
-  performanceData String?   // JSON performance metrics
-  timestamp       DateTime  @default(now())
-  user            users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventType       String
+  eventData       String?
+  timeSpent       Int?
+  performanceData String?
+  timestamp       DateTime @default(now())
+  user            users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("learning_analytics")
   @@index([userId])
   @@index([eventType])
   @@index([timestamp])
+  @@map("learning_analytics")
 }
 
-// Subscription and Payment Tracking
 model subscriptions {
-  id              String    @id @default(cuid())
-  userId          String    @unique
-  tier            String    // free, premium
-  status          String    // active, cancelled, expired
-  startDate       DateTime  @default(now())
-  endDate         DateTime?
-  monthlyPrice    Float?
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  tier                 String
+  status               String
+  startDate            DateTime  @default(now())
+  endDate              DateTime?
+  monthlyPrice         Float?
   stripeSubscriptionId String?
-  user            users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 users     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("subscriptions")
 }
 
-// Stripe Activities Tracking
 model StripeActivity {
   id                    String    @id @default(cuid())
-  userId                String?   // Optional - some activities might not have a user
-  stripeCustomerId      String?   // Stripe customer ID
-  stripeSubscriptionId  String?   // Stripe subscription ID
-  stripePaymentIntentId String?   // Stripe payment intent ID
-  stripeInvoiceId       String?   // Stripe invoice ID
-  stripeSessionId       String?   // Stripe checkout session ID
-  eventType             String    // checkout_session_created, payment_succeeded, subscription_created, etc.
-  eventSource           String    // api, webhook, manual
-  amount                Float?    // Amount in the currency's smallest unit
-  currency              String?   // Currency code (GBP, USD, etc.)
-  status                String?   // Status of the activity (succeeded, failed, pending, etc.)
-  description           String?   // Human readable description
-  metadata              String?   // JSON metadata from Stripe
-  webhookEventId        String?   // Stripe webhook event ID
-  errorMessage          String?   // Error message if the activity failed
-  processedAt           DateTime? // When the activity was processed
+  userId                String?
+  stripeCustomerId      String?
+  stripeSubscriptionId  String?
+  stripePaymentIntentId String?
+  stripeInvoiceId       String?
+  stripeSessionId       String?
+  eventType             String
+  eventSource           String
+  amount                Float?
+  currency              String?
+  status                String?
+  description           String?
+  metadata              String?
+  webhookEventId        String?
+  errorMessage          String?
+  processedAt           DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+  user                  users?    @relation(fields: [userId], references: [id])
 
-  // Relation to user (optional)
-  user                  users?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  @@map("stripe_activities")
   @@index([userId])
   @@index([stripeCustomerId])
   @@index([stripeSubscriptionId])
   @@index([eventType])
   @@index([createdAt])
   @@index([status])
+  @@map("stripe_activities")
 }

@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "vitest.explorer",
+    "ms-playwright.playwright",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next",
+    "ms-vscode.vscode-eslint",
+    "prisma.prisma"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "vitest.enable": true,
+  "vitest.commandLine": "npm run test",
+  "testing.automaticallyOpenPeekView": "never",
+  "testing.defaultGutterClickAction": "run",
+  "testing.gutterEnabled": true,
+  "testing.openTesting": "neverOpen",
+  "vitest.rootConfig": "./vitest.config.ts",
+  "vitest.workspaceConfig": "./vitest.config.ts",
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "files.associations": {
+    "*.test.ts": "typescript",
+    "*.test.tsx": "typescriptreact",
+    "*.spec.ts": "typescript",
+    "*.spec.tsx": "typescriptreact"
+  },
+  "testing.automaticallyOpenTestResults": "neverOpen"
+}

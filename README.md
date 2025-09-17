@@ -98,32 +98,146 @@ navada_robotics/
 
 ## Testing
 
-This project uses [Vitest](https://vitest.dev/) for unit testing and [Playwright](https://playwright.dev/) for end-to-end testing.
+This project includes comprehensive test coverage using [Vitest](https://vitest.dev/) for unit and integration testing, and [Playwright](https://playwright.dev/) for end-to-end testing.
 
-### Unit Tests
+### Test Structure
 
-Unit tests are located in the `app` directory, alongside the components they test.
-
-To run unit tests:
-
-```bash
-npm run test:unit
+```
+tests/
+├── api/                    # API endpoint tests
+│   ├── agent-lee.test.ts  # AI assistant API tests
+│   ├── auth.test.ts       # Authentication tests
+│   └── learning.test.ts   # Learning platform API tests
+├── database/              # Database operation tests
+│   └── database-operations.test.ts
+├── e2e/                   # End-to-end tests
+│   ├── navada.spec.ts    # Main E2E tests
+│   └── performance.spec.ts # Performance tests
+├── integration/           # Integration tests
+│   └── full-integration.test.ts
+├── mcp/                   # MCP integration tests
+│   └── mcp-integration.test.ts
+├── payment/               # Payment processing tests
+│   └── stripe.test.ts
+└── rag-service.test.ts   # RAG and vector search tests
 ```
 
-### End-to-End Tests
+### Running Tests
 
-E2E tests are located in the `tests/e2e` directory.
-
-To run E2E tests:
-
+#### All Tests
 ```bash
-npm run test:e2e          # Run headless
-npm run test:e2e:headed   # Run with browser UI
+npm run test:all          # Run all tests once
+npm run test              # Run tests in watch mode
+npm run test:coverage     # Run tests with coverage report
 ```
+
+#### Specific Test Categories
+```bash
+# API Tests
+npm run test:api          # Test all API endpoints
+
+# Database Tests
+npm run test:db           # Test database operations
+
+# MCP Integration Tests
+npm run test:mcp          # Test MCP server integrations
+
+# Payment Tests
+npm run test:payment      # Test Stripe payment processing
+
+# Integration Tests
+npm run test:integration  # Test full integration flows
+
+# RAG/Vector Tests
+npm run test:rag          # Test RAG service and vector search
+```
+
+#### Unit Tests
+```bash
+npm run test:unit         # Run unit tests in watch mode
+npm run test:unit:run     # Run unit tests once
+```
+
+#### End-to-End Tests
+```bash
+npm run test:e2e          # Run E2E tests headless
+npm run test:e2e:headed   # Run E2E tests with browser UI
+npm run test:e2e:report   # Show HTML test report
+```
+
+#### Performance Tests
+```bash
+npm run test:perf         # Run performance tests
+
+# Performance metrics measured:
+# - Page load times
+# - Core Web Vitals (LCP, FID, CLS)
+# - Network idle timing
+# - Resource loading performance
+```
+
+### Test Coverage Areas
+
+#### API Endpoints (35 routes tested)
+- **AI Assistant**: Agent Lee chat, TTS, session management
+- **Authentication**: Registration, login, session handling
+- **Learning Platform**: Courses, enrollment, progress tracking, notes
+- **Payment**: Stripe checkout, webhooks, subscriptions
+- **MCP**: Server control, statistics, tool usage
+- **Admin**: Course management, analytics
+
+#### Database Operations
+- User CRUD operations
+- Course management
+- Chat sessions and messages
+- Knowledge base with vector embeddings
+- Subscription management
+- Transaction handling
+
+#### Integration Flows
+- User registration → course enrollment
+- AI chat with RAG and MCP integration
+- Payment → subscription activation
+- Full learning journey with notes and progress
+- Error handling and recovery
+
+#### MCP Integrations
+- Brave Search API
+- GitHub operations
+- File system operations
+- Tool recommendation system
+- Server management
+
+#### Payment Processing
+- Checkout session creation
+- Webhook handling
+- Subscription management
+- Customer portal
+- Activity tracking
+
+### Writing New Tests
+
+When adding new features, create corresponding tests:
+
+1. **API Tests**: Add to `tests/api/` for new endpoints
+2. **Integration Tests**: Add to `tests/integration/` for complex flows
+3. **Unit Tests**: Place alongside components in `app/` directory
+4. **E2E Tests**: Add to `tests/e2e/` for user journeys
+
+### Continuous Integration
+
+Tests are automatically run on:
+- Pull requests
+- Commits to main branch
+- Pre-deployment checks
 
 ### Test Results
 
-The test results will be displayed in the console. If there are any failing tests, they will be highlighted in the output. The output will also show a summary of the test run, including the number of passed and failed tests.
+Test results show:
+- ✅ Passed tests in green
+- ❌ Failed tests in red with error details
+- ⏱️ Test execution time
+- 📊 Coverage percentages (when using `test:coverage`)
 
 ## Pages
 
@@ -136,8 +250,55 @@ The test results will be displayed in the console. If there are any failing test
 
 ## API Endpoints
 
+### AI Assistant APIs
 - `POST /api/agent-lee` - Main AI assistant endpoint
 - `POST /api/agent-lee/tts` - Text-to-speech conversion
+- `POST /api/agent-lee/init` - Initialize chat session
+- `GET /api/agent-lee/session/[threadId]` - Get session details
+- `GET /api/agent-lee/history/[threadId]` - Get chat history
+
+### Authentication APIs
+- `/api/auth/[...nextauth]` - NextAuth authentication handlers
+- `POST /api/auth/register` - User registration
+
+### Learning Platform APIs
+- `GET /api/learning/courses` - Get all courses
+- `GET /api/learning/courses/[courseId]` - Get specific course
+- `POST /api/learning/generate-course` - Generate new course with AI
+- `POST /api/learning/enhance-course` - Enhance existing course
+- `POST /api/learning/generate-quiz` - Generate quiz questions
+- `POST /api/learning/enroll` - Enroll in a course
+- `GET/POST /api/learning/progress` - Track learning progress
+- `GET/POST /api/learning/notes` - Manage learning notes
+- `GET/POST /api/learning/reading-progress` - Track reading progress
+- `POST /api/learning/text-to-speech` - Convert lesson text to speech
+- `GET /api/learning/analytics` - Get learning analytics
+- `POST /api/learning/seed-courses` - Seed initial courses
+
+### Admin APIs
+- `GET/POST /api/admin/courses` - Course administration
+
+### MCP (Model Context Protocol) APIs
+- `GET/POST /api/mcp/control` - Control MCP servers
+- `GET /api/mcp/servers` - Get MCP server status
+- `GET /api/mcp/stats` - Get MCP usage statistics
+
+### Payment APIs (Stripe)
+- `POST /api/stripe/create-checkout-session` - Create Stripe checkout
+- `POST /api/stripe/create-portal-session` - Create customer portal
+- `POST /api/stripe/webhook` - Handle Stripe webhooks
+
+### Utility APIs
+- `POST /api/analytics` - Track analytics events
+- `GET /api/user/chat-sessions` - Get user chat sessions
+- `POST /api/emails/subscribe` - Email newsletter subscription
+- `POST /api/emails/admin` - Admin email notifications
+- `POST /api/generate-website` - Generate website with AI
+- `POST /api/anthropic/codegen` - Generate code with Claude
+
+### Debug APIs (Development Only)
+- `GET /api/debug/db` - Database debugging tools
+- `GET /api/debug/env` - Environment variable checker
 
 ## Knowledge Base & Vector Search
 

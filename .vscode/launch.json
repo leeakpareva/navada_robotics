@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Vitest Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
+      "args": ["run"],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Debug Current Test File",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "${relativeFile}"],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal"
+    }
+  ]
+}
