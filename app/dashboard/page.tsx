@@ -397,9 +397,9 @@ Welcome back, {mockUser.name}! Manage your AI interactions and explore NAVADA Ro
             <Wrench className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Solutions</span>
           </Link>
-          <Link href="/services" className="flex flex-col items-center py-2 px-3 text-xs">
+          <Link href="/robotics" className="flex flex-col items-center py-2 px-3 text-xs">
             <Shield className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Services</span>
+            <span className="text-gray-400">Robotics</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-3 text-xs">
             <span className="text-gray-400">Agent Lee</span>

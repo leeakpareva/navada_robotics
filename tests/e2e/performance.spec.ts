@@ -31,13 +31,13 @@ test.describe('Page Performance Tests', () => {
     expect(loadTime).toBeLessThan(5000); // 5 seconds max
   });
 
-  test('services page performance', async ({ page }) => {
+  test('robotics page performance', async ({ page }) => {
     const start = Date.now();
-    await page.goto('/services');
+    await page.goto('/robotics');
     await page.waitForLoadState('networkidle');
     const loadTime = Date.now() - start;
 
-    console.log(`Services page load time: ${loadTime}ms`);
+    console.log(`Robotics page load time: ${loadTime}ms`);
     expect(loadTime).toBeLessThan(5000); // 5 seconds max
   });
 

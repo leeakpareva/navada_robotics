@@ -76,8 +76,8 @@ for angle in [0, 45, 90, 45, 0]:
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
-                Services
+              <Link href="/ai-agent-development" className="text-white hover:text-purple-400 transition-all duration-200">
+                AI Agents
               </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200">
                 Contact
@@ -95,8 +95,8 @@ for angle in [0, 45, 90, 45, 0]:
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
-                Services
+              <Link href="/ai-agent-development" className="text-white hover:text-purple-400 transition-all duration-200">
+                AI Agents
               </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200">
                 Contact

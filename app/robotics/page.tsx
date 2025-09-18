@@ -99,8 +99,8 @@ export default function RoboticsPage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
-                Services
+              <Link href="/ai-agent-development" className="text-white hover:text-purple-400 transition-all duration-200">
+                AI Agents
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
@@ -121,8 +121,8 @@ export default function RoboticsPage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
-                Services
+              <Link href="/ai-agent-development" className="text-white hover:text-purple-400 transition-all duration-200">
+                AI Agents
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
@@ -159,9 +159,9 @@ export default function RoboticsPage() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/services">
+            <Link href="/solutions">
               <Button variant="outline" size="lg" className="text-lg px-8 bg-transparent border-purple-400 text-purple-400 hover:bg-purple-900 transition-all duration-200">
-                View Services
+                View Solutions
               </Button>
             </Link>
           </div>

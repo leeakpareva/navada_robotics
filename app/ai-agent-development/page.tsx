@@ -99,8 +99,8 @@ export default function AIAgentDevelopmentPage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
-                Services
+              <Link href="/robotics" className="text-white hover:text-purple-400 transition-all duration-200">
+                Robotics
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
@@ -121,8 +121,8 @@ export default function AIAgentDevelopmentPage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/services" className="text-white hover:text-purple-400 transition-all duration-200">
-                Services
+              <Link href="/robotics" className="text-white hover:text-purple-400 transition-all duration-200">
+                Robotics
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
