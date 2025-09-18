@@ -1,16 +1,12 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
+import { AdminAuthorizationError, requireAdmin } from '@/lib/auth'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    // Check if user is admin (you can implement proper auth check)
-    // const session = await getServerSession()
-    // if (!session || session.user.role !== 'admin') {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    // }
+    await requireAdmin()
 
     const courses = await prisma.courses.findMany({
       include: {
@@ -52,6 +48,9 @@ export async function GET() {
 
     return NextResponse.json(coursesWithStats)
   } catch (error) {
+    if (error instanceof AdminAuthorizationError) {
+      return NextResponse.json({ error: error.message }, { status: error.status })
+    }
     console.error('Failed to fetch courses:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -62,11 +61,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    // Check if user is admin
-    // const session = await getServerSession()
-    // if (!session || session.user.role !== 'admin') {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    // }
+    await requireAdmin()
 
     const data = await request.json()
 
@@ -94,6 +89,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json(course)
   } catch (error) {
+    if (error instanceof AdminAuthorizationError) {
+      return NextResponse.json({ error: error.message }, { status: error.status })
+    }
     console.error('Failed to create course:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

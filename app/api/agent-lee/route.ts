@@ -1266,12 +1266,22 @@ export async function POST(request: NextRequest) {
         console.log("[v0] Starting code generation with Anthropic")
         const codegenStartTime = Date.now()
 
+        const internalApiKey = process.env.INTERNAL_API_KEY
+
+        if (!internalApiKey) {
+          console.error("[v0] Internal API key not configured for code generation")
+          return NextResponse.json({
+            error: "Code generation not available",
+            details: "Internal API key not configured"
+          }, { status: 500 })
+        }
+
         // Call our internal codegen API
         const codegenResponse = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/anthropic/codegen`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.INTERNAL_API_KEY || 'agent-lee-internal'}`
+            'Authorization': `Bearer ${internalApiKey}`
           },
           body: JSON.stringify({
             instruction: message,

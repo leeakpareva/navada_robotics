@@ -2,9 +2,17 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
   try {
-    // Simple admin authentication (you can enhance this)
+    const adminKey = process.env.EMAIL_ADMIN_KEY
+
+    if (!adminKey) {
+      console.error('Email admin key is not configured')
+      return NextResponse.json(
+        { error: 'Email admin key not configured' },
+        { status: 500 }
+      )
+    }
+
     const authHeader = request.headers.get('authorization')
-    const adminKey = process.env.EMAIL_ADMIN_KEY || 'admin123' // Set this in your .env.local
 
     if (!authHeader || authHeader !== `Bearer ${adminKey}`) {
       return NextResponse.json(
@@ -58,9 +66,17 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    // Authentication check
+    const adminKey = process.env.EMAIL_ADMIN_KEY
+
+    if (!adminKey) {
+      console.error('Email admin key is not configured')
+      return NextResponse.json(
+        { error: 'Email admin key not configured' },
+        { status: 500 }
+      )
+    }
+
     const authHeader = request.headers.get('authorization')
-    const adminKey = process.env.EMAIL_ADMIN_KEY || 'admin123'
 
     if (!authHeader || authHeader !== `Bearer ${adminKey}`) {
       return NextResponse.json(

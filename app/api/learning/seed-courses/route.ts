@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
+import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { v4 as uuidv4 } from "uuid"
+import { AdminAuthorizationError, requireAdmin } from "@/lib/auth"
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -128,22 +128,9 @@ const defaultCourses = [
   }
 ]
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    // Parse request body to check for bypass parameter
-    const body = await request.json().catch(() => ({}))
-
-    // Check authentication - only admin can seed courses (or bypass with special param)
-    const session = await getServerSession()
-    if (!session || session.user?.email !== "leeakpareva@gmail.com") {
-      // Allow bypass for initial seeding with special parameter
-      if (body.bypassAuth !== "initial-seed-navada-2024") {
-        return NextResponse.json(
-          { error: "Unauthorized. Admin access required." },
-          { status: 401 }
-        )
-      }
-    }
+    await requireAdmin()
 
     console.log("[Seed] Starting to seed default courses...")
 
@@ -217,6 +204,12 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
+    if (error instanceof AdminAuthorizationError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.status }
+      )
+    }
     console.error("[Seed] Error seeding courses:", error)
     return NextResponse.json(
       { error: "Failed to seed courses", details: error instanceof Error ? error.message : "Unknown error" },
