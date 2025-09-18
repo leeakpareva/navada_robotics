@@ -1,5 +1,9 @@
 import { vi } from 'vitest'
 import '@testing-library/jest-dom'
+import React from 'react'
+
+// Make React globally available
+global.React = React
 
 // Mock environment variables
 vi.mock('process', () => ({

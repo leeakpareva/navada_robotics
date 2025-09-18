@@ -15,21 +15,21 @@ export default function RoboticsPage() {
     {
       title: "Autonomous Navigation Robot",
       description: "Advanced robotic system with AI-powered navigation and obstacle avoidance capabilities.",
-      image: "/placeholder-robot-1.jpg",
+      image: "/AiCreative.png",
       tags: ["AI Navigation", "Computer Vision", "Autonomous"],
       status: "In Development"
     },
     {
       title: "Industrial Automation System",
       description: "Precision robotics for manufacturing and assembly line automation.",
-      image: "/placeholder-robot-2.jpg",
+      image: "/NextGenAuto.png",
       tags: ["Manufacturing", "Precision", "Industrial"],
       status: "Prototype"
     },
     {
       title: "Raspberry Pi Robot Platform",
       description: "Educational and research platform for robotics development using Raspberry Pi.",
-      image: "/placeholder-robot-3.jpg",
+      image: "/ManvsMachine.png",
       tags: ["Educational", "Open Source", "Research"],
       status: "Active"
     }

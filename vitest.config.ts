@@ -22,6 +22,11 @@ export default defineConfig({
           '.next/**',
           'coverage/**',
           'tests/e2e/**',
+          'tests/payment/**',
+          'tests/integration/**',
+          'tests/api/learning.test.ts',
+          'tests/api/agent-lee.test.ts',
+          'app/**/*.test.tsx',
           '**/*.e2e.{test,spec}.{js,ts,jsx,tsx}',
           '**/*.playwright.{test,spec}.{js,ts,jsx,tsx}'
         ],

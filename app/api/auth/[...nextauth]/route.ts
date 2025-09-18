@@ -92,13 +92,43 @@ const authOptions: NextAuthOptions = {
 
 const handler = NextAuth(authOptions)
 
-// Wrap handlers to ensure they're async and handle headers properly
-async function GET(request: Request) {
-  return handler(request)
+// App Router handlers for Next.js 15
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ nextauth: string[] }> }
+) {
+  // Await the params as required by Next.js 15
+  const resolvedParams = await params
+
+  // Create a new request with the resolved params
+  const modifiedRequest = new Request(request.url, {
+    method: request.method,
+    headers: request.headers,
+    body: request.body,
+    // @ts-ignore - NextAuth expects query params
+    query: { nextauth: resolvedParams.nextauth }
+  })
+
+  return handler(modifiedRequest as any, { params: { nextauth: resolvedParams.nextauth } } as any)
 }
 
-async function POST(request: Request) {
-  return handler(request)
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ nextauth: string[] }> }
+) {
+  // Await the params as required by Next.js 15
+  const resolvedParams = await params
+
+  // Create a new request with the resolved params
+  const modifiedRequest = new Request(request.url, {
+    method: request.method,
+    headers: request.headers,
+    body: request.body,
+    // @ts-ignore - NextAuth expects query params
+    query: { nextauth: resolvedParams.nextauth }
+  })
+
+  return handler(modifiedRequest as any, { params: { nextauth: resolvedParams.nextauth } } as any)
 }
 
-export { GET, POST, authOptions }
+export { authOptions }
