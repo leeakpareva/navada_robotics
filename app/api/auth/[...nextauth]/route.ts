@@ -92,4 +92,13 @@ const authOptions: NextAuthOptions = {
 
 const handler = NextAuth(authOptions)
 
-export { handler as GET, handler as POST, authOptions }
+// Wrap handlers to ensure they're async and handle headers properly
+async function GET(request: Request) {
+  return handler(request)
+}
+
+async function POST(request: Request) {
+  return handler(request)
+}
+
+export { GET, POST, authOptions }

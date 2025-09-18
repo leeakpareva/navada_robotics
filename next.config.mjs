@@ -7,10 +7,8 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    esmExternals: false,
-  },
   output: 'standalone',
+  outputFileTracingRoot: 'C:\\Users\\leeak\\navada_robotics',
   images: {
     remotePatterns: [
       {
@@ -43,8 +41,6 @@ const nextConfig = {
   ],
   // Compression
   compress: true,
-  // Enable SWC minification
-  swcMinify: true,
   // Bundle optimization
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
