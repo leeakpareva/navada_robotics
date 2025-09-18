@@ -5,7 +5,15 @@ export async function POST(request: NextRequest) {
   try {
     // Basic authentication - ensure this is called from Agent Lee
     const authHeader = request.headers.get('authorization')
-    const internalKey = process.env.INTERNAL_API_KEY || 'agent-lee-internal'
+    const internalKey = process.env.INTERNAL_API_KEY
+
+    if (!internalKey) {
+      console.error('[Codegen API] INTERNAL_API_KEY is not configured')
+      return NextResponse.json(
+        { error: 'Internal API key not configured' },
+        { status: 500 }
+      )
+    }
 
     if (!authHeader || authHeader !== `Bearer ${internalKey}`) {
       return NextResponse.json(
