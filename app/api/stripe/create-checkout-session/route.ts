@@ -9,7 +9,7 @@ const getStripe = () => {
     return null;
   }
   return new Stripe(stripeSecretKey, {
-    apiVersion: '2025-08-27.basil',
+    apiVersion: '2024-11-20.acacia',
   });
 };
 
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'subscription',
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/subscription?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/subscription?canceled=true`,
       customer_email: body.customer_email,
     });

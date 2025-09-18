@@ -6,6 +6,9 @@
     "esbenp.prettier-vscode",
     "ms-vscode.vscode-typescript-next",
     "ms-vscode.vscode-eslint",
-    "prisma.prisma"
+    "prisma.prisma",
+    "ckolkman.vscode-postgres",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg"
   ]
 }
