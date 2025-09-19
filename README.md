@@ -63,6 +63,29 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
+## Project Management & Planning
+
+**GitHub Project Board**: [Navada_Robotics Planning View](https://github.com/users/leeakpareva/projects/7)
+
+**Planning Workflow:**
+1. **Backlog**: New features, bugs, and improvements
+2. **Ready**: Prioritized items ready for development
+3. **In Progress**: Currently being worked on
+4. **In Review**: Code review, testing, validation
+5. **Done**: Completed and deployed
+
+**Planning Features:**
+- **Priority Levels**: P0 (Critical), P1 (High), P2 (Medium)
+- **Size Estimation**: XS (1-2h), S (3-5h), M (1-2d), L (3-5d), XL (1w+)
+- **Sprint Planning**: 5 iterations planned (Sep 18 - Nov 13, 2025)
+- **Roadmap View**: Long-term feature planning and timeline
+
+**How to Use:**
+- Add new issues/features to the project board
+- Set priority and size estimates for planning
+- Move items through workflow columns
+- Use iterations for sprint planning
+
 ## Project Structure
 
 ```
