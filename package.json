@@ -24,8 +24,7 @@
     "test:e2e:report": "playwright show-report",
     "test:perf": "playwright test tests/e2e/performance.spec.ts",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && npm run build:vercel",
-    "build:vercel": "cross-env NODE_ENV=production SKIP_VALIDATION=true next build"
+    "vercel-build": "prisma generate && NODE_ENV=production SKIP_VALIDATION=true next build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.62.0",
@@ -114,7 +113,6 @@
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^5.0.2",
     "@vitest/ui": "^3.2.4",
-    "cross-env": "^10.0.0",
     "eslint": "^9.35.0",
     "eslint-config-next": "^14.2.15",
     "jsdom": "^27.0.0",
