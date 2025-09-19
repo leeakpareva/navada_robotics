@@ -121,13 +121,17 @@ export default function LearningPage() {
   }
 
   const handleUpgradeToPremium = async () => {
+    console.log('handleUpgradeToPremium called, session:', session)
+
     if (!session) {
+      console.log('No session found, showing signup modal')
       setShowSignupModal(true)
       return
     }
 
     setIsUpgrading(true)
     try {
+      console.log('Creating checkout session...')
       const response = await fetch('/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
@@ -140,10 +144,13 @@ export default function LearningPage() {
       })
 
       const data = await response.json()
+      console.log('Checkout response:', data)
 
       if (data.url) {
+        console.log('Redirecting to:', data.url)
         window.location.href = data.url
       } else {
+        console.error('No URL in response:', data)
         toast.error('Failed to create checkout session')
       }
     } catch (error) {

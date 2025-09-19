@@ -40,6 +40,35 @@ interface ChatSession {
 
 export default function Dashboard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isUpgrading, setIsUpgrading] = useState(false)
+
+  const handleUpgradeToPremium = async () => {
+    setIsUpgrading(true)
+    try {
+      const response = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lookup_key: 'Consulting_Services_(Ai)-acfea00',
+          customer_email: 'user@example.com', // Replace with actual session email
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        console.error('Failed to create checkout session')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      setIsUpgrading(false)
+    }
+  }
 
   // Mock data for demo purposes
   const chatSessions = [
@@ -378,9 +407,14 @@ Welcome back, {mockUser.name}! Manage your AI interactions and explore NAVADA Ro
                       <Settings className="h-4 w-4 mr-2" />
                       Edit Profile
                     </Button>
-                    <Button variant="outline" className="border-green-400/50 text-green-300 hover:bg-green-600/20 hover:border-green-400 hover:text-white">
+                    <Button
+                      variant="outline"
+                      className="border-green-400/50 text-green-300 hover:bg-green-600/20 hover:border-green-400 hover:text-white"
+                      onClick={handleUpgradeToPremium}
+                      disabled={isUpgrading}
+                    >
                       <Crown className="h-4 w-4 mr-2" />
-                      Upgrade Account
+                      {isUpgrading ? 'Processing...' : 'Upgrade Account'}
                     </Button>
                   </div>
                 </CardContent>
