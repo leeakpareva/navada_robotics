@@ -324,6 +324,44 @@ This application is optimized for deployment on Vercel:
 3. Add environment variables in Vercel dashboard
 4. Deploy
 
+### Build Troubleshooting
+
+If you encounter Vercel build failures:
+
+1. **Check the last working build**: Use `git log --oneline` to identify the last successful build commit
+2. **Compare configurations**: Use `git diff <last-working-commit>..HEAD` to see what changed
+3. **Focus on these critical files**:
+   - `package.json` (scripts and dependencies)
+   - `next.config.mjs` (Next.js configuration)
+   - `vercel.json` (Vercel build settings)
+   - `.eslintrc.json` (ESLint configuration)
+
+**Example troubleshooting workflow:**
+```bash
+# Find the last working build commit (e.g., debab58)
+git log --oneline
+
+# Compare what changed since then
+git diff debab58..HEAD --name-only
+
+# Check specific file differences
+git show debab58:vercel.json
+git show debab58:next.config.mjs
+
+# Revert to working configuration if needed
+git checkout debab58 -- vercel.json next.config.mjs
+```
+
+**Common issues:**
+- Custom build scripts in `package.json` can interfere with Vercel's build process
+- Complex environment variable overrides in `vercel.json` may cause conflicts
+- ESLint version mismatches with `eslint-config-next`
+
+**Working configuration reference (commit `debab58`):**
+- Uses standard `npm run build` command
+- Minimal `vercel.json` with basic environment variables
+- Simple `next.config.mjs` without complex webpack modifications
+
 ## License
 
 © 2024 NAVADA. All rights reserved.
