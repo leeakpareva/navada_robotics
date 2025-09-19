@@ -84,7 +84,13 @@
       "Bash(dir:*)",
       "Bash(ls:*)",
       "Bash(npm uninstall:*)",
-      "Bash(npm run vercel-build:*)"
+      "Bash(npm run vercel-build:*)",
+      "Bash(where python)",
+      "Bash(pip show:*)",
+      "Bash(python:*)",
+      "Bash(del .eslintrc.json)",
+      "Bash(SKIP_VALIDATION=true NODE_ENV=production npm run vercel-build)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []
