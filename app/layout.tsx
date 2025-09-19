@@ -21,13 +21,6 @@ export const metadata: Metadata = {
   }
 }
 
-export const viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
-  viewportFit: "cover"
-}
 
 export default function RootLayout({
   children,
@@ -37,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
         <link rel="preload" href="/api/auth/session" as="fetch" crossOrigin="anonymous" />
         <link rel="preload" href="/_next/static/css/app/layout.css" as="style" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
