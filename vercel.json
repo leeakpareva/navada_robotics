@@ -8,7 +8,8 @@
       "SKIP_ENV_VALIDATION": "1",
       "NEXT_TELEMETRY_DISABLED": "1",
       "NODE_ENV": "production",
-      "SKIP_VALIDATION": "true"
+      "SKIP_VALIDATION": "true",
+      "CI": "true"
     }
   },
   "buildCommand": "npm run vercel-build",

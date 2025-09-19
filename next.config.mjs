@@ -6,13 +6,13 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Development stage configuration - ignore errors for deployment
+  // Production-ready configuration with proper error handling
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: process.env.NODE_ENV === 'production',
     dirs: ['app', 'lib', 'components']
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: process.env.NODE_ENV === 'production' || process.env.SKIP_VALIDATION === 'true',
   },
   // Use SWC minifier (default in Next.js 14)
   swcMinify: true,
