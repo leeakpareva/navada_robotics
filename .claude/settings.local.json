@@ -82,7 +82,9 @@
       "Bash(rm:*)",
       "Bash(git restore:*)",
       "Bash(dir:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run vercel-build:*)"
     ],
     "deny": [],
     "ask": []
