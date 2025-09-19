@@ -8,7 +8,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   output: 'standalone',
-  outputFileTracingRoot: 'C:\\Users\\leeak\\navada_robotics',
   images: {
     remotePatterns: [
       {
