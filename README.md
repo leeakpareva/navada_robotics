@@ -329,6 +329,99 @@ Test results show:
 - The `search` API first performs cosine similarity lookups against the stored vectors and gracefully falls back to keyword search when embeddings are unavailable.
 - Unit tests in `tests/rag-service.test.ts` demonstrate how embeddings influence ranking. Run `npm run test` to verify the vector search pipeline end-to-end.
 
+## Error Tracking with Sentry
+
+This application includes comprehensive error tracking and monitoring using [Sentry](https://sentry.io).
+
+### Sentry Features
+
+- **Automatic Error Capture**: All unhandled errors are automatically captured
+- **Performance Monitoring**: Track transaction performance and identify bottlenecks
+- **Session Replay**: Records user sessions when errors occur (10% sampling, 100% on errors)
+- **Custom Context**: Errors include user context, tags, and custom metadata
+- **Source Maps**: Full stack traces in production with source map upload
+- **Release Tracking**: Track errors by release version
+
+### How Sentry Works
+
+**Automatic Tracking** (Default):
+- Sentry automatically captures all unhandled errors in both client and server code
+- No code changes needed - errors are tracked automatically once configured
+- Works in development (`npm run dev`) and production environments
+
+**Manual Error Capture** (When needed):
+```typescript
+import * as Sentry from '@sentry/nextjs';
+
+// Capture exceptions
+try {
+  // Your code
+} catch (error) {
+  Sentry.captureException(error);
+}
+
+// Send custom messages
+Sentry.captureMessage('Custom event', 'info');
+
+// Add user context
+Sentry.setUser({ id: userId, email: userEmail });
+
+// Add custom tags
+Sentry.setTag('feature', 'payment');
+```
+
+### Testing Sentry
+
+#### Option 1: Test Page (Recommended)
+Visit http://localhost:3000/sentry-test for an interactive test interface with buttons to trigger various error scenarios.
+
+#### Option 2: API Testing
+```bash
+# Test server-side error tracking
+curl "http://localhost:3000/api/sentry-test?type=basic"
+
+# Test custom message
+curl "http://localhost:3000/api/sentry-test?type=message"
+
+# Test with context
+curl "http://localhost:3000/api/sentry-test?type=context"
+```
+
+#### Option 3: Automated Test Script
+```bash
+# Run comprehensive test suite
+node test-sentry.js
+```
+
+This script tests:
+- Client and server errors
+- Async errors
+- Custom messages
+- User context
+- Custom tags and metadata
+
+### Verifying Sentry Integration
+
+1. **Trigger a test error** using any method above
+2. **Check the console** for error logs
+3. **Visit Sentry Dashboard**: https://sentry.io
+4. **Navigate to your project**: `generali-ki / sentry-purple-lamp`
+5. **View captured events** in the Issues tab
+
+### Sentry Configuration Files
+
+- `sentry.client.config.ts` - Client-side configuration
+- `sentry.server.config.ts` - Server-side configuration
+- `sentry.edge.config.ts` - Edge runtime configuration
+- `next.config.mjs` - Sentry webpack plugin configuration
+
+### When Errors Are Captured
+
+- **Development**: All errors are captured with debug information
+- **Production**: Errors are captured with source maps for debugging
+- **User Sessions**: 10% of sessions are recorded, 100% when errors occur
+- **Performance**: All transactions are monitored (configurable sample rate)
+
 ## Environment Variables
 
 | Variable | Description | Required |
@@ -337,6 +430,10 @@ Test results show:
 | `OPENAI_ASSISTANT_ID` | OpenAI Assistant ID for Agent Lee | Yes |
 | `VOICE_PROMPT_ID` | Voice prompt configuration ID | Yes |
 | `OPENAI_EMBEDDING_MODEL` | Optional embedding model used for knowledge vectorization (defaults to `text-embedding-3-small`) | No |
+| `NEXT_PUBLIC_SENTRY_DSN` | Sentry Data Source Name for error tracking | Yes |
+| `SENTRY_ORG` | Sentry organization slug | Yes |
+| `SENTRY_PROJECT` | Sentry project name | Yes |
+| `SENTRY_AUTH_TOKEN` | Sentry auth token for source map upload | Yes (for production) |
 
 ## Deployment
 
