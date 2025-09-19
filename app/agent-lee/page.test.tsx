@@ -2,7 +2,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import AgentLeePage from './page'
-import { SessionProvider } from 'next-auth/react'
 
 // Mock next-auth to simulate loading state
 vi.mock('next-auth/react', () => ({

@@ -15,21 +15,21 @@ export default function ComputerVisionPage() {
     {
       title: "Real-time Object Detection",
       description: "Advanced object detection and classification system for real-time applications.",
-      image: "/placeholder-vision-1.jpg",
+      image: "/placeholder.jpg",
       tags: ["Object Detection", "Real-time", "Deep Learning"],
       status: "Production"
     },
     {
       title: "Facial Recognition System",
       description: "Secure and accurate facial recognition technology for access control and identification.",
-      image: "/placeholder-vision-2.jpg",
+      image: "/placeholder.jpg",
       tags: ["Facial Recognition", "Security", "Biometrics"],
       status: "Active"
     },
     {
       title: "Medical Image Analysis",
       description: "AI-powered analysis of medical images for diagnostic assistance and research.",
-      image: "/placeholder-vision-3.jpg",
+      image: "/placeholder.jpg",
       tags: ["Medical Imaging", "Healthcare", "Diagnostics"],
       status: "Research"
     }

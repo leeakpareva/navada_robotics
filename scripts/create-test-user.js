@@ -14,12 +14,13 @@ async function createTestUser() {
     if (existingUser) {
       console.log('Test user already exists!')
       console.log('Email: test@navada.com')
-      console.log('Password: Test123!')
+      console.log('Password:', process.env.TEST_USER_PASSWORD || 'Test123!')
       return
     }
 
     // Create test user
-    const hashedPassword = await bcrypt.hash('Test123!', 12)
+    const testUserPassword = process.env.TEST_USER_PASSWORD || 'Test123!'
+    const hashedPassword = await bcrypt.hash(testUserPassword, 12)
 
     const user = await prisma.users.create({
       data: {

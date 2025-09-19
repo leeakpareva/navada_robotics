@@ -287,4 +287,89 @@
   .cursor-glow:hover::before {
     opacity: 1;
   }
+
+  /* Mobile touch improvements */
+  @media (max-width: 768px) {
+    /* Ensure minimum touch target size */
+    button, a, [role="button"], input[type="button"], input[type="submit"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Better mobile text readability */
+    h1, h2, h3, h4, h5, h6 {
+      line-height: 1.2;
+    }
+
+    p, li {
+      line-height: 1.6;
+    }
+
+    /* Prevent text zoom on orientation change */
+    * {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+
+    /* Improve mobile card layouts */
+    .card {
+      margin: 0.5rem;
+      border-radius: 0.75rem;
+    }
+
+    /* Better mobile button spacing */
+    .flex.gap-4 {
+      gap: 0.75rem;
+    }
+
+    /* Improve mobile form elements */
+    input, textarea, select {
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+    }
+
+    /* Mobile-specific utility classes */
+    .mobile-px {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .mobile-py {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+
+    .mobile-text-sm {
+      font-size: 0.875rem;
+    }
+
+    .mobile-text-base {
+      font-size: 1rem;
+    }
+
+    .mobile-text-lg {
+      font-size: 1.125rem;
+    }
+
+    .mobile-text-xl {
+      font-size: 1.25rem;
+    }
+
+    /* Better mobile spacing */
+    .mobile-space-y-2 > * + * {
+      margin-top: 0.5rem;
+    }
+
+    .mobile-space-y-4 > * + * {
+      margin-top: 1rem;
+    }
+  }
+
+  /* Tablet improvements */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
 }

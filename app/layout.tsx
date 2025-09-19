@@ -14,6 +14,19 @@ export const metadata: Metadata = {
   generator: "Next.js",
   keywords: "robotics, AI, Raspberry Pi, automation, computer vision, deep learning, robotics education",
   authors: [{ name: "Lee Akpareva" }],
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "mobile-web-app-capable": "yes"
+  }
+}
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover"
 }
 
 export default function RootLayout({
@@ -31,7 +44,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//vitals.vercel-insights.com" />
         <link rel="dns-prefetch" href="//va.vercel-scripts.com" />
       </head>
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} pb-20 md:pb-0`}>
+      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} pb-safe md:pb-0 overflow-x-hidden`}>
         <SessionProvider>
           <Suspense fallback={null}>{children}</Suspense>
         </SessionProvider>

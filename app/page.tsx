@@ -36,8 +36,9 @@ export default function NavadaRoboticsApp() {
 
             {/* Mobile menu button */}
             <button
-              className="md:hidden text-white hover:bg-gray-800 transition-all duration-200 hover:scale-105 p-2 rounded"
+              className="md:hidden text-white hover:bg-gray-800 transition-all duration-200 hover:scale-105 p-3 rounded-lg min-w-12 min-h-12 flex items-center justify-center"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
             >
               <div className="transition-transform duration-200">
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -72,26 +73,26 @@ export default function NavadaRoboticsApp() {
 
           {/* Mobile navigation */}
           <div className={`md:hidden mt-4 pb-4 border-t border-gray-800 pt-4 transition-all duration-300 ${isMenuOpen ? 'block' : 'hidden'}`}>
-            <nav className="flex flex-col space-y-3">
-              <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
+            <nav className="flex flex-col space-y-1">
+              <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Solutions
               </Link>
-              <Link href="/news" className="relative text-white hover:text-cyan-400 transition-all duration-200 font-semibold">
+              <Link href="/news" className="relative text-white hover:text-cyan-400 transition-all duration-200 font-semibold py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 <span className="relative z-10">News</span>
-                <span className="absolute -top-1 -right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                <span className="absolute top-2 left-12 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
               </Link>
-              <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
+              <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
               </Link>
-              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200">
+              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Agent Lee
               </Link>
               {session && (
-                <Link href="/dashboard" className="text-purple-400 hover:text-purple-300 transition-all duration-200">
+                <Link href="/dashboard" className="text-purple-400 hover:text-purple-300 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                   Dashboard
                 </Link>
               )}
-              <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200">
+              <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Contact
               </Link>
             </nav>
@@ -115,10 +116,10 @@ export default function NavadaRoboticsApp() {
             <Badge variant="secondary" className="mb-4 bg-purple-900 text-purple-200 border-purple-700">
               AI • Robotics • Digital Innovation
             </Badge>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-6 text-balance tracking-tighter leading-tight md:leading-none text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 px-4">
               Navigating Artistic Vision with Advanced Digital Assistance
             </h2>
-            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-3xl mx-auto px-4 leading-relaxed">
               NAVADA explores how technology advances our future through the intersection of AI, robotics, and creative
               innovation. I support the growth and adoption of AI tools focused on pioneering research and products in
               robotics and automation for the next generation.
@@ -146,14 +147,14 @@ export default function NavadaRoboticsApp() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/solutions">
-                <Button size="lg" className="text-lg px-8 bg-purple-600 hover:bg-purple-700 transition-all duration-200">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
+              <Link href="/solutions" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 bg-purple-600 hover:bg-purple-700 transition-all duration-200 min-h-12">
                   Explore Innovation
                 </Button>
               </Link>
-              <Link href="/about">
-                <Button variant="outline" size="lg" className="text-lg px-8 bg-transparent border-purple-400 text-purple-400 hover:bg-purple-900 transition-all duration-200">
+              <Link href="/about" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 bg-transparent border-purple-400 text-purple-400 hover:bg-purple-900 transition-all duration-200 min-h-12">
                   My Vision
                 </Button>
               </Link>

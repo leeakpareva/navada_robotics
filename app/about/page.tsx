@@ -130,8 +130,8 @@ export default function AboutPage() {
                   <p className="text-gray-200 text-sm mb-3">
                     My expertise spans the full spectrum of modern innovation - from crafting elegant code and integrating 
                     OpenAI APIs to synthesizing voice experiences and designing intuitive user journeys. Beyond technology, 
-                    I'm a passionate Fashion Designer and Shoe Maker, finding inspiration in the intersection of form and function. 
-                    When I need to clear my mind and spark creativity, you'll find me roller blading through the streets of London.
+                    I&apos;m a passionate Fashion Designer and Shoe Maker, finding inspiration in the intersection of form and function.
+                    When I need to clear my mind and spark creativity, you&apos;ll find me roller blading through the streets of London.
                   </p>
                   <p className="text-gray-200 text-sm mb-3">
                     This project embodies my commitment to breaking down barriers between cutting-edge technology and practical 

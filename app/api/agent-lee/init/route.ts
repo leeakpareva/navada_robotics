@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { RAGService } from "@/lib/rag-service"
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // Seed the knowledge base with initial robotics and AI content
     await RAGService.seedKnowledgeBase()

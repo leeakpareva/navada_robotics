@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Menu, X, ArrowLeft, Brain, MessageCircle, Zap, Bot, Code, Database } from "lucide-react"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/ui/optimized-image"
@@ -15,21 +15,21 @@ export default function AIAgentDevelopmentPage() {
     {
       title: "Conversational AI Assistant",
       description: "Advanced natural language processing agent for customer service and support.",
-      image: "/placeholder-ai-1.jpg",
+      image: "/placeholder.jpg",
       tags: ["NLP", "Conversational AI", "Customer Support"],
       status: "Production"
     },
     {
       title: "Intelligent Task Automation",
       description: "AI agents that automate complex business processes and workflows.",
-      image: "/placeholder-ai-2.jpg",
+      image: "/placeholder.jpg",
       tags: ["Automation", "Workflow", "Business Intelligence"],
       status: "In Development"
     },
     {
       title: "Multi-Modal AI Agent",
       description: "Agent capable of processing text, images, and voice inputs for comprehensive assistance.",
-      image: "/placeholder-ai-3.jpg",
+      image: "/placeholder.jpg",
       tags: ["Multi-Modal", "Computer Vision", "Speech Recognition"],
       status: "Beta"
     }
@@ -309,7 +309,7 @@ export default function AIAgentDevelopmentPage() {
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Deploy AI Agents?</h2>
           <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
             Transform your business with intelligent AI agents. From customer service to complex automation, 
-            we'll help you build the perfect AI solution.
+            we&apos;ll help you build the perfect AI solution.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact">

@@ -81,7 +81,8 @@
       "Bash(timeout 3 sleep 3)",
       "Bash(rm:*)",
       "Bash(git restore:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

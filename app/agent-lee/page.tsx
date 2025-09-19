@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { BeamsBackground } from "@/components/ui/beams-background"
-import { Menu, X, ShieldCheck, SendHorizonal, UserCircle2, Mic2, MicOff, AudioLines, VolumeX, BrainCircuit, Dna, Fingerprint, Radio, Lock, Download, FileDown, Home, ArrowLeft, LogOut, Newspaper, Infinity as InfinityIcon, BarChart3 } from "lucide-react"
+import { Menu, X, ShieldCheck, SendHorizonal, UserCircle2, Mic2, MicOff, AudioLines, VolumeX, BrainCircuit, Dna, Fingerprint, Radio, Lock, Download, FileDown, Home, LogOut, Newspaper, Infinity as InfinityIcon, BarChart3 } from "lucide-react"
 import Link from "next/link"
 
 
