@@ -28,6 +28,7 @@ A Next.js web application showcasing NAVADA's innovations at the intersection of
 - Node.js 18+ 
 - npm or pnpm
 - OpenAI API key
+- Database (Neon PostgreSQL recommended, or local PostgreSQL)
 
 ## Installation
 
@@ -47,14 +48,28 @@ pnpm install
 3. Set up environment variables:
 Create a `.env.local` file in the root directory with:
 ```env
+# Database Configuration
+DATABASE_URL=postgresql://username:password@localhost:5432/navada_robotics
+
+# OpenAI Configuration
 OPENAI_API_KEY=your_openai_api_key
 OPENAI_ASSISTANT_ID=your_assistant_id
 VOICE_PROMPT_ID=your_voice_prompt_id
+
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-here
 ```
 
 **Note**: For production deployment on Vercel, ensure these environment variables are set in your Vercel project settings.
 
-4. Run the development server:
+4. Set up the database:
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+5. Run the development server:
 ```bash
 npm run dev
 # or
@@ -62,6 +77,236 @@ pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+## Database Setup
+
+NAVADA Robotics uses PostgreSQL as its primary database with Prisma ORM for database management. You can choose between a cloud-hosted Neon database (recommended) or a local PostgreSQL installation.
+
+### Option 1: Neon Database (Recommended)
+
+[Neon](https://neon.tech) is a serverless PostgreSQL platform that's perfect for development and production. It offers a generous free tier and scales automatically.
+
+#### Why Neon?
+- **Serverless**: No database server management required
+- **Free Tier**: Generous limits for development and small projects
+- **Instant Setup**: Database ready in seconds
+- **Automatic Scaling**: Scales down to zero when not in use
+- **Built-in Branching**: Create database branches for feature development
+
+#### Setup Steps:
+
+1. **Create a Neon Account**
+   - Visit [neon.tech](https://neon.tech) and sign up for a free account
+   - Verify your email address
+
+2. **Create a New Project**
+   - Click "Create a project" in your Neon dashboard
+   - Choose a project name (e.g., "navada-robotics")
+   - Select your preferred region (closest to your users)
+   - Choose PostgreSQL version (latest recommended)
+
+3. **Get Your Connection String**
+   - In your project dashboard, click "Dashboard" → "Connection Details"
+   - Copy the connection string that looks like:
+   ```
+   postgresql://username:password@ep-cool-darkness-123456.us-east-2.aws.neon.tech/neondb?sslmode=require
+   ```
+
+4. **Configure Environment Variables**
+   - Add your Neon connection string to `.env.local`:
+   ```env
+   DATABASE_URL="postgresql://username:password@ep-cool-darkness-123456.us-east-2.aws.neon.tech/neondb?sslmode=require"
+   ```
+
+5. **Initialize the Database**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+#### Neon Features for Development:
+- **Database Branching**: Create branches for testing schema changes
+- **Time Travel**: Restore your database to any point in time
+- **Connection Pooling**: Built-in connection pooling for better performance
+- **Monitoring**: Real-time database metrics and query insights
+
+### Option 2: Local PostgreSQL
+
+If you prefer running PostgreSQL locally or need offline development capabilities, you can set up a local PostgreSQL instance.
+
+#### Prerequisites:
+- PostgreSQL 12+ installed on your system
+- Basic knowledge of PostgreSQL commands
+
+#### Installation:
+
+**On macOS (using Homebrew):**
+```bash
+# Install PostgreSQL
+brew install postgresql
+
+# Start PostgreSQL service
+brew services start postgresql
+
+# Create a database
+createdb navada_robotics
+```
+
+**On Ubuntu/Debian:**
+```bash
+# Update package list
+sudo apt update
+
+# Install PostgreSQL
+sudo apt install postgresql postgresql-contrib
+
+# Start PostgreSQL service
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+
+# Switch to postgres user and create database
+sudo -u postgres createdb navada_robotics
+
+# Create a new user (optional)
+sudo -u postgres createuser --interactive
+```
+
+**On Windows:**
+1. Download PostgreSQL from [postgresql.org](https://www.postgresql.org/download/windows/)
+2. Run the installer and follow the setup wizard
+3. Remember the password you set for the postgres user
+4. Use pgAdmin or command line to create a database named `navada_robotics`
+
+#### Configuration:
+
+1. **Set up Database Connection**
+   - Update your `.env.local` file with local connection details:
+   ```env
+   DATABASE_URL="postgresql://username:password@localhost:5432/navada_robotics"
+   ```
+   
+   Replace:
+   - `username`: Your PostgreSQL username (often `postgres`)
+   - `password`: Your PostgreSQL password
+   - `navada_robotics`: Your database name
+
+2. **Test Connection**
+   ```bash
+   # Test if you can connect to the database
+   psql postgresql://username:password@localhost:5432/navada_robotics
+   ```
+
+3. **Initialize Database Schema**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+### Database Schema Overview
+
+The application uses Prisma ORM with the following key models:
+
+- **Users**: User accounts and authentication
+- **Courses**: Learning platform content
+- **Lessons**: Individual course lessons
+- **ChatSession/ChatMessage**: AI assistant conversations  
+- **KnowledgeBase**: Vector embeddings for RAG
+- **StripeActivity**: Payment and subscription tracking
+
+### Common Database Commands
+
+```bash
+# Generate Prisma client (run after schema changes)
+npx prisma generate
+
+# Push schema changes to database
+npx prisma db push
+
+# View database in browser
+npx prisma studio
+
+# Reset database (development only)
+npx prisma db reset
+
+# View current schema
+npx prisma db pull
+```
+
+### Database Troubleshooting
+
+#### Connection Issues:
+
+**Error: "Can't reach database server"**
+- Check if PostgreSQL is running (local setup)
+- Verify connection string format
+- Ensure database exists
+- Check firewall settings
+
+**Neon-specific issues:**
+- Verify your connection string includes `?sslmode=require`
+- Check if you're within your Neon plan limits
+- Ensure your IP is not blocked (Neon allows all IPs by default)
+
+**Local PostgreSQL issues:**
+- Ensure PostgreSQL service is running:
+  ```bash
+  # macOS
+  brew services list | grep postgresql
+  
+  # Linux
+  sudo systemctl status postgresql
+  
+  # Windows
+  services.msc (look for PostgreSQL service)
+  ```
+
+#### Schema Issues:
+
+**Error: "Table doesn't exist"**
+```bash
+# Reset and recreate schema
+npx prisma db push --force-reset
+```
+
+**Error: "Prisma client out of sync"**
+```bash
+# Regenerate Prisma client
+npx prisma generate
+```
+
+#### Performance Tips:
+
+**For Local Development:**
+- Use connection pooling in production
+- Regular maintenance: `VACUUM ANALYZE` on large tables
+- Index optimization for frequently queried fields
+
+**For Neon:**
+- Use database branching for schema experiments
+- Monitor usage in Neon dashboard
+- Consider connection pooling for high-traffic applications
+
+### Environment Variables
+
+The following database-related environment variables are available:
+
+| Variable | Description | Required | Example |
+|----------|-------------|----------|---------|
+| `DATABASE_URL` | PostgreSQL connection string | Yes | `postgresql://user:pass@host:5432/db` |
+| `DATABASE_POOL_SIZE` | Connection pool size | No | `10` |
+| `DATABASE_SSL` | Enable SSL connections | No | `true` |
+
+### Production Considerations
+
+When deploying to production:
+
+1. **Use Neon for Production**: Recommended for its reliability and scaling
+2. **Enable SSL**: Always use SSL connections in production
+3. **Connection Pooling**: Configure appropriate pool sizes
+4. **Monitoring**: Set up database monitoring and alerts
+5. **Backups**: Neon provides automatic backups; configure additional backups as needed
+
+For more detailed deployment instructions, see the [Deployment Guide](./wiki/Deployment.md).
 
 ## Project Management & Planning
 
@@ -426,14 +671,22 @@ This script tests:
 
 | Variable | Description | Required |
 |----------|-------------|----------|
+| `DATABASE_URL` | PostgreSQL connection string | Yes |
+| `NEXTAUTH_URL` | Application URL for authentication | Yes |
+| `NEXTAUTH_SECRET` | Secret key for authentication | Yes |
 | `OPENAI_API_KEY` | OpenAI API key for AI features | Yes |
 | `OPENAI_ASSISTANT_ID` | OpenAI Assistant ID for Agent Lee | Yes |
 | `VOICE_PROMPT_ID` | Voice prompt configuration ID | Yes |
+| `VECTOR_STORE_ID` | OpenAI Vector Store ID for knowledge base | Yes |
 | `OPENAI_EMBEDDING_MODEL` | Optional embedding model used for knowledge vectorization (defaults to `text-embedding-3-small`) | No |
+| `STRIPE_PUBLISHABLE_KEY` | Stripe publishable key for payments | Yes (if using payments) |
+| `STRIPE_SECRET_KEY` | Stripe secret key for payments | Yes (if using payments) |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook secret for payment processing | Yes (if using payments) |
 | `NEXT_PUBLIC_SENTRY_DSN` | Sentry Data Source Name for error tracking | Yes |
 | `SENTRY_ORG` | Sentry organization slug | Yes |
 | `SENTRY_PROJECT` | Sentry project name | Yes |
 | `SENTRY_AUTH_TOKEN` | Sentry auth token for source map upload | Yes (for production) |
+| `BRAVE_SEARCH_API_KEY` | Brave Search API key for MCP integration | No |
 
 ## Deployment
 
