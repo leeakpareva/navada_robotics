@@ -1,9 +1,9 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
-import path from 'path'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tsconfigPaths()],
   test: {
     projects: [
       {
@@ -26,7 +26,6 @@ export default defineConfig({
           'tests/integration/**',
           'tests/api/learning.test.ts',
           'tests/api/agent-lee.test.ts',
-          'app/**/*.test.tsx',
           '**/*.e2e.{test,spec}.{js,ts,jsx,tsx}',
           '**/*.playwright.{test,spec}.{js,ts,jsx,tsx}'
         ],
@@ -48,17 +47,6 @@ export default defineConfig({
     reporters: ['default', 'html'],
     outputFile: {
       html: './test-results/index.html'
-    }
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './'),
-      '@/components': path.resolve(__dirname, './components'),
-      '@/lib': path.resolve(__dirname, './lib'),
-      '@/app': path.resolve(__dirname, './app'),
-      '@/styles': path.resolve(__dirname, './styles'),
-      '@/hooks': path.resolve(__dirname, './hooks'),
-      '@/types': path.resolve(__dirname, './types')
     }
   }
 })

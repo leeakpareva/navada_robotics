@@ -28,3 +28,6 @@ next-env.d.ts
 
 # auth/session cookies
 cookies.txt
+
+# test results
+/test-results/
