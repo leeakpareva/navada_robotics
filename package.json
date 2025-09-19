@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
@@ -23,7 +23,8 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:report": "playwright show-report",
     "test:perf": "playwright test tests/e2e/performance.spec.ts",
-    "postinstall": "prisma generate || echo 'Prisma generate skipped'"
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma generate && next build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.62.0",
