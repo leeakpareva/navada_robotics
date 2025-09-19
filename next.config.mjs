@@ -1,12 +1,5 @@
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Production-ready configuration with proper error handling
   eslint: {
     ignoreDuringBuilds: true,
     dirs: ['app', 'lib', 'components']
@@ -14,8 +7,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Use SWC minifier (default in Next.js 14)
-  swcMinify: true,
+  experimental: {
+    esmExternals: false,
+  },
   output: 'standalone',
   images: {
     remotePatterns: [
@@ -31,7 +25,6 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    
     minimumCacheTTL: 31536000, // 1 year cache
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -50,9 +43,10 @@ const nextConfig = {
   ],
   // Compression
   compress: true,
+  // Enable SWC minification
+  swcMinify: true,
   // Bundle optimization
   webpack: (config, { dev, isServer }) => {
-    config.resolve.alias['@'] = path.resolve(__dirname);
     if (!dev && !isServer) {
       // Split chunks for better caching
       config.optimization.splitChunks = {
