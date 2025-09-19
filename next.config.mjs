@@ -77,15 +77,17 @@ const nextConfig = {
   },
 }
 
-export default withSentryConfig(nextConfig, {
+// Only wrap with Sentry in production and when auth token is available
+const sentryWebpackPluginOptions = {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
   org: "generali-ki",
   project: "sentry-purple-lamp",
 
-  // Only print logs for uploading source maps in CI
-  silent: !process.env.CI,
+  // Suppress source map upload errors in Vercel
+  silent: true,
+  dryRun: !process.env.SENTRY_AUTH_TOKEN,
 
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
@@ -110,4 +112,9 @@ export default withSentryConfig(nextConfig, {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
-});
+};
+
+// Export with or without Sentry based on environment
+export default process.env.SENTRY_AUTH_TOKEN
+  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+  : nextConfig;

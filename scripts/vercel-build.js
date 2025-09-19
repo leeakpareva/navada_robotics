@@ -26,7 +26,8 @@ console.log('🚀 Starting Vercel build process...');
 console.log('Environment:', {
   NODE_ENV: process.env.NODE_ENV,
   SKIP_VALIDATION: process.env.SKIP_VALIDATION,
-  CI: process.env.CI
+  CI: process.env.CI,
+  SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN ? 'Set' : 'Not set'
 });
 
 // Generate Prisma client

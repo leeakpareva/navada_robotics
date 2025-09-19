@@ -1,0 +1,7 @@
+[defaults]
+url=https://sentry.io/
+org=generali-ki
+project=sentry-purple-lamp
+
+[auth]
+# Auth token will be read from SENTRY_AUTH_TOKEN environment variable
