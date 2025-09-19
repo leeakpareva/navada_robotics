@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { BeamsBackground } from "@/components/ui/beams-background"
-import { VideoPlayer } from "@/components/ui/video-player"
+import { VideoPlayerOptimized as VideoPlayer } from "@/components/ui/video-player-optimized"
 import { LessonNotes } from "@/components/ui/lesson-notes"
 import { TextToSpeech } from "@/components/ui/text-to-speech"
 import {
