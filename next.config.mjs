@@ -6,12 +6,18 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Development stage configuration - ignore errors for deployment
   eslint: {
     ignoreDuringBuilds: true,
     dirs: ['app', 'lib', 'components']
   },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  // Skip build-time optimizations that might cause issues
+  swcMinify: false,
+  experimental: {
+    forceSwcTransforms: false,
   },
   output: 'standalone',
   images: {
