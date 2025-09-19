@@ -14,11 +14,8 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Skip build-time optimizations that might cause issues
-  swcMinify: false,
-  experimental: {
-    forceSwcTransforms: false,
-  },
+  // Use SWC minifier (default in Next.js 14)
+  swcMinify: true,
   output: 'standalone',
   images: {
     remotePatterns: [
