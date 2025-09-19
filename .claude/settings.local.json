@@ -94,7 +94,10 @@
       "Bash(gh issue create:*)",
       "Bash(gh project:*)",
       "Bash(gh auth:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(gh repo edit:*)",
+      "Bash(git clone:*)",
+      "Bash(gh issue list:*)"
     ],
     "deny": [],
     "ask": []
