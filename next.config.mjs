@@ -1,4 +1,10 @@
-import { withSentryConfig } from '@sentry/nextjs';
+// Conditionally import Sentry only when needed
+let withSentryConfig;
+try {
+  withSentryConfig = require('@sentry/nextjs').withSentryConfig;
+} catch (e) {
+  // Sentry not available, will use plain config
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -114,7 +120,7 @@ const sentryWebpackPluginOptions = {
   automaticVercelMonitors: true,
 };
 
-// Export with or without Sentry based on environment
-export default process.env.SENTRY_AUTH_TOKEN
+// Export with or without Sentry based on availability and environment
+export default (withSentryConfig && process.env.SENTRY_AUTH_TOKEN)
   ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
   : nextConfig;
