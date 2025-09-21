@@ -100,7 +100,8 @@
       "Bash(gh issue list:*)",
       "Bash(npx @sentry/wizard:*)",
       "Bash(start http://localhost:3000/sentry-test)",
-      "Bash(git rev-parse:*)"
+      "Bash(git rev-parse:*)",
+      "Bash(start http://localhost:3003/agent-lee)"
     ],
     "deny": [],
     "ask": []
