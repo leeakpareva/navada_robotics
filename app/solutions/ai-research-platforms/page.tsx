@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { isLearningHubEnabled } from "@/lib/feature-flags"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -211,9 +212,11 @@ export default function AIResearchPlatformsPage() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
-              <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
-                Learning
-              </Link>
+{isLearningHubEnabled() && (
+                <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                  Learning
+                </Link>
+              )}
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>

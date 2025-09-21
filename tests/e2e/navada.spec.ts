@@ -17,7 +17,7 @@ test.describe('NAVADA Robotics Homepage', () => {
     await expect(heroHeadline).toBeVisible();
 
     // Check navigation links are present
-    const navLinks = ['Solutions', 'News', 'About', 'Agent Lee', 'Contact'];
+    const navLinks = ['Solutions', 'About', 'Agent Lee', 'Contact'];
     for (const linkText of navLinks) {
       const link = page.locator(`a:has-text("${linkText}")`).first();
       await expect(link).toBeVisible();

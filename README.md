@@ -93,7 +93,6 @@ navada_robotics/
 ├── app/                    # Next.js app directory
 │   ├── page.tsx           # Home page
 │   ├── about/             # About page
-│   ├── services/          # Services page
 │   ├── solutions/         # Solutions page
 │   ├── contact/           # Contact page
 │   ├── agent-lee/         # AI Assistant interface
@@ -266,7 +265,6 @@ Test results show:
 
 - **Home** (`/`) - Landing page with company overview
 - **Solutions** (`/solutions`) - AI and robotics solutions
-- **Services** (`/services`) - Service offerings
 - **About** (`/about`) - Company information and vision
 - **Contact** (`/contact`) - Contact information
 - **Agent Lee** (`/agent-lee`) - AI assistant chat interface
@@ -422,6 +420,60 @@ This script tests:
 - **User Sessions**: 10% of sessions are recorded, 100% when errors occur
 - **Performance**: All transactions are monitored (configurable sample rate)
 
+## Feature Flags
+
+This application supports feature flags for temporarily hiding features during development or maintenance:
+
+### Temporarily Hidden Features (Environment Flags)
+
+**Current Status**: Learning Hub and Admin Pages are temporarily disabled.
+
+**To restore these features:**
+
+1. Edit `.env.local` and set:
+```env
+ENABLE_LEARNING_HUB=true
+ENABLE_ADMIN_PAGES=true
+```
+
+2. Restart the development server:
+```bash
+npm run dev
+```
+
+**What's affected when disabled:**
+
+**Learning Hub:**
+- `/learning` page shows maintenance message
+- Navigation links hidden in all headers:
+  - Agent Lee page (desktop & mobile nav)
+  - About page (desktop & mobile nav)
+  - Contact page (desktop & mobile nav)
+  - Solutions page (desktop & mobile nav)
+  - All solutions subpages (ai-research-platforms, educational-robotics, iot-integration, raspberry-pi-automation)
+- Learning course routes remain accessible via direct URL (if needed for testing)
+
+**Admin Pages:**
+- `/admin/courses` page shows maintenance message
+- `/admin/emails` page shows maintenance message
+- `/admin/lms` page shows maintenance message
+- Admin login links hidden from Learning page navigation (desktop & mobile)
+
+**Removed Features (Permanently Deleted):**
+- News page (`/news`) and all related files completely removed
+- Dashboard page (`/dashboard`) and all related files completely removed
+- RSS parser dependency removed for performance optimization
+
+**Files Modified:**
+- `.env.local` - Added feature flags
+- `lib/feature-flags.ts` - Created utility functions
+- Multiple page components updated with conditional rendering
+- Navigation components cleaned of news and dashboard references
+- Test files updated to reflect removed features
+- Dependencies cleaned up (rss-parser removed)
+
+**Safe Restoration**: Learning Hub and Admin Pages use non-destructive feature flags and can be instantly restored by changing environment variables. News and Dashboard pages were permanently removed for performance optimization.
+
 ## Environment Variables
 
 | Variable | Description | Required |
@@ -434,6 +486,8 @@ This script tests:
 | `SENTRY_ORG` | Sentry organization slug | Yes |
 | `SENTRY_PROJECT` | Sentry project name | Yes |
 | `SENTRY_AUTH_TOKEN` | Sentry auth token for source map upload | Yes (for production) |
+| `ENABLE_LEARNING_HUB` | Feature flag to enable/disable Learning Hub | No (defaults to false) |
+| `ENABLE_ADMIN_PAGES` | Feature flag to enable/disable Admin Pages | No (defaults to false) |
 
 ## Deployment
 

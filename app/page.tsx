@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Menu, X, Cog, Microscope as Microchip, Shield, Phone, Brain, Cpu, Sparkles, Folder, Newspaper } from "lucide-react";
+import { Menu, X, Cog, Microscope as Microchip, Shield, Phone, Brain, Cpu, Sparkles, Folder } from "lucide-react";
 import Link from "next/link";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import { AnimatedGridBackground } from "@/components/ui/animated-grid-background";
@@ -50,21 +50,12 @@ export default function NavadaRoboticsApp() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/news" className="relative text-white hover:text-cyan-400 transition-all duration-200 font-semibold">
-                <span className="relative z-10">News</span>
-                <span className="absolute -top-1 -right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-              </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
               </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200">
                 Agent Lee
               </Link>
-              {session && (
-                <Link href="/dashboard" className="text-purple-400 hover:text-purple-300 transition-all duration-200">
-                  Dashboard
-                </Link>
-              )}
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200">
                 Contact
               </Link>
@@ -87,11 +78,6 @@ export default function NavadaRoboticsApp() {
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Agent Lee
               </Link>
-              {session && (
-                <Link href="/dashboard" className="text-purple-400 hover:text-purple-300 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                  Dashboard
-                </Link>
-              )}
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Contact
               </Link>
@@ -346,20 +332,10 @@ export default function NavadaRoboticsApp() {
             <Microchip className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
           </Link>
-          <Link href="/news" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200 relative">
-            <Newspaper className="h-5 w-5 text-cyan-400 mb-1 animate-pulse" />
-            <span className="text-cyan-400 font-semibold">News</span>
-            <span className="absolute -top-0 -right-0 w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
-          </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Brain className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Agent Lee</span>
           </Link>
-          {session && (
-            <Link href="/dashboard" className="flex flex-col items-center py-2 px-3 text-xs transition-all duration-200">
-              <span className="text-purple-400">Dashboard</span>
-            </Link>
-          )}
           <Link href="/about" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Shield className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">About</span>

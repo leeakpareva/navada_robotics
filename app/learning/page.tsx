@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
+import { isLearningHubEnabled, isAdminPagesEnabled } from "@/lib/feature-flags"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -59,6 +60,21 @@ export default function LearningPage() {
   const [isUpgrading, setIsUpgrading] = useState(false)
   const router = useRouter()
   const { data: session } = useSession()
+
+  // Check if Learning Hub is enabled
+  if (!isLearningHubEnabled()) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center p-8">
+          <h1 className="text-3xl font-bold text-white mb-4">Learning Hub Temporarily Unavailable</h1>
+          <p className="text-gray-400 mb-6">The Learning Hub is currently under maintenance. Please check back later.</p>
+          <Button onClick={() => router.push('/')} className="bg-purple-600 hover:bg-purple-700">
+            Return Home
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   useEffect(() => {
     fetchCourses()
@@ -320,18 +336,17 @@ export default function LearningPage() {
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                 Agent Lee
               </Link>
-              <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
-                Dashboard
-              </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
-              <Link href="/auth/signup" className="text-white hover:text-purple-400 transition-colors">
-                <div className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  Admin Login
-                </div>
-              </Link>
+{isAdminPagesEnabled() && (
+                <Link href="/auth/signup" className="text-white hover:text-purple-400 transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
+                    Admin Login
+                  </div>
+                </Link>
+              )}
             </nav>
           </div>
 
@@ -357,12 +372,14 @@ export default function LearningPage() {
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
                 </Link>
-                <Link href="/auth/signup" className="text-white hover:text-purple-400 transition-colors">
-                  <div className="flex items-center gap-2">
-                    <Settings className="h-4 w-4" />
-                    Admin Login
-                  </div>
-                </Link>
+                {isAdminPagesEnabled() && (
+                  <Link href="/auth/signup" className="text-white hover:text-purple-400 transition-colors">
+                    <div className="flex items-center gap-2">
+                      <Settings className="h-4 w-4" />
+                      Admin Login
+                    </div>
+                  </Link>
+                )}
               </div>
             </nav>
           )}

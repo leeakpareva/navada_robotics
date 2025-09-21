@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Users, Mail, TrendingUp, Shield } from 'lucide-react'
+import { isAdminPagesEnabled } from '@/lib/feature-flags'
 
 interface EmailSubscriber {
   id: number
@@ -21,12 +23,28 @@ interface EmailStats {
 }
 
 export default function EmailAdminPage() {
+  const router = useRouter()
   const [subscribers, setSubscribers] = useState<EmailSubscriber[]>([])
   const [stats, setStats] = useState<EmailStats | null>(null)
   const [adminKey, setAdminKey] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Check if Admin Pages are enabled
+  if (!isAdminPagesEnabled()) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center p-8">
+          <h1 className="text-3xl font-bold text-white mb-4">Admin Panel Temporarily Unavailable</h1>
+          <p className="text-gray-400 mb-6">The admin panel is currently under maintenance. Please check back later.</p>
+          <Button onClick={() => router.push('/')} className="bg-purple-600 hover:bg-purple-700">
+            Return Home
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   const fetchEmails = async () => {
     if (!adminKey.trim()) {

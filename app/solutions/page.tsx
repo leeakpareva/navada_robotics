@@ -18,6 +18,7 @@ import {
   Phone,
 } from "lucide-react"
 import Link from "next/link"
+import { isLearningHubEnabled } from "@/lib/feature-flags"
 import { OptimizedImage } from "@/components/ui/optimized-image"
 import { OptimizedVideo } from "@/components/ui/optimized-video"
 
@@ -91,9 +92,11 @@ export default function SolutionsPage() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
-              <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
-                Learning
-              </Link>
+{isLearningHubEnabled() && (
+                <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                  Learning
+                </Link>
+              )}
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                 Agent Lee
               </Link>

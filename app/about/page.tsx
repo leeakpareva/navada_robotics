@@ -6,6 +6,7 @@ import { BeamsBackground } from "@/components/ui/beams-background"
 import { Menu, X, Microscope as Microchip, Shield, Phone } from "lucide-react"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/ui/optimized-image"
+import { isLearningHubEnabled } from "@/lib/feature-flags"
 
 export default function AboutPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -38,9 +39,11 @@ export default function AboutPage() {
               <Link href="/about" className="text-purple-400 font-medium">
                 About
               </Link>
-              <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
-                Learning
-              </Link>
+{isLearningHubEnabled() && (
+                <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                  Learning
+                </Link>
+              )}
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                 Agent Lee
               </Link>
@@ -60,9 +63,11 @@ export default function AboutPage() {
                 <Link href="/about" className="text-purple-400 font-medium">
                   About
                 </Link>
-                <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
-                  Learning
-                </Link>
+                {isLearningHubEnabled() && (
+                  <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                    Learning
+                  </Link>
+                )}
                 <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
                   Agent Lee
                 </Link>

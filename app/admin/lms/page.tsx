@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BeamsBackground } from "@/components/ui/beams-background"
 import { BarChart3, Plus, Edit, Trash2, Eye, Users, BookOpen, MessageSquare, Award, Save, Star, Clock, DollarSign, Shield, ArrowLeft } from "lucide-react"
 import Link from "next/link"
+import { isAdminPagesEnabled } from "@/lib/feature-flags"
 
 interface Course {
   id: string
@@ -33,10 +35,26 @@ interface Course {
 
 
 export default function LMSAdminDashboard() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState("overview")
   const [courses, setCourses] = useState<Course[]>([])
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
   const [showCourseForm, setShowCourseForm] = useState(false)
+
+  // Check if Admin Pages are enabled
+  if (!isAdminPagesEnabled()) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center p-8">
+          <h1 className="text-3xl font-bold text-white mb-4">Admin Panel Temporarily Unavailable</h1>
+          <p className="text-gray-400 mb-6">The admin panel is currently under maintenance. Please check back later.</p>
+          <Button onClick={() => router.push('/')} className="bg-purple-600 hover:bg-purple-700">
+            Return Home
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   // Mock data for demonstration
   useEffect(() => {

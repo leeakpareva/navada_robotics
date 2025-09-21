@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { BeamsBackground } from "@/components/ui/beams-background"
 import { Menu, X, ShieldCheck, SendHorizonal, UserCircle2, Mic2, MicOff, AudioLines, VolumeX, BrainCircuit, Dna, Fingerprint, Radio, Lock, Download, FileDown, Home, LogOut, Newspaper, Infinity as InfinityIcon, BarChart3 } from "lucide-react"
 import Link from "next/link"
+import { isLearningHubEnabled } from "@/lib/feature-flags"
 
 
 interface SpeechSynthesisErrorEvent extends Event {
@@ -551,14 +552,13 @@ export default function AgentLeePage() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
-              <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
-                Learning
-              </Link>
+{isLearningHubEnabled() && (
+                <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                  Learning
+                </Link>
+              )}
               <Link href="/agent-lee" className="text-purple-400 font-medium">
                 Agent Lee
-              </Link>
-              <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
-                Dashboard
               </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
@@ -600,14 +600,13 @@ export default function AgentLeePage() {
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
                 </Link>
-                <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
-                  Learning
-                </Link>
+                {isLearningHubEnabled() && (
+                  <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                    Learning
+                  </Link>
+                )}
                 <Link href="/agent-lee" className="text-purple-400 font-medium">
                   Agent Lee
-                </Link>
-                <Link href="/dashboard" className="text-white hover:text-purple-400 transition-colors">
-                  Dashboard
                 </Link>
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
