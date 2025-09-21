@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Menu, X, Cog, Microscope as Microchip, Shield, Phone, Brain, Cpu, Sparkles, Folder } from "lucide-react";
@@ -10,19 +9,9 @@ import { OptimizedImage } from "@/components/ui/optimized-image";
 import { AnimatedGridBackground } from "@/components/ui/animated-grid-background";
 import { useSession } from "next-auth/react";
 
-// Dynamic import for Vortex to prevent hydration issues
-const Vortex = dynamic(() => import("@/components/ui/vortex").then(mod => ({ default: mod.Vortex })), {
-  ssr: false
-});
-
 export default function NavadaRoboticsApp() {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   return (
     <div className="min-h-screen bg-black overflow-hidden">
@@ -88,17 +77,20 @@ export default function NavadaRoboticsApp() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen">
-        {isMounted ? (
-          <Vortex
-            backgroundColor="#000000"
-            rangeY={400}
-            particleCount={300}
-            baseHue={280}
-            baseSpeed={0.5}
-            rangeSpeed={1.0}
-            className="flex items-center justify-center px-4 py-16 min-h-screen"
-          >
-            <div className="container mx-auto text-center">
+        {/* Spline Background */}
+        <div className="absolute inset-0 w-full h-full">
+          <iframe
+            src='https://my.spline.design/squarechipsfallinginplace-UO2xpf3fdQZzFK32zpOZfsW0/'
+            frameBorder='0'
+            width='100%'
+            height='100%'
+            className="absolute inset-0"
+          />
+        </div>
+
+        {/* Content Overlay */}
+        <div className="relative z-10 flex items-center justify-center px-4 py-16 min-h-screen">
+          <div className="container mx-auto text-center">
             <Badge variant="secondary" className="mb-4 bg-purple-900 text-purple-200 border-purple-700">
               AI • Robotics • Digital Innovation
             </Badge>
@@ -145,60 +137,8 @@ export default function NavadaRoboticsApp() {
                 </Button>
               </Link>
             </div>
-            </div>
-          </Vortex>
-        ) : (
-          <div className="flex items-center justify-center px-4 py-16 min-h-screen bg-black">
-            <div className="container mx-auto text-center">
-              <Badge variant="secondary" className="mb-4 bg-purple-900 text-purple-200 border-purple-700">
-                AI • Robotics • Digital Innovation
-              </Badge>
-              <h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400">
-                Navigating Artistic Vision with Advanced Digital Assistance
-              </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-                NAVADA explores how technology advances our future through the intersection of AI, robotics, and creative
-                innovation. I support the growth and adoption of AI tools focused on pioneering research and products in
-                robotics and automation for the next generation.
-              </p>
-
-              {/* Value Props Row */}
-              <div className="flex flex-row justify-center md:grid md:grid-cols-3 gap-4 md:gap-8 max-w-2xl mx-auto mb-8">
-                <div className="flex flex-col items-center justify-center gap-2 md:gap-3">
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
-                    <Cpu className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
-                  </div>
-                  <span className="text-gray-300 font-medium text-sm md:text-base text-center">AI Processing</span>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-2 md:gap-3">
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
-                    <Cog className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
-                  </div>
-                  <span className="text-gray-300 font-medium text-sm md:text-base text-center">Robotics</span>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-2 md:gap-3">
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-purple-400 bg-purple-400/10 flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
-                  </div>
-                  <span className="text-gray-300 font-medium text-sm md:text-base text-center">Innovation</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/solutions">
-                  <Button size="lg" className="text-lg px-8 bg-purple-600 hover:bg-purple-700 transition-all duration-200">
-                    Explore Innovation
-                  </Button>
-                </Link>
-                <Link href="/about">
-                  <Button variant="outline" size="lg" className="text-lg px-8 bg-transparent border-purple-400 text-purple-400 hover:bg-purple-900 transition-all duration-200">
-                    My Vision
-                  </Button>
-                </Link>
-              </div>
-            </div>
           </div>
-        )}
+        </div>
       </section>
 
       {/* Innovation Showcase Section */}
