@@ -186,10 +186,10 @@ export async function POST(
 
 async function generateTutorResponse(userMessage: string, context: any) {
   try {
-    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
-    if (!OPENAI_API_KEY) {
-      throw new Error('OpenAI API key not configured');
+    if (!ANTHROPIC_API_KEY) {
+      throw new Error('Anthropic API key not configured');
     }
 
     const systemPrompt = `You are ${context.tutor.name}, a ${context.tutor.specialization}.
@@ -241,29 +241,33 @@ Remember to:
       { role: 'user', content: userMessage }
     ];
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages,
+        model: 'claude-3-haiku-20240307',
         max_tokens: 500,
-        temperature: 0.7
+        system: systemPrompt,
+        messages: messages.filter(m => m.role !== 'system').map(m => ({
+          role: m.role,
+          content: m.content
+        }))
       })
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
+      throw new Error(`Anthropic API error: ${response.status}`);
     }
 
     const data = await response.json();
-    const content = data.choices[0]?.message?.content;
+    const content = data.content?.[0]?.text;
 
     if (!content) {
-      throw new Error('No response from OpenAI');
+      throw new Error('No response from Claude');
     }
 
     // Check if response contains code
@@ -274,7 +278,7 @@ Remember to:
       messageType: codeMatch ? 'code' : 'text',
       codeSnippet: codeMatch ? codeMatch[2] : null,
       metadata: {
-        model: 'gpt-3.5-turbo',
+        model: 'claude-3-haiku-20240307',
         generated: true
       }
     };
