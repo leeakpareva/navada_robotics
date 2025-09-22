@@ -136,6 +136,8 @@ model users {
   stripe_activities      StripeActivity[]
   subscription           subscriptions?
   user_progress          user_progress[]
+  tutor_sessions         TutorSession[]
+  learning_paths         LearningPath[]
 }
 
 model EmailSubscriber {
@@ -561,4 +563,150 @@ model StripeActivity {
   @@index([createdAt])
   @@index([status])
   @@map("stripe_activities")
+}
+
+model AiTutor {
+  id                String             @id @default(cuid())
+  name              String
+  specialization    String
+  description       String
+  personality       String
+  teachingStyle     String
+  avatar            String?
+  elevenLabsAgentId String?
+  isActive          Boolean            @default(true)
+  capabilities      Json?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  sessions          TutorSession[]
+  learningPaths     LearningPath[]
+
+  @@map("ai_tutors")
+}
+
+model TutorSession {
+  id               String              @id @default(cuid())
+  userId           String
+  tutorId          String
+  sessionType      String              @default("chat")
+  status           String              @default("active")
+  startTime        DateTime            @default(now())
+  endTime          DateTime?
+  lastActivity     DateTime            @default(now())
+  messageCount     Int                 @default(0)
+  learningPathId   String?
+  sessionData      Json?
+  sessionSummary   String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  user             users               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tutor            AiTutor             @relation(fields: [tutorId], references: [id])
+  learningPath     LearningPath?       @relation(fields: [learningPathId], references: [id])
+  messages         TutorMessage[]
+  interactions     TutorInteraction[]
+
+  @@index([userId])
+  @@index([tutorId])
+  @@index([status])
+  @@map("tutor_sessions")
+}
+
+model TutorMessage {
+  id           String       @id @default(cuid())
+  sessionId    String
+  role         String
+  content      String
+  messageType  String       @default("text")
+  codeSnippet  String?
+  imageUrl     String?
+  audioUrl     String?
+  metadata     Json?
+  timestamp    DateTime     @default(now())
+  session      TutorSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("tutor_messages")
+}
+
+model LearningPath {
+  id                String              @id @default(cuid())
+  userId            String
+  tutorId           String
+  title             String
+  description       String
+  objectives        Json
+  difficulty        String              @default("intermediate")
+  estimatedDuration Int?
+  topics            Json
+  prerequisites     Json?
+  status            String              @default("draft")
+  progress          Int                 @default(0)
+  mistralGenerated  Boolean             @default(false)
+  generationPrompt  String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  completedAt       DateTime?
+  user              users               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tutor             AiTutor             @relation(fields: [tutorId], references: [id])
+  sessions          TutorSession[]
+  milestones        LearningMilestone[]
+  resources         LearningResource[]
+
+  @@index([userId])
+  @@index([tutorId])
+  @@index([status])
+  @@map("learning_paths")
+}
+
+model LearningMilestone {
+  id             String       @id @default(cuid())
+  learningPathId String
+  title          String
+  description    String
+  orderIndex     Int
+  completed      Boolean      @default(false)
+  completedAt    DateTime?
+  feedback       String?
+  points         Int          @default(100)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  learningPath   LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+
+  @@index([learningPathId])
+  @@map("learning_milestones")
+}
+
+model LearningResource {
+  id             String       @id @default(cuid())
+  learningPathId String
+  title          String
+  type           String
+  url            String?
+  content        String?
+  orderIndex     Int
+  isRequired     Boolean      @default(false)
+  completed      Boolean      @default(false)
+  completedAt    DateTime?
+  createdAt      DateTime     @default(now())
+  learningPath   LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+
+  @@index([learningPathId])
+  @@map("learning_resources")
+}
+
+model TutorInteraction {
+  id           String       @id @default(cuid())
+  sessionId    String
+  type         String
+  action       String
+  data         Json?
+  response     Json?
+  success      Boolean      @default(true)
+  errorDetails String?
+  timestamp    DateTime     @default(now())
+  session      TutorSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([type])
+  @@map("tutor_interactions")
 }

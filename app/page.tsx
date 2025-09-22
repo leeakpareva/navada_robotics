@@ -42,6 +42,9 @@ export default function NavadaRoboticsApp() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
               </Link>
+              <Link href="/ai-tutors" className="text-white hover:text-purple-400 transition-all duration-200">
+                AI Tutors
+              </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200">
                 Agent Lee
               </Link>
@@ -57,12 +60,11 @@ export default function NavadaRoboticsApp() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Solutions
               </Link>
-              <Link href="/news" className="relative text-white hover:text-cyan-400 transition-all duration-200 font-semibold py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                <span className="relative z-10">News</span>
-                <span className="absolute top-2 left-12 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-              </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
+              </Link>
+              <Link href="/ai-tutors" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
+                AI Tutors
               </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Agent Lee
@@ -142,74 +144,74 @@ export default function NavadaRoboticsApp() {
       </section>
 
       {/* Innovation Showcase Section */}
-      <section className="py-16 px-4 bg-black overflow-x-hidden cursor-glow">
-        <div className="container mx-auto relative z-10">
+      <section className="py-16 px-4 bg-black">
+        <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Innovation Showcase</h3>
-            <p className="text-gray-100 max-w-2xl mx-auto">
+            <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Innovation Showcase</h3>
+            <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
               Discover my latest breakthroughs in AI-powered robotics, creative technology, and digital assistance platforms
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
-              <OptimizedImage
-                src="/AiCreative.png"
-                alt="Artistic vision meets robotic precision"
-                width={400}
-                height={192}
-                className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
-              />
-              <div className="p-4">
-                <h4 className="text-purple-200 font-semibold mb-2">AI Creative Assistant</h4>
-                <p className="text-gray-200 text-sm">Artistic vision meets robotic precision</p>
-              </div>
-            </div>
+                  <OptimizedImage
+                    src="/AiCreative.png"
+                    alt="Artistic vision meets robotic precision"
+                    width={400}
+                    height={192}
+                    className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="p-4">
+                    <h4 className="text-purple-200 font-semibold mb-2">AI Creative Assistant</h4>
+                    <p className="text-gray-200 text-sm">Artistic vision meets robotic precision</p>
+                  </div>
+                </div>
 
-            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
-              <OptimizedImage
-                src="/NextGenAuto.png"
-                alt="Advanced digital assistance for the future"
-                width={400}
-                height={192}
-                className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
-              />
-              <div className="p-4">
-                <h4 className="text-purple-200 font-semibold mb-2">Next-Gen Automation</h4>
-                <p className="text-gray-200 text-sm">Advanced digital assistance for the future</p>
-              </div>
-            </div>
+                <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
+                  <OptimizedImage
+                    src="/NextGenAuto.png"
+                    alt="Advanced digital assistance for the future"
+                    width={400}
+                    height={192}
+                    className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="p-4">
+                    <h4 className="text-purple-200 font-semibold mb-2">Next-Gen Automation</h4>
+                    <p className="text-gray-200 text-sm">Advanced digital assistance for the future</p>
+                  </div>
+                </div>
 
-            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
-              <OptimizedImage
-                src="/ManvsMachine.png"
-                alt="Empowering the next generation of innovators"
-                width={400}
-                height={192}
-                className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
-              />
-              <div className="p-4">
-                <h4 className="text-purple-200 font-semibold mb-2">Research Platform</h4>
-                <p className="text-gray-200 text-sm">Empowering the next generation of innovators</p>
-              </div>
-            </div>
+                <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
+                  <OptimizedImage
+                    src="/ManvsMachine.png"
+                    alt="Empowering the next generation of innovators"
+                    width={400}
+                    height={192}
+                    className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="p-4">
+                    <h4 className="text-purple-200 font-semibold mb-2">Research Platform</h4>
+                    <p className="text-gray-200 text-sm">Empowering the next generation of innovators</p>
+                  </div>
+                </div>
           </div>
         </div>
       </section>
 
       {/* Active Projects Section */}
-      <section id="active-projects" className="py-16 px-4 bg-black overflow-x-hidden cursor-glow">
-        <div className="container mx-auto relative z-10">
+      <section id="active-projects" className="py-16 px-4 bg-black">
+        <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">Active Projects</h3>
-            <p className="text-gray-100 max-w-2xl mx-auto">
+            <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Active Projects</h3>
+            <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
               Current development initiatives pushing the boundaries of AI and robotics technology
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <Link href="/robotics" className="group cursor-pointer transition-all duration-300 hover:scale-[1.02] h-full cursor-glow">
-              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60 relative z-10">
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center backdrop-blur-sm">
                   <Folder className="w-8 h-8 text-purple-300 group-hover:text-purple-200 transition-colors duration-300" />
                 </div>
@@ -223,7 +225,7 @@ export default function NavadaRoboticsApp() {
             </Link>
 
             <Link href="/ai-agent-development" className="group cursor-pointer transition-all duration-300 hover:scale-[1.02] h-full cursor-glow">
-              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60 relative z-10">
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center backdrop-blur-sm">
                   <Folder className="w-8 h-8 text-purple-300 group-hover:text-purple-200 transition-colors duration-300" />
                 </div>
@@ -237,7 +239,7 @@ export default function NavadaRoboticsApp() {
             </Link>
 
             <Link href="/computer-vision" className="group cursor-pointer transition-all duration-300 hover:scale-[1.02] h-full cursor-glow">
-              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60 relative z-10">
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 text-center h-full flex flex-col hover:bg-black/60">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center backdrop-blur-sm">
                   <Folder className="w-8 h-8 text-purple-300 group-hover:text-purple-200 transition-colors duration-300" />
                 </div>
@@ -271,6 +273,10 @@ export default function NavadaRoboticsApp() {
           <Link href="/solutions" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Microchip className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
+          </Link>
+          <Link href="/ai-tutors" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
+            <Brain className="h-5 w-5 text-gray-400 mb-1" />
+            <span className="text-gray-400">AI Tutors</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Brain className="h-5 w-5 text-gray-400 mb-1" />
