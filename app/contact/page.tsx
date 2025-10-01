@@ -245,8 +245,8 @@ export default function ContactPage() {
               <CardContent className="pt-6">
                 <Mail className="h-8 w-8 text-purple-300 mx-auto mb-4" />
                 <h4 className="font-semibold mb-2 text-white">Email</h4>
-                <a href="mailto:leekapareva@gmail.com" className="text-gray-200 hover:text-purple-400 transition-colors block">
-                  leekapareva@gmail.com
+                <a href="mailto:Lee@navadarobotics.com" className="text-gray-200 hover:text-purple-400 transition-colors block">
+                  Lee@navadarobotics.com
                 </a>
                 <p className="text-gray-300 text-sm mt-1">Response within 24 hours</p>
               </CardContent>
@@ -307,8 +307,8 @@ export default function ContactPage() {
           </div>
 
           <div className="text-center mt-12">
-            <a 
-              href="mailto:leekapareva@gmail.com?subject=Research%20Meeting%20Inquiry&body=Hello%20Lee,%0A%0AI%20would%20like%20to%20schedule%20a%20research%20meeting%20to%20discuss%20robotics%20and%20AI%20projects.%0A%0APlease%20let%20me%20know%20your%20availability.%0A%0ABest%20regards,"
+            <a
+              href="mailto:Lee@navadarobotics.com?subject=Research%20Meeting%20Inquiry&body=Hello%20Lee,%0A%0AI%20would%20like%20to%20schedule%20a%20research%20meeting%20to%20discuss%20robotics%20and%20AI%20projects.%0A%0APlease%20let%20me%20know%20your%20availability.%0A%0ABest%20regards,"
               className="inline-block"
             >
               <Button size="lg" className="text-lg px-8 bg-purple-500/20 hover:bg-purple-500/30 backdrop-blur-sm border border-purple-400/50 text-white hover:text-purple-200">
