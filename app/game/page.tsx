@@ -9,19 +9,20 @@ export default function GamePage() {
   const [apiKey, setApiKey] = useState<string>("");
 
   useEffect(() => {
-    // API proxy endpoint is available at /api/anthropic-proxy
-    const proxyEndpoint = '/api/anthropic-proxy';
+    // Load API key from environment
+    const key = process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || "";
+    setApiKey(key);
 
-    console.log('Anthropic API proxy available at:', proxyEndpoint);
+    console.log('API Key loaded:', key ? 'Available' : 'Missing');
 
-    // Send proxy endpoint to iframe on load
-    const sendProxyInfo = () => {
+    // Send API key to iframe
+    const sendApiKey = () => {
       const iframe = document.getElementById('navada-iframe') as HTMLIFrameElement;
       if (iframe && iframe.contentWindow) {
-        console.log('Sending proxy endpoint to iframe');
+        console.log('Sending API key to iframe');
         iframe.contentWindow.postMessage({
-          type: 'SET_API_PROXY',
-          proxyEndpoint: window.location.origin + proxyEndpoint
+          type: 'SET_API_KEY',
+          apiKey: key
         }, '*');
       }
     };
@@ -30,33 +31,30 @@ export default function GamePage() {
     const handleMessage = (event: MessageEvent) => {
       console.log('Message received from iframe:', event.data);
 
-      if (event.data.type === 'REQUEST_API_PROXY') {
-        console.log('API proxy requested by iframe');
-        sendProxyInfo();
+      if (event.data.type === 'REQUEST_API_KEY') {
+        console.log('API key requested by iframe');
+        sendApiKey();
       }
 
       // Listen for API errors from iframe
       if (event.data.type === 'API_ERROR') {
         console.error('API Error in iframe:', event.data.error);
-      }
-
-      // Listen for iframe ready signal
-      if (event.data.type === 'IFRAME_READY') {
-        console.log('Iframe ready, sending proxy info');
-        sendProxyInfo();
+        alert('API Error: ' + event.data.error);
       }
     };
 
     window.addEventListener('message', handleMessage);
 
-    // Also try sending proxy info after a short delay (fallback)
-    const timer = setTimeout(() => {
-      sendProxyInfo();
-    }, 1000);
+    // Send API key after delays to ensure iframe is ready
+    const timer1 = setTimeout(() => sendApiKey(), 500);
+    const timer2 = setTimeout(() => sendApiKey(), 1000);
+    const timer3 = setTimeout(() => sendApiKey(), 2000);
 
     return () => {
       window.removeEventListener('message', handleMessage);
-      clearTimeout(timer);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
     };
   }, []);
 
@@ -152,15 +150,15 @@ export default function GamePage() {
                 allow="clipboard-write"
                 allowFullScreen
                 onLoad={() => {
-                  console.log('Iframe loaded');
+                  console.log('Iframe loaded, sending API key');
                   const iframe = document.getElementById('navada-iframe') as HTMLIFrameElement;
                   if (iframe && iframe.contentWindow) {
                     setTimeout(() => {
                       iframe.contentWindow?.postMessage({
-                        type: 'SET_API_PROXY',
-                        proxyEndpoint: window.location.origin + '/api/anthropic-proxy'
+                        type: 'SET_API_KEY',
+                        apiKey: process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || ""
                       }, '*');
-                    }, 500);
+                    }, 100);
                   }
                 }}
               />
