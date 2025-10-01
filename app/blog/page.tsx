@@ -83,7 +83,7 @@ export default function BlogPage() {
           Blog
         </h1>
 
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto space-y-8">
           <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-8 mb-8 border border-gray-700">
             <h2 className="text-3xl font-bold mb-6 text-blue-400">
               NAVADA AI Shopping Platform
@@ -92,6 +92,23 @@ export default function BlogPage() {
             <div className="w-full min-h-[800px]">
               <iframe
                 src="https://claude.site/public/artifacts/43b00b86-ede4-47c9-a67f-b22e821565f3/embed"
+                title="Claude Artifact"
+                className="w-full h-[800px] rounded-lg border border-gray-600"
+                style={{ border: 'none' }}
+                allow="clipboard-write"
+                allowFullScreen
+              />
+            </div>
+          </article>
+
+          <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-8 mb-8 border border-gray-700">
+            <h2 className="text-3xl font-bold mb-6 text-blue-400">
+              Featured Content
+            </h2>
+
+            <div className="w-full min-h-[800px]">
+              <iframe
+                src="https://claude.site/public/artifacts/ad141410-6c6b-4406-96d8-4bfcd6f9e9b4/embed"
                 title="Claude Artifact"
                 className="w-full h-[800px] rounded-lg border border-gray-600"
                 style={{ border: 'none' }}
