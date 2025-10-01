@@ -4,8 +4,9 @@ import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Send, Mic, MicOff, MessageSquare, X, ChevronLeft, ChevronRight, Menu, Volume2, VolumeX } from "lucide-react"
+import { Send, Mic, MicOff, MessageSquare, X, ChevronLeft, ChevronRight, Menu } from "lucide-react"
 import Link from "next/link"
+import Script from "next/script"
 
 interface Message {
   id: number
@@ -35,6 +36,11 @@ declare global {
     SpeechRecognition: any;
     webkitSpeechRecognition: any;
   }
+  namespace JSX {
+    interface IntrinsicElements {
+      'elevenlabs-convai': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & { 'agent-id': string }, HTMLElement>;
+    }
+  }
 }
 
 export default function AgentLeePage() {
@@ -47,8 +53,6 @@ export default function AgentLeePage() {
   const [speechSupported, setSpeechSupported] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isSpeaking, setIsSpeaking] = useState(false)
-  const [ttsEnabled, setTtsEnabled] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const recognitionRef = useRef<SpeechRecognition | null>(null)
 
@@ -95,73 +99,6 @@ export default function AgentLeePage() {
     }
   }
 
-  const speakText = async (text: string) => {
-    if (!ttsEnabled) {
-      console.log("TTS is disabled")
-      return
-    }
-
-    console.log("Speaking text with ElevenLabs:", text.substring(0, 50) + "...")
-    setIsSpeaking(true)
-
-    try {
-      // Use ElevenLabs API for high-quality voice synthesis
-      const response = await fetch('/api/elevenlabs-tts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to generate speech')
-      }
-
-      const audioBlob = await response.blob()
-      const audioUrl = URL.createObjectURL(audioBlob)
-      const audio = new Audio(audioUrl)
-
-      audio.onended = () => {
-        console.log("TTS ended")
-        setIsSpeaking(false)
-        URL.revokeObjectURL(audioUrl)
-      }
-
-      audio.onerror = () => {
-        console.error("Audio playback error")
-        setIsSpeaking(false)
-        URL.revokeObjectURL(audioUrl)
-      }
-
-      await audio.play()
-    } catch (error) {
-      console.error("ElevenLabs TTS error:", error)
-      setIsSpeaking(false)
-
-      // Fallback to browser TTS
-      if ('speechSynthesis' in window) {
-        console.log("Falling back to browser TTS")
-        window.speechSynthesis.cancel()
-        const utterance = new SpeechSynthesisUtterance(text)
-        utterance.rate = 0.9
-        utterance.pitch = 1
-        utterance.volume = 0.8
-        utterance.lang = 'en-US'
-        utterance.onend = () => setIsSpeaking(false)
-        utterance.onerror = () => setIsSpeaking(false)
-        setTimeout(() => window.speechSynthesis.speak(utterance), 100)
-      }
-    }
-  }
-
-  const toggleTTS = () => {
-    if (isSpeaking) {
-      window.speechSynthesis.cancel()
-      setIsSpeaking(false)
-    }
-    setTtsEnabled(!ttsEnabled)
-  }
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return
@@ -222,11 +159,6 @@ export default function AgentLeePage() {
       }
 
       setMessages(prev => [...prev, agentMessage])
-
-      // Speak the agent's response if TTS is enabled
-      if (ttsEnabled && responseText) {
-        speakText(responseText)
-      }
     } catch (error) {
       console.error("Error sending message:", error)
       let errorText = "Sorry, there was an error processing your request."
@@ -355,15 +287,6 @@ export default function AgentLeePage() {
             <h1 className="text-base sm:text-lg font-semibold text-white">Agent Lee</h1>
           </div>
           <div className="flex items-center space-x-1 sm:space-x-2">
-            <Button
-              onClick={toggleTTS}
-              variant="ghost"
-              size="sm"
-              className={`${ttsEnabled ? "text-purple-400" : "text-gray-400"} hover:text-white hover:bg-gray-800`}
-              title={ttsEnabled ? "Voice responses enabled - Click to disable" : "Voice responses disabled - Click to enable"}
-            >
-              {isSpeaking ? <VolumeX className="h-4 w-4 animate-pulse" /> : <Volume2 className="h-4 w-4" />}
-            </Button>
             <Select value={apiProvider} onValueChange={(value: any) => setApiProvider(value)}>
               <SelectTrigger className="w-20 sm:w-28 text-xs sm:text-sm bg-gray-800 border-gray-600 text-white">
                 <SelectValue />
@@ -479,6 +402,14 @@ export default function AgentLeePage() {
         </div>
       </div>
       </div>
+
+      {/* ElevenLabs ConvAI Widget */}
+      <Script
+        src="https://unpkg.com/@elevenlabs/convai-widget-embed"
+        strategy="afterInteractive"
+        type="text/javascript"
+      />
+      <elevenlabs-convai agent-id="agent_6501k5q5hn4zf9eteg70jwra0ekp"></elevenlabs-convai>
     </div>
   )
 }
