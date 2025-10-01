@@ -95,45 +95,64 @@ export default function AgentLeePage() {
     }
   }
 
-  const speakText = (text: string) => {
+  const speakText = async (text: string) => {
     if (!ttsEnabled) {
       console.log("TTS is disabled")
       return
     }
 
-    if (!('speechSynthesis' in window)) {
-      console.log("Speech synthesis not supported")
-      return
-    }
+    console.log("Speaking text with ElevenLabs:", text.substring(0, 50) + "...")
+    setIsSpeaking(true)
 
-    console.log("Speaking text:", text.substring(0, 50) + "...")
+    try {
+      // Use ElevenLabs API for high-quality voice synthesis
+      const response = await fetch('/api/elevenlabs-tts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text }),
+      })
 
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel()
+      if (!response.ok) {
+        throw new Error('Failed to generate speech')
+      }
 
-    const utterance = new SpeechSynthesisUtterance(text)
-    utterance.rate = 0.9
-    utterance.pitch = 1
-    utterance.volume = 0.8
-    utterance.lang = 'en-US'
+      const audioBlob = await response.blob()
+      const audioUrl = URL.createObjectURL(audioBlob)
+      const audio = new Audio(audioUrl)
 
-    utterance.onstart = () => {
-      console.log("TTS started")
-      setIsSpeaking(true)
-    }
-    utterance.onend = () => {
-      console.log("TTS ended")
+      audio.onended = () => {
+        console.log("TTS ended")
+        setIsSpeaking(false)
+        URL.revokeObjectURL(audioUrl)
+      }
+
+      audio.onerror = () => {
+        console.error("Audio playback error")
+        setIsSpeaking(false)
+        URL.revokeObjectURL(audioUrl)
+      }
+
+      await audio.play()
+    } catch (error) {
+      console.error("ElevenLabs TTS error:", error)
       setIsSpeaking(false)
-    }
-    utterance.onerror = (event) => {
-      console.error("TTS error:", event)
-      setIsSpeaking(false)
-    }
 
-    // Small delay to ensure proper cancellation
-    setTimeout(() => {
-      window.speechSynthesis.speak(utterance)
-    }, 100)
+      // Fallback to browser TTS
+      if ('speechSynthesis' in window) {
+        console.log("Falling back to browser TTS")
+        window.speechSynthesis.cancel()
+        const utterance = new SpeechSynthesisUtterance(text)
+        utterance.rate = 0.9
+        utterance.pitch = 1
+        utterance.volume = 0.8
+        utterance.lang = 'en-US'
+        utterance.onend = () => setIsSpeaking(false)
+        utterance.onerror = () => setIsSpeaking(false)
+        setTimeout(() => window.speechSynthesis.speak(utterance), 100)
+      }
+    }
   }
 
   const toggleTTS = () => {
