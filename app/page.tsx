@@ -8,6 +8,7 @@ import Link from "next/link";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import { AnimatedGridBackground } from "@/components/ui/animated-grid-background";
 import { useSession } from "next-auth/react";
+import Script from "next/script";
 
 export default function NavadaRoboticsApp() {
   const { data: session } = useSession();
@@ -257,6 +258,26 @@ export default function NavadaRoboticsApp() {
         </div>
       </section>
 
+      {/* ElevenLabs AudioNative Widget */}
+      <section className="bg-black py-8 px-4 border-t border-gray-800">
+        <div className="container mx-auto max-w-4xl">
+          <div className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-lg p-6 border border-purple-400/30">
+            <h3 className="text-xl font-bold text-white mb-4 text-center">Listen to This Page</h3>
+            <div
+              id="elevenlabs-audionative-widget"
+              data-height="90"
+              data-width="100%"
+              data-frameborder="no"
+              data-scrolling="no"
+              data-publicuserid="10625bb8c127d3203fcc18a3e7c3f84d7d1458e6e71b30cfd322d0fc62dc93b1"
+              data-playerurl="https://elevenlabs.io/player/index.html"
+            >
+              Loading the <a href="https://elevenlabs.io/text-to-speech" target="_blank" rel="noopener" className="text-purple-400 hover:text-purple-300">Elevenlabs Text to Speech</a> AudioNative Player...
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-black py-8 px-4">
         <div className="container mx-auto text-center">
@@ -290,6 +311,13 @@ export default function NavadaRoboticsApp() {
           </Link>
         </div>
       </nav>
+
+      {/* ElevenLabs AudioNative Script */}
+      <Script
+        src="https://elevenlabs.io/player/audioNativeHelper.js"
+        strategy="afterInteractive"
+        type="text/javascript"
+      />
     </div>
   );
 }
