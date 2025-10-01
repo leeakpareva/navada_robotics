@@ -55,6 +55,13 @@ const nextConfig = {
   swcMinify: true,
   // Bundle optimization
   webpack: (config, { dev, isServer }) => {
+    // Suppress warnings for Sentry/OpenTelemetry instrumentation
+    config.ignoreWarnings = [
+      { module: /node_modules\/require-in-the-middle/ },
+      { module: /node_modules\/@opentelemetry\/instrumentation/ },
+      { module: /node_modules\/@prisma\/instrumentation/ },
+    ];
+
     if (!dev && !isServer) {
       // Split chunks for better caching
       config.optimization.splitChunks = {
