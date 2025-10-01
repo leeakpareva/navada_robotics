@@ -13,26 +13,52 @@ export default function GamePage() {
     const key = process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || "";
     setApiKey(key);
 
+    console.log('API Key loaded:', key ? 'Available' : 'Missing');
+
+    // Send API key to iframe on load
+    const sendApiKey = () => {
+      const iframe = document.getElementById('navada-iframe') as HTMLIFrameElement;
+      if (iframe && iframe.contentWindow) {
+        console.log('Sending API key to iframe');
+        iframe.contentWindow.postMessage({
+          type: 'SET_API_KEY',
+          apiKey: key
+        }, '*');
+      }
+    };
+
     // Listen for API key requests from iframe
     const handleMessage = (event: MessageEvent) => {
+      console.log('Message received from iframe:', event.data);
+
       if (event.data.type === 'REQUEST_API_KEY') {
-        const iframe = document.getElementById('navada-iframe') as HTMLIFrameElement;
-        if (iframe && iframe.contentWindow) {
-          iframe.contentWindow.postMessage({
-            type: 'SET_API_KEY',
-            apiKey: key
-          }, '*');
-        }
+        console.log('API key requested by iframe');
+        sendApiKey();
       }
 
       // Listen for API errors from iframe
       if (event.data.type === 'API_ERROR') {
         console.error('API Error in iframe:', event.data.error);
       }
+
+      // Listen for iframe ready signal
+      if (event.data.type === 'IFRAME_READY') {
+        console.log('Iframe ready, sending API key');
+        sendApiKey();
+      }
     };
 
     window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
+
+    // Also try sending API key after a short delay (fallback)
+    const timer = setTimeout(() => {
+      sendApiKey();
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
@@ -126,6 +152,18 @@ export default function GamePage() {
                 style={{ border: 'none' }}
                 allow="clipboard-write"
                 allowFullScreen
+                onLoad={() => {
+                  console.log('Iframe loaded');
+                  const iframe = document.getElementById('navada-iframe') as HTMLIFrameElement;
+                  if (iframe && iframe.contentWindow) {
+                    setTimeout(() => {
+                      iframe.contentWindow?.postMessage({
+                        type: 'SET_API_KEY',
+                        apiKey: process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || ""
+                      }, '*');
+                    }, 500);
+                  }
+                }}
               />
             </div>
           </article>
