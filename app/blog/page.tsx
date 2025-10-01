@@ -91,8 +91,8 @@ export default function BlogPage() {
 
             <div className="w-full min-h-[800px]">
               <iframe
-                src="https://claude.site/public/artifacts/9974c2a7-0201-4d52-9e5c-5d922643c345/embed"
-                title="NAVADA AI Shopping Platform"
+                src="https://claude.site/public/artifacts/43b00b86-ede4-47c9-a67f-b22e821565f3/embed"
+                title="Claude Artifact"
                 className="w-full h-[800px] rounded-lg border border-gray-600"
                 style={{ border: 'none' }}
                 allow="clipboard-write"
