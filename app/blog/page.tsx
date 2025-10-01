@@ -38,9 +38,6 @@ export default function BlogPage() {
               <Link href="/blog" className="text-purple-400 font-semibold transition-all duration-200">
                 PoC
               </Link>
-              <Link href="/game" className="text-white hover:text-purple-400 transition-all duration-200">
-                Game
-              </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
               </Link>
@@ -61,9 +58,6 @@ export default function BlogPage() {
               </Link>
               <Link href="/blog" className="text-purple-400 font-semibold transition-all duration-200 py-3 px-2 rounded-lg bg-gray-800/50 min-h-12 flex items-center">
                 PoC
-              </Link>
-              <Link href="/game" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                Game
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
@@ -133,23 +127,6 @@ export default function BlogPage() {
             <div className="w-full min-h-[500px] md:min-h-[800px]">
               <iframe
                 src="https://claude.site/public/artifacts/ad141410-6c6b-4406-96d8-4bfcd6f9e9b4/embed"
-                title="Claude Artifact"
-                className="w-full h-[500px] md:h-[800px] rounded-lg border border-gray-600"
-                style={{ border: 'none' }}
-                allow="clipboard-write"
-                allowFullScreen
-              />
-            </div>
-          </article>
-
-          <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 md:p-8 mb-8 border border-gray-700">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-blue-400">
-              Additional Demo
-            </h2>
-
-            <div className="w-full min-h-[500px] md:min-h-[800px]">
-              <iframe
-                src="https://claude.site/public/artifacts/ec412771-8ae9-49db-9be0-fd004b35f5f3/embed"
                 title="Claude Artifact"
                 className="w-full h-[500px] md:h-[800px] rounded-lg border border-gray-600"
                 style={{ border: 'none' }}
