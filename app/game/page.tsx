@@ -143,8 +143,8 @@ export default function GamePage() {
             <div className="w-full min-h-[500px] md:min-h-[800px]">
               <iframe
                 id="navada-iframe"
-                src="https://claude.site/public/artifacts/14614b6a-a5f5-4ebd-96c4-3b4499cab19a/embed"
-                title="Claude Artifact"
+                src="/navada-game.html"
+                title="NAVADA AI Studio"
                 className="w-full h-[500px] md:h-[800px] rounded-lg border border-gray-600"
                 style={{ border: 'none' }}
                 allow="clipboard-write"
@@ -161,6 +161,23 @@ export default function GamePage() {
                     }, 100);
                   }
                 }}
+              />
+            </div>
+          </article>
+
+          <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 md:p-8 mb-8 border border-gray-700">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-blue-400">
+              Character Design
+            </h2>
+
+            <div className="w-full min-h-[500px] md:min-h-[800px]">
+              <iframe
+                src="https://my.spline.design/characterdesign-Ogwx7EasOilAUxhZ2wEzTIh4/"
+                title="Character Design"
+                className="w-full h-[500px] md:h-[800px] rounded-lg border border-gray-600"
+                style={{ border: 'none' }}
+                frameBorder="0"
+                allowFullScreen
               />
             </div>
           </article>
