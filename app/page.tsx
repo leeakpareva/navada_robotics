@@ -278,6 +278,9 @@ export default function NavadaRoboticsApp() {
         </div>
       </section>
 
+      {/* ElevenLabs AudioNative Widget - Bottom */}
+      <div id="elevenlabs-audionative-widget" data-height="90" data-width="100%" data-frameborder="no" data-scrolling="no" data-publicuserid="10625bb8c127d3203fcc18a3e7c3f84d7d1458e6e71b30cfd322d0fc62dc93b1" data-playerurl="https://elevenlabs.io/player/index.html" >Loading the <a href="https://elevenlabs.io/text-to-speech" target="_blank" rel="noopener">Elevenlabs Text to Speech</a> AudioNative Player...</div><script src="https://elevenlabs.io/player/audioNativeHelper.js" type="text/javascript"></script>
+
       {/* Footer */}
       <footer className="bg-black py-8 px-4">
         <div className="container mx-auto text-center">
