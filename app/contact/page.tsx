@@ -294,19 +294,6 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="mb-12">
-            <div className="w-full max-w-4xl mx-auto h-64 md:h-80 rounded-lg overflow-hidden border border-purple-400/50">
-              <OptimizedImage
-                src="/Contact.png"
-                alt="Get in Touch - NAVADA Robotics Contact"
-                width={800}
-                height={320}
-                className="w-full h-full"
-                priority
-              />
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
             <Card className="text-center hover:border-purple-400/50 transition-colors bg-black/30 border-white/20 backdrop-blur-sm hover:bg-black/40">
               <CardContent className="pt-6">
