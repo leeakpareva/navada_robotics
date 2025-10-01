@@ -20,6 +20,9 @@ export default function ContactPage() {
   })
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [statusMessage, setStatusMessage] = useState('')
+  const [subscribeEmail, setSubscribeEmail] = useState('')
+  const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+  const [subscribeMessage, setSubscribeMessage] = useState('')
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -55,6 +58,36 @@ export default function ContactPage() {
     } catch (error) {
       setFormStatus('error')
       setStatusMessage('An error occurred. Please try again later.')
+    }
+  }
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubscribeStatus('submitting')
+    setSubscribeMessage('')
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: subscribeEmail, source: 'contact_page' }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setSubscribeStatus('success')
+        setSubscribeMessage(data.message || 'Thank you for subscribing! Stay tuned for updates.')
+        setSubscribeEmail('')
+      } else {
+        setSubscribeStatus('error')
+        setSubscribeMessage(data.error || 'Failed to subscribe. Please try again.')
+      }
+    } catch (error) {
+      setSubscribeStatus('error')
+      setSubscribeMessage('An error occurred. Please try again later.')
     }
   }
 
@@ -405,6 +438,49 @@ export default function ContactPage() {
                     className="w-full bg-purple-600 hover:bg-purple-700 text-white text-lg py-6"
                   >
                     {formStatus === 'submitting' ? 'Sending...' : 'Send Message'}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Email Subscribe Section */}
+          <div className="mt-16 max-w-2xl mx-auto">
+            <Card className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 border-purple-400/50 backdrop-blur-sm">
+              <CardContent className="p-8 text-center">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Stay Updated</h3>
+                <p className="text-gray-300 mb-6">
+                  Subscribe to our newsletter for the latest updates on AI, robotics, and technology innovations
+                </p>
+
+                {subscribeStatus === 'success' && (
+                  <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
+                    <p className="text-green-200">{subscribeMessage}</p>
+                  </div>
+                )}
+
+                {subscribeStatus === 'error' && (
+                  <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+                    <p className="text-red-200">{subscribeMessage}</p>
+                  </div>
+                )}
+
+                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
+                  <input
+                    type="email"
+                    value={subscribeEmail}
+                    onChange={(e) => setSubscribeEmail(e.target.value)}
+                    required
+                    placeholder="Enter your email address"
+                    className="flex-1 px-4 py-3 bg-black/40 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 transition-colors"
+                  />
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={subscribeStatus === 'submitting'}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-8"
+                  >
+                    {subscribeStatus === 'submitting' ? 'Subscribing...' : 'Subscribe'}
                   </Button>
                 </form>
               </CardContent>
