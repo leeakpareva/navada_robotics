@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { BeamsBackground } from "@/components/ui/beams-background"
 import { Menu, X, Microscope as Microchip, Shield, Phone } from "lucide-react"
@@ -10,6 +10,48 @@ import { isLearningHubEnabled } from "@/lib/feature-flags"
 
 export default function AboutPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
+
+  const testimonials = [
+    {
+      name: "Sarah Chen",
+      role: "Software Engineer at Google",
+      text: "Lee transformed my understanding of AI development in just weeks. His teaching style breaks down complex concepts into digestible lessons. I went from zero coding experience to building my first AI app. Absolutely life-changing!",
+      image: "🎓"
+    },
+    {
+      name: "Marcus Rodriguez",
+      role: "Startup Founder",
+      text: "What sets Lee apart is his ability to teach ANYONE regardless of their background. He guided me from complete beginner to deploying production AI systems. His patience and expertise are unmatched.",
+      image: "🚀"
+    },
+    {
+      name: "Priya Patel",
+      role: "Career Switcher to AI",
+      text: "I never thought I could understand AI until I met Lee. His teaching methodology is pure magic - he makes the impossible feel achievable. Within 3 months, I landed my dream job in AI development.",
+      image: "💡"
+    },
+    {
+      name: "James Williams",
+      role: "High School Student",
+      text: "Lee believes in every student's potential. At 16, I built my first AI chatbot under his mentorship. He doesn't just teach code - he teaches you how to think like a developer. Inspiring beyond words!",
+      image: "🎯"
+    },
+    {
+      name: "Elena Volkova",
+      role: "Small Business Owner",
+      text: "Lee's gift is making AI accessible to everyone. No tech jargon, no condescension - just clear, powerful teaching. He helped me automate my business with AI tools I built myself. Revolutionary!",
+      image: "⭐"
+    }
+  ]
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+    }, 5000) // Change testimonial every 5 seconds
+
+    return () => clearInterval(timer)
+  }, [testimonials.length])
 
   return (
     <div className="min-h-screen bg-black">
@@ -155,18 +197,49 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-              <div className="text-center bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
-                <div className="text-3xl font-bold text-purple-300 mb-2">50+</div>
-                <div className="text-gray-200">Research Projects Completed</div>
+            {/* Testimonials Slideshow */}
+            <div className="mt-12">
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">What Students Say</h3>
+              <div className="relative min-h-[300px] flex items-center justify-center">
+                {testimonials.map((testimonial, index) => (
+                  <div
+                    key={index}
+                    className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+                      index === currentTestimonial
+                        ? 'opacity-100 transform translate-y-0'
+                        : 'opacity-0 transform translate-y-4 pointer-events-none'
+                    }`}
+                  >
+                    <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm rounded-lg p-8 md:p-12 border border-purple-400/50 hover:border-purple-400 transition-all duration-300 shadow-xl">
+                      <div className="text-center">
+                        <div className="text-6xl mb-6">{testimonial.image}</div>
+                        <p className="text-lg md:text-xl text-gray-100 italic mb-6 leading-relaxed">
+                          &quot;{testimonial.text}&quot;
+                        </p>
+                        <div className="border-t border-purple-400/30 pt-6">
+                          <p className="text-xl font-bold text-white mb-1">{testimonial.name}</p>
+                          <p className="text-purple-300 font-medium">{testimonial.role}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="text-center bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
-                <div className="text-3xl font-bold text-purple-300 mb-2">15+</div>
-                <div className="text-gray-200">University Partnerships</div>
-              </div>
-              <div className="text-center bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
-                <div className="text-3xl font-bold text-purple-300 mb-2">200+</div>
-                <div className="text-gray-200">Students & Researchers Trained</div>
+
+              {/* Slideshow indicators */}
+              <div className="flex justify-center mt-8 gap-2">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentTestimonial(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === currentTestimonial
+                        ? 'w-8 bg-purple-400'
+                        : 'w-2 bg-gray-600 hover:bg-gray-500'
+                    }`}
+                    aria-label={`Go to testimonial ${index + 1}`}
+                  />
+                ))}
               </div>
             </div>
           </div>
