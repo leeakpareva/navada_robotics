@@ -404,12 +404,12 @@ export default function AgentLeePage() {
       </div>
 
       {/* ElevenLabs ConvAI Widget */}
+      <elevenlabs-convai agent-id="agent_5501k13tdhrgfc28jaz0n0cn07h7"></elevenlabs-convai>
       <Script
         src="https://unpkg.com/@elevenlabs/convai-widget-embed"
-        strategy="afterInteractive"
+        async
         type="text/javascript"
       />
-      <elevenlabs-convai agent-id="agent_6501k5q5hn4zf9eteg70jwra0ekp"></elevenlabs-convai>
     </div>
   )
 }
