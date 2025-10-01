@@ -63,7 +63,7 @@ export function PasswordProtection({ children }: PasswordProtectionProps) {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="text-center">
               <h1 className="text-2xl font-bold text-white mb-2">NAVADA</h1>
-              <p className="text-gray-400 text-sm">Enter passlock to continue</p>
+              <p className="text-gray-400 text-sm">Welcome to the Future!</p>
             </div>
 
             <div className="space-y-4">
