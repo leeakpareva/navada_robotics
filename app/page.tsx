@@ -40,13 +40,10 @@ export default function NavadaRoboticsApp() {
                 Solutions
               </Link>
               <Link href="/blog" className="text-white hover:text-purple-400 transition-all duration-200">
-                Blog
+                PoC
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
-              </Link>
-              <Link href="/ai-tutors" className="text-white hover:text-purple-400 transition-all duration-200">
-                AI Tutors
               </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200">
                 Agent Lee
@@ -64,13 +61,10 @@ export default function NavadaRoboticsApp() {
                 Solutions
               </Link>
               <Link href="/blog" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                Blog
+                PoC
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
-              </Link>
-              <Link href="/ai-tutors" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                AI Tutors
               </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Agent Lee
@@ -279,10 +273,6 @@ export default function NavadaRoboticsApp() {
           <Link href="/solutions" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Microchip className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
-          </Link>
-          <Link href="/ai-tutors" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
-            <Brain className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">AI Tutors</span>
           </Link>
           <Link href="/agent-lee" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Brain className="h-5 w-5 text-gray-400 mb-1" />

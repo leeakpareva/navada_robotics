@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Volume2, VolumeX } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function BlogPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
@@ -34,13 +36,10 @@ export default function BlogPage() {
                 Solutions
               </Link>
               <Link href="/blog" className="text-purple-400 font-semibold transition-all duration-200">
-                Blog
+                PoC
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
-              </Link>
-              <Link href="/ai-tutors" className="text-white hover:text-purple-400 transition-all duration-200">
-                AI Tutors
               </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200">
                 Agent Lee
@@ -58,13 +57,10 @@ export default function BlogPage() {
                 Solutions
               </Link>
               <Link href="/blog" className="text-purple-400 font-semibold transition-all duration-200 py-3 px-2 rounded-lg bg-gray-800/50 min-h-12 flex items-center">
-                Blog
+                PoC
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
-              </Link>
-              <Link href="/ai-tutors" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                AI Tutors
               </Link>
               <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Agent Lee
@@ -79,9 +75,31 @@ export default function BlogPage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-          Blog
-        </h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 flex-1">
+            PoC
+          </h1>
+          <Button
+            onClick={() => setVoiceEnabled(!voiceEnabled)}
+            className={`flex items-center space-x-2 ${
+              voiceEnabled
+                ? 'bg-purple-600 hover:bg-purple-700'
+                : 'bg-gray-700 hover:bg-gray-600'
+            }`}
+          >
+            {voiceEnabled ? (
+              <>
+                <Volume2 className="h-5 w-5" />
+                <span>Voice On</span>
+              </>
+            ) : (
+              <>
+                <VolumeX className="h-5 w-5" />
+                <span>Voice Off</span>
+              </>
+            )}
+          </Button>
+        </div>
 
         <div className="max-w-6xl mx-auto space-y-8">
           <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-8 mb-8 border border-gray-700">
