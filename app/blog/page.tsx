@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, Volume2, VolumeX } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
 
 export default function BlogPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
@@ -75,31 +73,9 @@ export default function BlogPage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-16">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-6 md:mb-8 gap-4">
-          <h1 className="text-3xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 flex-1">
-            PoC
-          </h1>
-          <Button
-            onClick={() => setVoiceEnabled(!voiceEnabled)}
-            className={`flex items-center space-x-2 min-h-12 ${
-              voiceEnabled
-                ? 'bg-purple-600 hover:bg-purple-700'
-                : 'bg-gray-700 hover:bg-gray-600'
-            }`}
-          >
-            {voiceEnabled ? (
-              <>
-                <Volume2 className="h-5 w-5" />
-                <span className="hidden sm:inline">Voice On</span>
-              </>
-            ) : (
-              <>
-                <VolumeX className="h-5 w-5" />
-                <span className="hidden sm:inline">Voice Off</span>
-              </>
-            )}
-          </Button>
-        </div>
+        <h1 className="text-3xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 mb-8">
+          PoC
+        </h1>
 
         <div className="max-w-6xl mx-auto space-y-8 pb-safe">
           <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 md:p-8 mb-8 border border-gray-700">
