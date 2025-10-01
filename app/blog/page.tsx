@@ -141,6 +141,23 @@ export default function BlogPage() {
               />
             </div>
           </article>
+
+          <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 md:p-8 mb-8 border border-gray-700">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-blue-400">
+              Additional Demo
+            </h2>
+
+            <div className="w-full min-h-[500px] md:min-h-[800px]">
+              <iframe
+                src="https://claude.site/public/artifacts/ec412771-8ae9-49db-9be0-fd004b35f5f3/embed"
+                title="Claude Artifact"
+                className="w-full h-[500px] md:h-[800px] rounded-lg border border-gray-600"
+                style={{ border: 'none' }}
+                allow="clipboard-write"
+                allowFullScreen
+              />
+            </div>
+          </article>
         </div>
       </div>
     </div>
