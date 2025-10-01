@@ -32,7 +32,6 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
         <link rel="preload" href="/api/auth/session" as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href="/_next/static/css/app/layout.css" as="style" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="//vitals.vercel-insights.com" />

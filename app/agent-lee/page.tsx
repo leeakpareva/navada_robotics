@@ -388,7 +388,19 @@ export default function AgentLeePage() {
                     : "bg-gray-700 text-gray-100"
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                <div
+                  className="text-sm leading-relaxed"
+                  dangerouslySetInnerHTML={{
+                    __html: message.text
+                      .replace(/\n\n/g, '</p><p class="mb-3">')
+                      .replace(/\n/g, '<br />')
+                      .replace(/^/, '<p class="mb-3">')
+                      .replace(/$/, '</p>')
+                      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                      .replace(/`(.*?)`/g, '<code class="bg-gray-600 px-1 py-0.5 rounded text-sm">$1</code>')
+                  }}
+                />
                 <p className="text-xs mt-1 opacity-70">
                   {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>

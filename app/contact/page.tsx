@@ -12,6 +12,51 @@ import { isLearningHubEnabled } from "@/lib/feature-flags"
 export default function ContactPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [openFaqItem, setOpenFaqItem] = useState<number | null>(null)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  })
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+  const [statusMessage, setStatusMessage] = useState('')
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setFormStatus('submitting')
+    setStatusMessage('')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setFormStatus('success')
+        setStatusMessage(data.message || 'Thank you for your message! We will get back to you soon.')
+        setFormData({ name: '', email: '', phone: '', message: '' })
+      } else {
+        setFormStatus('error')
+        setStatusMessage(data.error || 'Failed to submit form. Please try again.')
+      }
+    } catch (error) {
+      setFormStatus('error')
+      setStatusMessage('An error occurred. Please try again later.')
+    }
+  }
 
   const faqItems = [
     {
@@ -267,6 +312,101 @@ export default function ContactPage() {
                 <h4 className="font-semibold mb-2 text-white">FAQ</h4>
                 <p className="text-gray-200">AI, Robotics & IoT</p>
                 <p className="text-gray-300 text-sm mt-1">Common Questions</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Contact Form */}
+          <div className="mt-16 max-w-3xl mx-auto">
+            <Card className="bg-black/30 border-white/20 backdrop-blur-sm">
+              <CardContent className="p-8">
+                <h3 className="text-2xl font-bold text-white mb-6 text-center">Send Us a Message</h3>
+
+                {formStatus === 'success' && (
+                  <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
+                    <p className="text-green-200 text-center">{statusMessage}</p>
+                  </div>
+                )}
+
+                {formStatus === 'error' && (
+                  <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+                    <p className="text-red-200 text-center">{statusMessage}</p>
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label htmlFor="name" className="block text-white font-medium mb-2">
+                      Name <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-black/40 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 transition-colors"
+                      placeholder="Your name"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-white font-medium mb-2">
+                      Email <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-black/40 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 transition-colors"
+                      placeholder="your.email@example.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="phone" className="block text-white font-medium mb-2">
+                      Phone
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-black/40 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 transition-colors"
+                      placeholder="+44 1234 567890"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="block text-white font-medium mb-2">
+                      Message <span className="text-red-400">*</span>
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
+                      rows={6}
+                      className="w-full px-4 py-3 bg-black/40 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 transition-colors resize-none"
+                      placeholder="Tell us about your project or inquiry..."
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={formStatus === 'submitting'}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white text-lg py-6"
+                  >
+                    {formStatus === 'submitting' ? 'Sending...' : 'Send Message'}
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </div>

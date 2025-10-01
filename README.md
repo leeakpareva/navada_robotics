@@ -536,6 +536,24 @@ git checkout debab58 -- vercel.json next.config.mjs
 - Minimal `vercel.json` with basic environment variables
 - Simple `next.config.mjs` without complex webpack modifications
 
+## Recent Changes
+
+### Latest Updates (September 2025)
+
+- **Claude AI Integration**: Enhanced AI tutoring system with Claude AI for more sophisticated educational interactions
+- **AI Tutors Platform**: Comprehensive learning management system with PostgreSQL backend
+  - Learning paths with structured modules
+  - Interactive quizzes and assessments
+  - Progress tracking and session management
+  - Real-time chat with AI tutors
+- **3D Animations**: Replaced static graphics with interactive Spline 3D animations
+  - Hero section with animated 3D scenes
+  - Agent Lee interface with 3D robot arm animation
+  - Voice-synchronized robot movements
+- **Performance Optimizations**: Removed News and Dashboard pages to improve load times
+- **Database Integration**: Full PostgreSQL setup with Prisma ORM for data persistence
+- **Error Tracking**: Comprehensive Sentry integration for monitoring and debugging
+
 ## License
 
 © 2024 NAVADA. All rights reserved.

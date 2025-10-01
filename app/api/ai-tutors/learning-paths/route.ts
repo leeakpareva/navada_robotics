@@ -71,6 +71,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if user has reached the 3 learning paths limit
+    const existingPathsCount = await prisma.learningPath.count({
+      where: { userId: user.id }
+    });
+
+    if (existingPathsCount >= 3) {
+      return NextResponse.json(
+        { error: 'You have reached the maximum of 3 learning paths. Please delete an existing path to create a new one.' },
+        { status: 400 }
+      );
+    }
+
     const {
       tutorId,
       topic,
@@ -189,6 +201,86 @@ Format the response as JSON with this structure:
       };
     }
 
+    // Determine number of modules based on difficulty
+    const moduleCount = difficulty === 'beginner' ? 5 : difficulty === 'intermediate' ? 10 : 15;
+
+    // Generate agenda modules using Mistral AI
+    const agendaPrompt = `Create a structured learning agenda for "${topic}" at ${difficulty} level with exactly ${moduleCount} modules.
+
+    For each module, provide:
+    1. Module title (concise, descriptive)
+    2. Learning objectives (2-3 specific goals)
+    3. Estimated duration in hours
+    4. Brief description of what will be covered
+    5. Prerequisites (if any)
+
+    Format as JSON with this structure:
+    {
+      "modules": [
+        {
+          "title": "Module Title",
+          "objectives": ["objective 1", "objective 2"],
+          "duration": 2,
+          "description": "What this module covers",
+          "prerequisites": ["prerequisite if any"],
+          "orderIndex": 1
+        }
+      ]
+    }
+
+    Topic: ${topic}
+    Difficulty: ${difficulty}
+    Target modules: ${moduleCount}
+    Student objectives: ${objectives || 'General understanding'}`;
+
+    let agendaModules = [];
+    if (useMistralAI && MISTRAL_API_KEY) {
+      try {
+        const agendaResponse = await fetch('https://api.mistral.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${MISTRAL_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: 'mistral-medium',
+            messages: [{ role: 'user', content: agendaPrompt }],
+            max_tokens: 3000,
+            temperature: 0.7
+          })
+        });
+
+        if (agendaResponse.ok) {
+          const agendaData = await agendaResponse.json();
+          const agendaContent = agendaData.choices[0]?.message?.content;
+          if (agendaContent) {
+            try {
+              const parsedAgenda = JSON.parse(agendaContent);
+              agendaModules = parsedAgenda.modules || [];
+            } catch (parseError) {
+              console.log('Failed to parse agenda JSON, using fallback');
+            }
+          }
+        }
+      } catch (error) {
+        console.log('Mistral agenda generation failed, using fallback');
+      }
+    }
+
+    // Fallback agenda generation if Mistral fails
+    if (agendaModules.length === 0) {
+      for (let i = 1; i <= moduleCount; i++) {
+        agendaModules.push({
+          title: `${topic} - Module ${i}`,
+          objectives: [`Learn key concepts of module ${i}`, `Apply knowledge practically`],
+          duration: difficulty === 'beginner' ? 1 : difficulty === 'intermediate' ? 2 : 3,
+          description: `Comprehensive coverage of ${topic} concepts for module ${i}`,
+          prerequisites: i === 1 ? [] : [`Completion of Module ${i-1}`],
+          orderIndex: i
+        });
+      }
+    }
+
     const learningPath = await prisma.learningPath.create({
       data: {
         userId: user.id,
@@ -206,7 +298,31 @@ Format the response as JSON with this structure:
       }
     });
 
-    // Create milestones if provided
+    // Create agenda modules as milestones
+    const createdModules = [];
+    for (const module of agendaModules) {
+      const createdModule = await prisma.learningMilestone.create({
+        data: {
+          learningPathId: learningPath.id,
+          title: module.title,
+          description: module.description,
+          orderIndex: module.orderIndex,
+          completed: false,
+          points: 10,
+          metadata: {
+            objectives: module.objectives,
+            duration: module.duration,
+            prerequisites: module.prerequisites,
+            moduleType: 'agenda',
+            hasContent: false,
+            hasQuiz: false
+          }
+        }
+      });
+      createdModules.push(createdModule);
+    }
+
+    // Create traditional milestones if provided by Mistral
     if (learningPathData.milestones) {
       for (const milestone of learningPathData.milestones) {
         await prisma.learningMilestone.create({
@@ -214,8 +330,11 @@ Format the response as JSON with this structure:
             learningPathId: learningPath.id,
             title: milestone.title,
             description: milestone.description,
-            orderIndex: milestone.orderIndex,
-            points: 100
+            orderIndex: milestone.orderIndex + agendaModules.length,
+            points: 100,
+            metadata: {
+              moduleType: 'milestone'
+            }
           }
         });
       }
