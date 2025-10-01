@@ -1,13 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Volume2, VolumeX } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
 
-export default function BlogPage() {
+export default function GamePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [apiKey, setApiKey] = useState<string>("");
+
+  useEffect(() => {
+    // Load API key from environment
+    const key = process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || "";
+    setApiKey(key);
+
+    // Listen for API key requests from iframe
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'REQUEST_API_KEY') {
+        const iframe = document.getElementById('navada-iframe') as HTMLIFrameElement;
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage({
+            type: 'SET_API_KEY',
+            apiKey: key
+          }, '*');
+        }
+      }
+
+      // Listen for API errors from iframe
+      if (event.data.type === 'API_ERROR') {
+        console.error('API Error in iframe:', event.data.error);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
@@ -35,10 +61,10 @@ export default function BlogPage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/blog" className="text-purple-400 font-semibold transition-all duration-200">
+              <Link href="/blog" className="text-white hover:text-purple-400 transition-all duration-200">
                 PoC
               </Link>
-              <Link href="/game" className="text-white hover:text-purple-400 transition-all duration-200">
+              <Link href="/game" className="text-purple-400 font-semibold transition-all duration-200">
                 Game
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
@@ -59,10 +85,10 @@ export default function BlogPage() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Solutions
               </Link>
-              <Link href="/blog" className="text-purple-400 font-semibold transition-all duration-200 py-3 px-2 rounded-lg bg-gray-800/50 min-h-12 flex items-center">
+              <Link href="/blog" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 PoC
               </Link>
-              <Link href="/game" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
+              <Link href="/game" className="text-purple-400 font-semibold transition-all duration-200 py-3 px-2 rounded-lg bg-gray-800/50 min-h-12 flex items-center">
                 Game
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
@@ -81,59 +107,21 @@ export default function BlogPage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-16">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-6 md:mb-8 gap-4">
-          <h1 className="text-3xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 flex-1">
-            PoC
-          </h1>
-          <Button
-            onClick={() => setVoiceEnabled(!voiceEnabled)}
-            className={`flex items-center space-x-2 min-h-12 ${
-              voiceEnabled
-                ? 'bg-purple-600 hover:bg-purple-700'
-                : 'bg-gray-700 hover:bg-gray-600'
-            }`}
-          >
-            {voiceEnabled ? (
-              <>
-                <Volume2 className="h-5 w-5" />
-                <span className="hidden sm:inline">Voice On</span>
-              </>
-            ) : (
-              <>
-                <VolumeX className="h-5 w-5" />
-                <span className="hidden sm:inline">Voice Off</span>
-              </>
-            )}
-          </Button>
-        </div>
+        <h1 className="text-3xl md:text-5xl font-bold mb-6 md:mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+          NAVADA AI Studio
+        </h1>
 
         <div className="max-w-6xl mx-auto space-y-8 pb-safe">
           <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 md:p-8 mb-8 border border-gray-700">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-blue-400">
-              NAVADA AI Shopping Platform
+              Interactive AI Game
             </h2>
 
             <div className="w-full min-h-[500px] md:min-h-[800px]">
               <iframe
-                src="https://claude.site/public/artifacts/43b00b86-ede4-47c9-a67f-b22e821565f3/embed"
-                title="Claude Artifact"
-                className="w-full h-[500px] md:h-[800px] rounded-lg border border-gray-600"
-                style={{ border: 'none' }}
-                allow="clipboard-write"
-                allowFullScreen
-              />
-            </div>
-          </article>
-
-          <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 md:p-8 mb-8 border border-gray-700">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-blue-400">
-              Featured Content
-            </h2>
-
-            <div className="w-full min-h-[500px] md:min-h-[800px]">
-              <iframe
-                src="https://claude.site/public/artifacts/ad141410-6c6b-4406-96d8-4bfcd6f9e9b4/embed"
-                title="Claude Artifact"
+                id="navada-iframe"
+                src="https://claude.site/public/artifacts/e8649dc6-5533-4f03-8e23-64744e3477a8/embed"
+                title="NAVADA AI Studio"
                 className="w-full h-[500px] md:h-[800px] rounded-lg border border-gray-600"
                 style={{ border: 'none' }}
                 allow="clipboard-write"
