@@ -295,9 +295,11 @@ export default function ContactPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <Card className="text-center hover:border-purple-400/50 transition-colors bg-black/30 border-white/20 backdrop-blur-sm hover:bg-black/40">
+            <Card className="text-center hover:border-purple-400 transition-all duration-300 bg-black/30 border-purple-400/30 backdrop-blur-sm hover:bg-black/40 hover:shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:shadow-purple-500/50 group">
               <CardContent className="pt-6">
-                <Phone className="h-8 w-8 text-purple-300 mx-auto mb-4" />
+                <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition-all duration-300">
+                  <Phone className="h-8 w-8 text-purple-300" />
+                </div>
                 <h4 className="font-semibold mb-2 text-white">Phone</h4>
                 <a href="tel:+447953523704" className="text-gray-200 hover:text-purple-400 transition-colors block">
                   +44 7953 523704
@@ -306,9 +308,11 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:border-purple-400/50 transition-colors bg-black/30 border-white/20 backdrop-blur-sm hover:bg-black/40">
+            <Card className="text-center hover:border-purple-400 transition-all duration-300 bg-black/30 border-purple-400/30 backdrop-blur-sm hover:bg-black/40 hover:shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:shadow-purple-500/50 group">
               <CardContent className="pt-6">
-                <Mail className="h-8 w-8 text-purple-300 mx-auto mb-4" />
+                <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition-all duration-300">
+                  <Mail className="h-8 w-8 text-purple-300" />
+                </div>
                 <h4 className="font-semibold mb-2 text-white">Email</h4>
                 <a href="mailto:Lee@navada.info" className="text-gray-200 hover:text-purple-400 transition-colors block">
                   Lee@navada.info
@@ -317,18 +321,22 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:border-purple-400/50 transition-colors bg-black/30 border-white/20 backdrop-blur-sm hover:bg-black/40">
+            <Card className="text-center hover:border-purple-400 transition-all duration-300 bg-black/30 border-purple-400/30 backdrop-blur-sm hover:bg-black/40 hover:shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:shadow-purple-500/50 group">
               <CardContent className="pt-6">
-                <MapPin className="h-8 w-8 text-purple-300 mx-auto mb-4" />
+                <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition-all duration-300">
+                  <MapPin className="h-8 w-8 text-purple-300" />
+                </div>
                 <h4 className="font-semibold mb-2 text-white">Location</h4>
                 <p className="text-gray-200">London, UK</p>
                 <p className="text-gray-300 text-sm mt-1">Research & Development Hub</p>
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:border-purple-400/50 transition-colors bg-black/30 border-white/20 backdrop-blur-sm hover:bg-black/40">
+            <Card className="text-center hover:border-purple-400 transition-all duration-300 bg-black/30 border-purple-400/30 backdrop-blur-sm hover:bg-black/40 hover:shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:shadow-purple-500/50 group">
               <CardContent className="pt-6">
-                <HelpCircle className="h-8 w-8 text-purple-300 mx-auto mb-4" />
+                <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition-all duration-300">
+                  <HelpCircle className="h-8 w-8 text-purple-300" />
+                </div>
                 <h4 className="font-semibold mb-2 text-white">FAQ</h4>
                 <p className="text-gray-200">AI, Robotics & IoT</p>
                 <p className="text-gray-300 text-sm mt-1">Common Questions</p>
@@ -340,7 +348,7 @@ export default function ContactPage() {
           <div className="mt-16 max-w-3xl mx-auto">
             <Card className="bg-black/30 border-white/20 backdrop-blur-sm">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-white mb-6 text-center">Send Us a Message</h3>
+                <h3 className="text-2xl font-bold text-white mb-6 text-center">Send Me a Message</h3>
 
                 {formStatus === 'success' && (
                   <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
@@ -414,7 +422,7 @@ export default function ContactPage() {
                       required
                       rows={6}
                       className="w-full px-4 py-3 bg-black/40 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 transition-colors resize-none"
-                      placeholder="Tell us about your project or inquiry..."
+                      placeholder="Tell me about your project or inquiry..."
                     />
                   </div>
 
