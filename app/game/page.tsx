@@ -120,8 +120,8 @@ export default function GamePage() {
             <div className="w-full min-h-[500px] md:min-h-[800px]">
               <iframe
                 id="navada-iframe"
-                src="https://claude.site/public/artifacts/e8649dc6-5533-4f03-8e23-64744e3477a8/embed"
-                title="NAVADA AI Studio"
+                src="https://claude.site/public/artifacts/14614b6a-a5f5-4ebd-96c4-3b4499cab19a/embed"
+                title="Claude Artifact"
                 className="w-full h-[500px] md:h-[800px] rounded-lg border border-gray-600"
                 style={{ border: 'none' }}
                 allow="clipboard-write"
