@@ -8,6 +8,7 @@ import { SurveyIntro } from '@/components/data/SurveyIntro'
 import { SurveyForm } from '@/components/data/SurveyForm'
 import { SecureNotice } from '@/components/data/SecureNotice'
 import { getSurveyStatus } from '@/lib/surveyConfig'
+import { AuthModal } from '@/components/auth/auth-modal'
 import { ArrowLeft, Clock, AlertCircle, Brain, BarChart3, Users, Building2, DollarSign, Mail, Phone, Globe, TrendingUp, Zap, ShieldCheck, Cpu, Bot, Factory, CircuitBoard } from 'lucide-react'
 
 export default function DataPage() {
@@ -25,7 +26,8 @@ export default function DataPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900">
+    <AuthModal>
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900">
       {/* Navigation */}
       <header className="relative z-50 bg-black/90 backdrop-blur-sm border-b border-gray-800">
         <div className="container mx-auto px-4 py-4">
@@ -635,5 +637,6 @@ export default function DataPage() {
         </div>
       </div>
     </div>
+    </AuthModal>
   )
 }
