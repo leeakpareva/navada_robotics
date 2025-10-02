@@ -41,7 +41,7 @@ export default function NavadaRoboticsApp() {
                 Solutions
               </Link>
               <Link href="/blog" className="text-white hover:text-purple-400 transition-all duration-200">
-                PoC
+                Engagement
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
@@ -62,7 +62,7 @@ export default function NavadaRoboticsApp() {
                 Solutions
               </Link>
               <Link href="/blog" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                PoC
+                Engagement
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About

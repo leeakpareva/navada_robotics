@@ -34,7 +34,7 @@ export default function BlogPage() {
                 Solutions
               </Link>
               <Link href="/blog" className="text-purple-400 font-semibold transition-all duration-200">
-                PoC
+                Engagement
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
@@ -55,7 +55,7 @@ export default function BlogPage() {
                 Solutions
               </Link>
               <Link href="/blog" className="text-purple-400 font-semibold transition-all duration-200 py-3 px-2 rounded-lg bg-gray-800/50 min-h-12 flex items-center">
-                PoC
+                Engagement
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
@@ -74,8 +74,21 @@ export default function BlogPage() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-3xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 mb-8">
-          PoC
+          Engagement
         </h1>
+
+        <div className="max-w-6xl mx-auto mb-8">
+          <iframe
+            src="https://claude.site/public/artifacts/b2af70b0-1bc7-4cba-adbf-5eb50bdc78ab/embed"
+            title="Claude Artifact"
+            width="100%"
+            height="600"
+            frameBorder="0"
+            allow="clipboard-write"
+            allowFullScreen
+            className="rounded-lg border border-gray-600"
+          />
+        </div>
 
         <div className="max-w-6xl mx-auto space-y-8 pb-safe">
           <article className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 md:p-8 mb-8 border border-gray-700">
