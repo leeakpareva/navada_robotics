@@ -300,19 +300,19 @@ Format the response as JSON with this structure:
 
     // Create agenda modules as milestones
     const createdModules = [];
-    for (const module of agendaModules) {
+    for (const moduleItem of agendaModules) {
       const createdModule = await prisma.learningMilestone.create({
         data: {
           learningPathId: learningPath.id,
-          title: module.title,
-          description: module.description,
-          orderIndex: module.orderIndex,
+          title: moduleItem.title,
+          description: moduleItem.description,
+          orderIndex: moduleItem.orderIndex,
           completed: false,
           points: 10,
           metadata: {
-            objectives: module.objectives,
-            duration: module.duration,
-            prerequisites: module.prerequisites,
+            objectives: moduleItem.objectives,
+            duration: moduleItem.duration,
+            prerequisites: moduleItem.prerequisites,
             moduleType: 'agenda',
             hasContent: false,
             hasQuiz: false

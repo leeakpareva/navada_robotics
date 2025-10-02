@@ -24,7 +24,7 @@ export async function POST(
     const { quizResults } = await request.json();
 
     // Get the module
-    const module = await prisma.learningMilestone.findUnique({
+    const moduleData = await prisma.learningMilestone.findUnique({
       where: { id: params.moduleId },
       include: {
         learningPath: {
@@ -45,7 +45,7 @@ export async function POST(
     }
 
     // Check if user owns this learning path
-    if (module.learningPath.userId !== user.id) {
+    if (moduleData.learningPath.userId !== user.id) {
       return NextResponse.json(
         { error: 'Access denied' },
         { status: 403 }
@@ -55,7 +55,7 @@ export async function POST(
     // Validate quiz results if provided
     let quizPassed = true;
     if (quizResults) {
-      const quiz = module.metadata?.quiz;
+      const quiz = moduleData.metadata?.quiz;
       if (quiz) {
         const score = (quizResults.correctAnswers / quiz.questions.length) * 100;
         quizPassed = score >= quiz.passingScore;
@@ -76,7 +76,7 @@ export async function POST(
         completed: true,
         completedAt: new Date(),
         metadata: {
-          ...module.metadata,
+          ...moduleData.metadata,
           quizResults: quizResults || null,
           completedAt: new Date().toISOString()
         }
@@ -84,15 +84,15 @@ export async function POST(
     });
 
     // Calculate learning path progress
-    const totalModules = module.learningPath.milestones.length;
-    const completedModules = module.learningPath.milestones.filter(m =>
+    const totalModules = moduleData.learningPath.milestones.length;
+    const completedModules = moduleData.learningPath.milestones.filter(m =>
       m.completed || m.id === params.moduleId
     ).length;
     const progress = Math.round((completedModules / totalModules) * 100);
 
     // Update learning path progress
     await prisma.learningPath.update({
-      where: { id: module.learningPathId },
+      where: { id: moduleData.learningPathId },
       data: {
         progress: progress,
         ...(progress === 100 && {
@@ -104,7 +104,7 @@ export async function POST(
 
     // Get updated learning path with all milestones
     const updatedLearningPath = await prisma.learningPath.findUnique({
-      where: { id: module.learningPathId },
+      where: { id: moduleData.learningPathId },
       include: {
         milestones: {
           orderBy: { orderIndex: 'asc' }

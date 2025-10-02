@@ -24,7 +24,7 @@ export async function POST(
     }
 
     // Get the module with content
-    const module = await prisma.learningMilestone.findUnique({
+    const moduleData = await prisma.learningMilestone.findUnique({
       where: { id: params.moduleId },
       include: {
         learningPath: {
@@ -35,7 +35,7 @@ export async function POST(
       }
     });
 
-    if (!module) {
+    if (!moduleItem) {
       return NextResponse.json(
         { error: 'Module not found' },
         { status: 404 }
@@ -43,7 +43,7 @@ export async function POST(
     }
 
     // Check if user owns this learning path
-    if (module.learningPath.userId !== user.id) {
+    if (moduleData.learningPath.userId !== user.id) {
       return NextResponse.json(
         { error: 'Access denied' },
         { status: 403 }
@@ -51,7 +51,7 @@ export async function POST(
     }
 
     // Check if module is completed
-    if (!module.completed) {
+    if (!moduleData.completed) {
       return NextResponse.json(
         { error: 'Module must be completed before generating quiz' },
         { status: 400 }
@@ -59,7 +59,7 @@ export async function POST(
     }
 
     // Get module content for quiz generation
-    const moduleContent = module.metadata?.content;
+    const moduleContent = moduleData.metadata?.content;
     if (!moduleContent) {
       return NextResponse.json(
         { error: 'Module content not found. Generate content first.' },
@@ -70,9 +70,9 @@ export async function POST(
     // Generate quiz using Mistral AI
     const quizPrompt = `Create a multiple choice quiz based on this module content:
 
-Module Title: ${module.title}
-Learning Path: ${module.learningPath.title}
-Difficulty: ${module.learningPath.difficulty}
+Module Title: ${moduleData.title}
+Learning Path: ${moduleData.learningPath.title}
+Difficulty: ${moduleData.learningPath.difficulty}
 
 Module Content Summary:
 ${moduleContent.introduction}
@@ -87,7 +87,7 @@ Create a quiz with 5-8 multiple choice questions that test:
 
 Format as JSON with this structure:
 {
-  "title": "Quiz: ${module.title}",
+  "title": "Quiz: ${moduleData.title}",
   "description": "Test your knowledge of the concepts covered in this module",
   "questions": [
     {
@@ -102,7 +102,7 @@ Format as JSON with this structure:
   "timeLimit": 15
 }
 
-Make questions challenging but fair for ${module.learningPath.difficulty} level learners.`;
+Make questions challenging but fair for ${moduleData.learningPath.difficulty} level learners.`;
 
     let generatedQuiz = null;
 
@@ -142,12 +142,12 @@ Make questions challenging but fair for ${module.learningPath.difficulty} level 
     // Fallback quiz if Mistral fails
     if (!generatedQuiz) {
       generatedQuiz = {
-        title: `Quiz: ${module.title}`,
+        title: `Quiz: ${moduleData.title}`,
         description: "Test your knowledge of the concepts covered in this module",
         questions: [
           {
             id: 1,
-            question: `What is the main objective of ${module.title}?`,
+            question: `What is the main objective of ${moduleData.title}?`,
             options: [
               "To understand basic concepts",
               "To apply practical skills",
@@ -164,10 +164,10 @@ Make questions challenging but fair for ${module.learningPath.difficulty} level 
               "Beginner",
               "Intermediate",
               "Advanced",
-              module.learningPath.difficulty
+              moduleData.learningPath.difficulty
             ],
             correctAnswer: 3,
-            explanation: `This module is specifically designed for ${module.learningPath.difficulty} level learners.`
+            explanation: `This module is specifically designed for ${moduleData.learningPath.difficulty} level learners.`
           }
         ],
         passingScore: 70,
@@ -180,7 +180,7 @@ Make questions challenging but fair for ${module.learningPath.difficulty} level 
       where: { id: params.moduleId },
       data: {
         metadata: {
-          ...module.metadata,
+          ...moduleData.metadata,
           hasQuiz: true,
           quiz: generatedQuiz,
           quizGeneratedAt: new Date().toISOString()
@@ -210,22 +210,22 @@ export async function GET(
     // TEMPORARILY DISABLE AUTH FOR TESTING
     console.log('Module Quiz GET - Auth disabled for testing');
 
-    const module = await prisma.learningMilestone.findUnique({
+    const moduleItem = await prisma.learningMilestone.findUnique({
       where: { id: params.moduleId },
       include: {
         learningPath: true
       }
     });
 
-    if (!module) {
+    if (!moduleItem) {
       return NextResponse.json(
         { error: 'Module not found' },
         { status: 404 }
       );
     }
 
-    const quiz = module.metadata?.quiz || null;
-    const hasQuiz = module.metadata?.hasQuiz || false;
+    const quiz = moduleData.metadata?.quiz || null;
+    const hasQuiz = moduleData.metadata?.hasQuiz || false;
 
     return NextResponse.json({
       module,

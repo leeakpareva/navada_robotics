@@ -87,21 +87,6 @@ export default function AdminCoursesPage() {
     avgRating: 0
   })
 
-  // Check if Admin Pages are enabled
-  if (!isAdminPagesEnabled()) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center p-8">
-          <h1 className="text-3xl font-bold text-white mb-4">Admin Panel Temporarily Unavailable</h1>
-          <p className="text-gray-400 mb-6">The admin panel is currently under maintenance. Please check back later.</p>
-          <Button onClick={() => router.push('/')} className="bg-purple-600 hover:bg-purple-700">
-            Return Home
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
   // Form states for new course
   const [newCourse, setNewCourse] = useState({
     title: "AI Fundamentals & Machine Learning",
@@ -140,6 +125,21 @@ export default function AdminCoursesPage() {
     fetchCourses()
     fetchAnalytics()
   }, [session, status, router])
+
+  // Check if Admin Pages are enabled
+  if (!isAdminPagesEnabled()) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center p-8">
+          <h1 className="text-3xl font-bold text-white mb-4">Admin Panel Temporarily Unavailable</h1>
+          <p className="text-gray-400 mb-6">The admin panel is currently under maintenance. Please check back later.</p>
+          <Button onClick={() => router.push('/')} className="bg-purple-600 hover:bg-purple-700">
+            Return Home
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   const fetchCourses = async () => {
     setLoading(true)

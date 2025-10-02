@@ -24,7 +24,7 @@ export async function POST(
     }
 
     // Get the module
-    const module = await prisma.learningMilestone.findUnique({
+    const moduleData = await prisma.learningMilestone.findUnique({
       where: { id: params.moduleId },
       include: {
         learningPath: {
@@ -35,7 +35,7 @@ export async function POST(
       }
     });
 
-    if (!module) {
+    if (!moduleItem) {
       return NextResponse.json(
         { error: 'Module not found' },
         { status: 404 }
@@ -43,7 +43,7 @@ export async function POST(
     }
 
     // Check if user owns this learning path
-    if (module.learningPath.userId !== user.id) {
+    if (moduleData.learningPath.userId !== user.id) {
       return NextResponse.json(
         { error: 'Access denied' },
         { status: 403 }
@@ -53,14 +53,14 @@ export async function POST(
     // Generate detailed course content using Mistral AI
     const contentPrompt = `Create comprehensive course content for this learning module:
 
-Module Title: ${module.title}
-Module Description: ${module.description}
-Learning Path: ${module.learningPath.title}
-Difficulty: ${module.learningPath.difficulty}
-Tutor Specialization: ${module.learningPath.tutor.specialization}
+Module Title: ${moduleData.title}
+Module Description: ${moduleData.description}
+Learning Path: ${moduleData.learningPath.title}
+Difficulty: ${moduleData.learningPath.difficulty}
+Tutor Specialization: ${moduleData.learningPath.tutor.specialization}
 
-${module.metadata?.objectives ? `Learning Objectives: ${module.metadata.objectives.join(', ')}` : ''}
-${module.metadata?.duration ? `Estimated Duration: ${module.metadata.duration} hours` : ''}
+${moduleData.metadata?.objectives ? `Learning Objectives: ${moduleData.metadata.objectives.join(', ')}` : ''}
+${moduleData.metadata?.duration ? `Estimated Duration: ${moduleData.metadata.duration} hours` : ''}
 
 Create detailed course content including:
 1. Introduction and overview
@@ -91,7 +91,7 @@ Format as JSON with this structure:
   "estimatedTime": "30-45 minutes"
 }
 
-Make the content engaging, practical, and appropriate for ${module.learningPath.difficulty} level learners.`;
+Make the content engaging, practical, and appropriate for ${moduleData.learningPath.difficulty} level learners.`;
 
     let generatedContent = null;
 
@@ -131,11 +131,11 @@ Make the content engaging, practical, and appropriate for ${module.learningPath.
     // Fallback content if Mistral fails
     if (!generatedContent) {
       generatedContent = {
-        introduction: `Welcome to ${module.title}. This module will cover the essential concepts and practical applications you need to master this topic.`,
+        introduction: `Welcome to ${moduleData.title}. This module will cover the essential concepts and practical applications you need to master this topic.`,
         sections: [
           {
             title: "Core Concepts",
-            content: `In this section, we'll explore the fundamental concepts of ${module.title}. Understanding these basics is crucial for your learning journey.`,
+            content: `In this section, we'll explore the fundamental concepts of ${moduleData.title}. Understanding these basics is crucial for your learning journey.`,
             examples: ["Basic example", "Practical application"],
             exercises: [
               {
@@ -146,8 +146,8 @@ Make the content engaging, practical, and appropriate for ${module.learningPath.
             ]
           }
         ],
-        summary: `You've completed ${module.title}! You should now understand the key concepts and be ready to apply them in practice.`,
-        estimatedTime: `${module.metadata?.duration || 1} hour(s)`
+        summary: `You've completed ${moduleData.title}! You should now understand the key concepts and be ready to apply them in practice.`,
+        estimatedTime: `${moduleData.metadata?.duration || 1} hour(s)`
       };
     }
 
@@ -156,7 +156,7 @@ Make the content engaging, practical, and appropriate for ${module.learningPath.
       where: { id: params.moduleId },
       data: {
         metadata: {
-          ...module.metadata,
+          ...moduleData.metadata,
           hasContent: true,
           content: generatedContent,
           contentGeneratedAt: new Date().toISOString()
@@ -186,22 +186,22 @@ export async function GET(
     // TEMPORARILY DISABLE AUTH FOR TESTING
     console.log('Module Content GET - Auth disabled for testing');
 
-    const module = await prisma.learningMilestone.findUnique({
+    const moduleItem = await prisma.learningMilestone.findUnique({
       where: { id: params.moduleId },
       include: {
         learningPath: true
       }
     });
 
-    if (!module) {
+    if (!moduleItem) {
       return NextResponse.json(
         { error: 'Module not found' },
         { status: 404 }
       );
     }
 
-    const content = module.metadata?.content || null;
-    const hasContent = module.metadata?.hasContent || false;
+    const content = moduleData.metadata?.content || null;
+    const hasContent = moduleData.metadata?.hasContent || false;
 
     return NextResponse.json({
       module,

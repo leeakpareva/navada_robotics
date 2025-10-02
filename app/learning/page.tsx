@@ -61,6 +61,10 @@ export default function LearningPage() {
   const router = useRouter()
   const { data: session } = useSession()
 
+  useEffect(() => {
+    fetchCourses()
+  }, [])
+
   // Check if Learning Hub is enabled
   if (!isLearningHubEnabled()) {
     return (
@@ -75,10 +79,6 @@ export default function LearningPage() {
       </div>
     )
   }
-
-  useEffect(() => {
-    fetchCourses()
-  }, [])
 
   const fetchCourses = async () => {
     try {
