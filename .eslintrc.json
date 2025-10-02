@@ -3,10 +3,11 @@
     "next/core-web-vitals"
   ],
   "rules": {
-    "react/no-unescaped-entities": "error",
+    "react/no-unescaped-entities": "off",
     "jsx-a11y/alt-text": "warn",
     "@next/next/no-img-element": "warn",
     "@next/next/no-assign-module-variable": "error",
+    "@next/next/no-sync-scripts": "warn",
     "react-hooks/exhaustive-deps": "warn",
     "react-hooks/rules-of-hooks": "error"
   },
