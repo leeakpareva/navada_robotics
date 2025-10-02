@@ -1,4 +1,4 @@
-import { vi } from 'vitest'
+import { vi, afterEach } from 'vitest'
 import '@testing-library/jest-dom'
 import React from 'react'
 

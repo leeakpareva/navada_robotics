@@ -5,34 +5,29 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   test: {
-    projects: [
-      {
-        name: 'navada-robotics',
-        root: './',
-        globals: true,
-        environment: 'jsdom',
-        setupFiles: ['./tests/setup.ts'],
-        include: [
-          'tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
-          'app/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
-        ],
-        exclude: [
-          'node_modules/**',
-          'dist/**',
-          '.next/**',
-          'coverage/**',
-          'tests/e2e/**',
-          'tests/payment/**',
-          'tests/integration/**',
-          'tests/api/learning.test.ts',
-          'tests/api/agent-lee.test.ts',
-          '**/*.e2e.{test,spec}.{js,ts,jsx,tsx}',
-          '**/*.playwright.{test,spec}.{js,ts,jsx,tsx}'
-        ],
-        testTimeout: 30000,
-        hookTimeout: 30000
-      }
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./tests/setup.ts'],
+    include: [
+      'tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'app/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
     ],
+    exclude: [
+      'node_modules/**',
+      'dist/**',
+      '.next/**',
+      'coverage/**',
+      'tests/e2e/**',
+      'tests/payment/**',
+      'tests/integration/**',
+      'tests/api/learning.test.ts',
+      'tests/api/agent-lee.test.ts',
+      '**/*.e2e.{test,spec}.{js,ts,jsx,tsx}',
+      '**/*.playwright.{test,spec}.{js,ts,jsx,tsx}',
+      '**/*.disabled'
+    ],
+    testTimeout: 30000,
+    hookTimeout: 30000,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

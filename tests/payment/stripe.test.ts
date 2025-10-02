@@ -350,7 +350,7 @@ describe('Stripe Payment Processing', () => {
     it('should track subscription activity', async () => {
       const { prisma } = await import('@/lib/prisma')
 
-      await prisma.stripe_activities.create({
+      await prisma.stripeActivity.create({
         data: {
           userId: 'user_123',
           stripeCustomerId: 'cus_123',
@@ -363,7 +363,7 @@ describe('Stripe Payment Processing', () => {
         }
       })
 
-      expect(prisma.stripe_activities.create).toHaveBeenCalledWith(
+      expect(prisma.stripeActivity.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             eventType: 'subscription.created'
@@ -376,10 +376,11 @@ describe('Stripe Payment Processing', () => {
       const { prisma } = await import('@/lib/prisma')
 
       await prisma.users.update({
-        where: { stripeCustomerId: 'cus_123' },
+        where: { id: 'user_123' },
         data: {
           subscriptionTier: 'pro',
-          subscriptionStatus: 'active'
+          subscriptionStatus: 'active',
+          stripeCustomerId: 'cus_123'
         }
       })
 

@@ -113,7 +113,7 @@ const prismaMocks = vi.hoisted(() => {
   })
 
   const groupByMock = vi.fn(async () => [])
-  const chatMessageFindManyMock = vi.fn(async () => [])
+  const chatMessageFindManyMock = vi.fn(async () => [] as any[])
 
   return {
     knowledgeBaseStore,

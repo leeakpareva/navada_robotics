@@ -123,6 +123,9 @@ describe('Full Integration Tests', () => {
               url: 'https://checkout.stripe.com/pay/cs_test_123'
             })
           }
+        },
+        webhooks: {
+          constructEvent: vi.fn()
         }
       }
 
@@ -159,9 +162,7 @@ describe('Full Integration Tests', () => {
         }
       }
 
-      stripeMock.webhooks = {
-        constructEvent: vi.fn().mockReturnValue(webhookEvent)
-      }
+      stripeMock.webhooks.constructEvent = vi.fn().mockReturnValue(webhookEvent)
 
       const { POST: webhookPOST } = await import('@/app/api/stripe/webhook/route')
       const webhookRequest = new NextRequest('http://localhost:3000/api/stripe/webhook', {
@@ -308,13 +309,14 @@ describe('Full Integration Tests', () => {
       const { DatabaseAnalytics } = await import('@/lib/database-analytics')
 
       // Track chat session
-      const sessionId = await DatabaseAnalytics.createOrUpdateChatSession({
+      const session = await DatabaseAnalytics.createOrUpdateChatSession({
         threadId: 'thread_test',
         userId: 'user_123',
         apiProvider: 'openai'
       })
 
-      expect(sessionId).toBeDefined()
+      expect(session).toBeDefined()
+      const sessionId = session.id
 
       // Track analytics event
       await DatabaseAnalytics.trackAnalyticsEvent({

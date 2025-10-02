@@ -330,7 +330,7 @@ describe('Database Operations', () => {
         }
       })
 
-      const result = await mockTransaction(async (tx) => {
+      const result = await mockTransaction(async (tx: any) => {
         const user = await tx.users.create({ data: {} })
         const subscription = await tx.subscriptions.create({ data: {} })
         return { user, subscription }
