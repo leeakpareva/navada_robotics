@@ -64,7 +64,7 @@ export function SurveyForm({ group }: SurveyFormProps) {
   const [errors, setErrors] = useState<string[]>([])
 
   const questions = getSurveyQuestions(group)
-  const rewardAmount = group === 'individual' ? '$5 USD' : '$15 USD'
+  const rewardAmount = group === 'individual' ? '£5 GBP' : '£15 GBP'
 
   useEffect(() => {
     if (universalCookies.hasAcceptedCookies()) {

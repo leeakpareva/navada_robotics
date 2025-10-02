@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
         surveyId: surveySubmission.id,
         stripeEmail: contactInfo.stripeEmail,
         amount: rewardAmount,
-        currency: 'USD',
+        currency: 'GBP',
         status: 'pending',
         attemptCount: 0
       }
@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Survey submitted successfully',
       submissionId: surveySubmission.id,
-      rewardAmount: `$${rewardAmount} USD`,
+      rewardAmount: `£${rewardAmount} GBP`,
       paymentTimeline: '72 hours'
     })
 

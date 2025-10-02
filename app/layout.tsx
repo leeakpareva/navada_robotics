@@ -6,7 +6,9 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Suspense } from "react"
 import { SessionProvider } from "@/components/SessionProvider"
-import { CookieConsentBanner } from "@/components/CookieConsentBanner"
+import dynamic from 'next/dynamic'
+
+// const CookieConsentBanner = dynamic(() => import('@/components/CookieConsentBanner').then(mod => ({ default: mod.CookieConsentBanner })), { ssr: false })
 import { Toaster } from "sonner"
 import "./globals.css"
 
@@ -42,7 +44,7 @@ export default function RootLayout({
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} pb-safe md:pb-0 overflow-x-hidden`}>
         <SessionProvider>
           <Suspense fallback={null}>{children}</Suspense>
-          <CookieConsentBanner />
+          {/* <CookieConsentBanner /> */}
           <Toaster position="top-right" />
         </SessionProvider>
         <Analytics />

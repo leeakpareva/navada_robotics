@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { clientCookies } from '@/lib/cookies'
-import { X, Cookie, Shield, Info } from 'lucide-react'
+import { X, Cookie } from 'lucide-react'
 
 export function CookieConsentBanner() {
   const [showBanner, setShowBanner] = useState(false)
@@ -42,7 +42,10 @@ export function CookieConsentBanner() {
     setTimeout(() => setShowBanner(false), 300)
   }
 
-  if (!showBanner) return null
+  // Don't render anything until we know we need to show the banner
+  if (!showBanner) {
+    return null
+  }
 
   return (
     <div

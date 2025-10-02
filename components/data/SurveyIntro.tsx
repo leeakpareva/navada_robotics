@@ -28,7 +28,7 @@ export function SurveyIntro() {
             <div className="bg-gray-700/50 p-4 rounded-lg">
               <DollarSign className="w-8 h-8 text-green-400 mb-2" />
               <h4 className="text-white font-semibold">Get Rewarded</h4>
-              <p className="text-gray-400 text-sm">$5-15 USD via Stripe</p>
+              <p className="text-gray-400 text-sm">£5-15 GBP via Stripe</p>
             </div>
 
             <div className="bg-gray-700/50 p-4 rounded-lg">
@@ -65,7 +65,7 @@ export function SurveyIntro() {
                 <span className="text-white font-bold">2</span>
               </div>
               <h4 className="text-white font-semibold mb-2">Answer Questions</h4>
-              <p className="text-gray-300 text-sm">Complete 10 multiple choice questions about AI and robotics</p>
+              <p className="text-gray-300 text-sm">Complete 20 multiple choice questions about AI and robotics</p>
             </div>
 
             <div className="text-center">
@@ -100,38 +100,38 @@ export function SurveyIntro() {
 
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <div className="bg-gradient-to-r from-purple-800/50 to-violet-800/50 rounded-xl p-4 border border-purple-500/30">
+              <div className="bg-gradient-to-r from-purple-800/70 to-violet-800/70 rounded-xl p-4 border border-purple-500/30">
                 <div className="flex items-start space-x-3">
                   <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-white text-xs font-bold">1</span>
                   </div>
                   <div>
                     <h5 className="text-white font-semibold text-sm mb-1">Participation Eligibility</h5>
-                    <p className="text-purple-100 text-sm">Each participant can complete both surveys (Individual + Business)</p>
+                    <p className="text-white/90 text-sm">Each participant can complete both surveys (Individual + Business)</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-800/50 to-violet-800/50 rounded-xl p-4 border border-purple-500/30">
+              <div className="bg-gradient-to-r from-purple-800/70 to-violet-800/70 rounded-xl p-4 border border-purple-500/30">
                 <div className="flex items-start space-x-3">
                   <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-white text-xs font-bold">2</span>
                   </div>
                   <div>
                     <h5 className="text-white font-semibold text-sm mb-1">Submission Policy</h5>
-                    <p className="text-purple-100 text-sm">Surveys can only be submitted once per email address</p>
+                    <p className="text-white/90 text-sm">Surveys can only be submitted once per email address</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-800/50 to-violet-800/50 rounded-xl p-4 border border-purple-500/30">
+              <div className="bg-gradient-to-r from-purple-800/70 to-violet-800/70 rounded-xl p-4 border border-purple-500/30">
                 <div className="flex items-start space-x-3">
                   <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-white text-xs font-bold">3</span>
                   </div>
                   <div>
                     <h5 className="text-white font-semibold text-sm mb-1">Age Requirement</h5>
-                    <p className="text-purple-100 text-sm">You must be 18+ years old to participate</p>
+                    <p className="text-white/90 text-sm">You must be 18+ years old to participate</p>
                   </div>
                 </div>
               </div>

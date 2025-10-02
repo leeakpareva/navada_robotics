@@ -44,7 +44,7 @@ export default function NavadaRoboticsApp() {
                 Engagement
               </Link>
               <Link href="/data" className="text-white hover:text-purple-400 transition-all duration-200">
-                Data
+                Data Initiative
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
@@ -68,7 +68,7 @@ export default function NavadaRoboticsApp() {
                 Engagement
               </Link>
               <Link href="/data" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                Data
+                Data Initiative
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
@@ -248,13 +248,21 @@ export default function NavadaRoboticsApp() {
                 Join live coding sessions, access comprehensive tutorials, and build a portfolio of AI-powered applications
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/contact">
-                  <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 min-h-12">
-                    Start Learning Today
-                  </Button>
-                </Link>
+                {/* Custom CTA Button - Always Rendered */}
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 bg-purple-600 hover:bg-purple-700 transition-all duration-200 min-h-12"
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      // Use the Stripe URL directly as fallback
+                      window.open('https://buy.stripe.com/cNi5kEci19VG7zd9WH3Ru00', '_blank');
+                    }
+                  }}
+                >
+                  Book 1:1 AI Consulting Session
+                </Button>
                 <Link href="/about">
-                  <Button variant="outline" size="lg" className="border-purple-400 text-purple-400 hover:bg-purple-900/50 px-8 py-3 min-h-12">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto border-purple-400 text-purple-400 hover:bg-purple-900/50 px-8 py-3 min-h-12">
                     Learn More About Lee
                   </Button>
                 </Link>

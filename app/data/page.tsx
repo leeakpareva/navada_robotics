@@ -8,17 +8,14 @@ import { SurveyIntro } from '@/components/data/SurveyIntro'
 import { SurveyForm } from '@/components/data/SurveyForm'
 import { SecureNotice } from '@/components/data/SecureNotice'
 import { getSurveyStatus } from '@/lib/surveyConfig'
-import { ArrowLeft, Clock, AlertCircle, Brain, BarChart3, Users, Building2, DollarSign, Mail, Phone, Globe, TrendingUp, Zap, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, Clock, AlertCircle, Brain, BarChart3, Users, Building2, DollarSign, Mail, Phone, Globe, TrendingUp, Zap, ShieldCheck, Cpu, Bot, Factory, CircuitBoard } from 'lucide-react'
 
 export default function DataPage() {
   const [activeTab, setActiveTab] = useState<'intro' | 'research' | 'insights' | 'individual' | 'business'>('intro')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const [surveyStatus, setSurveyStatus] = useState(getSurveyStatus())
 
   useEffect(() => {
-    setMounted(true)
-
     // Update survey status every minute
     const interval = setInterval(() => {
       setSurveyStatus(getSurveyStatus())
@@ -26,10 +23,6 @@ export default function DataPage() {
 
     return () => clearInterval(interval)
   }, [])
-
-  if (!mounted) {
-    return null
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900">
@@ -130,7 +123,7 @@ export default function DataPage() {
             <div className="flex flex-wrap justify-center bg-gradient-to-r from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-xl p-2 border border-gray-700/50 gap-1">
               <button
                 onClick={() => setActiveTab('intro')}
-                className={`px-4 md:px-6 py-3 rounded-lg font-semibold transition-all duration-300 text-sm md:text-base ${
+                className={`px-3 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-all duration-300 text-xs md:text-base ${
                   activeTab === 'intro'
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
@@ -140,7 +133,7 @@ export default function DataPage() {
               </button>
               <button
                 onClick={() => setActiveTab('research')}
-                className={`px-4 md:px-6 py-3 rounded-lg font-semibold transition-all duration-300 text-sm md:text-base ${
+                className={`px-3 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-all duration-300 text-xs md:text-base ${
                   activeTab === 'research'
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
@@ -150,17 +143,17 @@ export default function DataPage() {
               </button>
               <button
                 onClick={() => setActiveTab('insights')}
-                className={`px-4 md:px-6 py-3 rounded-lg font-semibold transition-all duration-300 text-sm md:text-base ${
+                className={`px-3 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-all duration-300 text-xs md:text-base ${
                   activeTab === 'insights'
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
                 }`}
               >
-                Data Insights
+                Data Initiative Insights
               </button>
               <button
                 onClick={() => setActiveTab('individual')}
-                className={`px-4 md:px-6 py-3 rounded-lg font-semibold transition-all duration-300 text-sm md:text-base ${
+                className={`px-3 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-all duration-300 text-xs md:text-base ${
                   activeTab === 'individual'
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
@@ -170,7 +163,7 @@ export default function DataPage() {
               </button>
               <button
                 onClick={() => setActiveTab('business')}
-                className={`px-4 md:px-6 py-3 rounded-lg font-semibold transition-all duration-300 text-sm md:text-base ${
+                className={`px-3 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-all duration-300 text-xs md:text-base ${
                   activeTab === 'business'
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
                     : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
@@ -189,38 +182,38 @@ export default function DataPage() {
 
                 {/* Survey Options */}
                 <div className="grid md:grid-cols-2 gap-8">
-                  <Card className="relative overflow-hidden bg-gradient-to-br from-blue-900/40 via-gray-800/50 to-blue-800/30 border border-blue-500/30 hover:border-blue-400/60 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/20 group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <Card className="relative overflow-hidden bg-gradient-to-br from-purple-900/50 via-purple-800/50 to-purple-700/40 border border-purple-500/40 hover:border-purple-400/70 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/30 group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <CardHeader className="relative z-10">
                       <div className="flex items-center justify-between mb-2">
-                        <div className="px-3 py-1 bg-blue-500/20 rounded-full border border-blue-400/30">
-                          <span className="text-blue-300 text-sm font-medium">Personal</span>
+                        <div className="px-3 py-1 bg-purple-500/30 rounded-full border border-purple-400/40">
+                          <span className="text-purple-200 text-sm font-medium">Personal</span>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-blue-400">$5</div>
-                          <div className="text-xs text-blue-300">USD Reward</div>
+                          <div className="text-3xl md:text-4xl font-bold text-purple-200">£5</div>
+                          <div className="text-sm text-purple-100">GBP Reward</div>
                         </div>
                       </div>
-                      <CardTitle className="text-white text-2xl font-bold mb-3">
+                      <CardTitle className="text-white text-xl md:text-2xl font-bold mb-3">
                         Individual Survey
                       </CardTitle>
-                      <CardDescription className="text-blue-100/80 text-base leading-relaxed">
+                      <CardDescription className="text-purple-100 text-sm md:text-base leading-relaxed">
                         Share your personal experience with AI and robotics technology across Africa
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="relative z-10">
                       <div className="bg-gray-900/30 rounded-lg p-4 mb-6 border border-blue-500/20">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <div className="text-blue-200">Questions: <span className="text-white font-semibold">10</span></div>
-                          <div className="text-blue-200">Duration: <span className="text-white font-semibold">5-7 min</span></div>
-                          <div className="text-blue-200">Focus: <span className="text-white font-semibold">Personal Use</span></div>
-                          <div className="text-blue-200">Payment: <span className="text-white font-semibold">Stripe</span></div>
+                        <div className="grid grid-cols-2 gap-2 md:gap-4 text-xs md:text-sm">
+                          <div className="text-purple-200">Questions: <span className="text-white font-semibold">20</span></div>
+                          <div className="text-purple-200">Duration: <span className="text-white font-semibold">5-7 min</span></div>
+                          <div className="text-purple-200">Focus: <span className="text-white font-semibold">Personal Use</span></div>
+                          <div className="text-purple-200">Payment: <span className="text-white font-semibold">Stripe</span></div>
                         </div>
                       </div>
                       <Button
                         onClick={() => surveyStatus.canParticipate && setActiveTab('individual')}
                         disabled={!surveyStatus.canParticipate}
-                        className={`w-full font-semibold py-4 rounded-lg transition-all duration-300 shadow-lg ${
+                        className={`w-full font-semibold py-3 md:py-4 text-sm md:text-base rounded-lg transition-all duration-300 shadow-lg ${
                           surveyStatus.canParticipate
                             ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white hover:shadow-blue-500/30 transform hover:scale-105'
                             : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
@@ -239,11 +232,11 @@ export default function DataPage() {
                           <span className="text-purple-300 text-sm font-medium">Business</span>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-purple-400">$15</div>
-                          <div className="text-xs text-purple-300">USD Reward</div>
+                          <div className="text-3xl md:text-4xl font-bold text-purple-300">£15</div>
+                          <div className="text-sm text-purple-200">GBP Reward</div>
                         </div>
                       </div>
-                      <CardTitle className="text-white text-2xl font-bold mb-3">
+                      <CardTitle className="text-white text-xl md:text-2xl font-bold mb-3">
                         Business Survey
                       </CardTitle>
                       <CardDescription className="text-purple-100/80 text-base leading-relaxed">
@@ -252,8 +245,8 @@ export default function DataPage() {
                     </CardHeader>
                     <CardContent className="relative z-10">
                       <div className="bg-gray-900/30 rounded-lg p-4 mb-6 border border-purple-500/20">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <div className="text-purple-200">Questions: <span className="text-white font-semibold">10</span></div>
+                        <div className="grid grid-cols-2 gap-2 md:gap-4 text-xs md:text-sm">
+                          <div className="text-purple-200">Questions: <span className="text-white font-semibold">20</span></div>
                           <div className="text-purple-200">Duration: <span className="text-white font-semibold">8-10 min</span></div>
                           <div className="text-purple-200">Focus: <span className="text-white font-semibold">Enterprise</span></div>
                           <div className="text-purple-200">Payment: <span className="text-white font-semibold">Stripe</span></div>
@@ -262,7 +255,7 @@ export default function DataPage() {
                       <Button
                         onClick={() => surveyStatus.canParticipate && setActiveTab('business')}
                         disabled={!surveyStatus.canParticipate}
-                        className={`w-full font-semibold py-4 rounded-lg transition-all duration-300 shadow-lg ${
+                        className={`w-full font-semibold py-3 md:py-4 text-sm md:text-base rounded-lg transition-all duration-300 shadow-lg ${
                           surveyStatus.canParticipate
                             ? 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white hover:shadow-purple-500/30 transform hover:scale-105'
                             : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
@@ -275,15 +268,15 @@ export default function DataPage() {
                 </div>
 
                 {/* Features */}
-                <div className="grid md:grid-cols-3 gap-8 mt-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-12 md:mt-16 px-4">
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-emerald-600/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="relative bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 text-center group-hover:border-green-500/50 transition-all duration-300">
+                    <div className="relative bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 md:p-8 text-center group-hover:border-green-500/50 transition-all duration-300">
                       <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl mx-auto mb-6 flex items-center justify-center">
                         <div className="w-8 h-8 bg-white/20 rounded-lg"></div>
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-3">Secure & Private</h3>
-                      <p className="text-gray-300 leading-relaxed">End-to-end encryption ensures your data remains confidential and protected</p>
+                      <h3 className="text-lg md:text-xl font-bold text-white mb-3">Secure & Private</h3>
+                      <p className="text-sm md:text-base text-gray-300 leading-relaxed">End-to-end encryption ensures your data remains confidential and protected</p>
                     </div>
                   </div>
                   <div className="relative group">
@@ -292,8 +285,8 @@ export default function DataPage() {
                       <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl mx-auto mb-6 flex items-center justify-center">
                         <div className="w-8 h-8 bg-white/20 rounded-lg"></div>
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-3">Get Rewarded</h3>
-                      <p className="text-gray-300 leading-relaxed">Receive instant payment within 72 hours via secure Stripe processing</p>
+                      <h3 className="text-lg md:text-xl font-bold text-white mb-3">Get Rewarded</h3>
+                      <p className="text-sm md:text-base text-gray-300 leading-relaxed">Receive instant payment within 72 hours via secure Stripe processing</p>
                     </div>
                   </div>
                   <div className="relative group">
@@ -302,8 +295,8 @@ export default function DataPage() {
                       <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl mx-auto mb-6 flex items-center justify-center">
                         <div className="w-8 h-8 bg-white/20 rounded-lg"></div>
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-3">Shape the Future</h3>
-                      <p className="text-gray-300 leading-relaxed">Your insights help advance AI and robotics innovation across Africa</p>
+                      <h3 className="text-lg md:text-xl font-bold text-white mb-3">Shape the Future</h3>
+                      <p className="text-sm md:text-base text-gray-300 leading-relaxed">Your insights help advance AI and robotics innovation across Africa</p>
                     </div>
                   </div>
                 </div>
@@ -313,49 +306,49 @@ export default function DataPage() {
             {activeTab === 'research' && (
               <div className="space-y-8">
                 {/* Research Header */}
-                <div className="text-center mb-12">
+                <div className="text-center mb-8 md:mb-12 px-4">
                   <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center">
                     <Brain className="w-10 h-10 text-white" />
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">AI Research & Development</h2>
-                  <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6">AI Research & Development</h2>
+                  <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
                     Advancing artificial intelligence design and development across Africa through comprehensive research initiatives
                   </p>
                 </div>
 
                 {/* Research Focus Areas */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  <Card className="bg-gradient-to-br from-blue-900/40 to-gray-800/50 border border-blue-500/30">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4">
+                  <Card className="bg-gradient-to-br from-purple-900/60 via-purple-800/50 to-indigo-900/40 border border-purple-400/50 hover:border-purple-300/70 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30">
                     <CardHeader>
-                      <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
-                        <Brain className="w-6 h-6 text-blue-400" />
+                      <div className="w-14 h-14 bg-gradient-to-br from-purple-500/40 to-indigo-500/40 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                        <CircuitBoard className="w-7 h-7 text-purple-200" />
                       </div>
-                      <CardTitle className="text-white text-xl">Machine Learning</CardTitle>
-                      <CardDescription className="text-blue-100/80">
+                      <CardTitle className="text-white text-lg md:text-xl font-bold">Machine Learning</CardTitle>
+                      <CardDescription className="text-purple-100 leading-relaxed text-sm md:text-base">
                         Developing adaptive AI systems that learn from African contexts and challenges
                       </CardDescription>
                     </CardHeader>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-purple-900/40 to-gray-800/50 border border-purple-500/30">
+                  <Card className="bg-gradient-to-br from-purple-900/60 via-purple-800/50 to-violet-900/40 border border-purple-400/50 hover:border-purple-300/70 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30">
                     <CardHeader>
-                      <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
-                        <Building2 className="w-6 h-6 text-purple-400" />
+                      <div className="w-14 h-14 bg-gradient-to-br from-purple-500/40 to-violet-500/40 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                        <Bot className="w-7 h-7 text-purple-200" />
                       </div>
-                      <CardTitle className="text-white text-xl">Robotics Integration</CardTitle>
-                      <CardDescription className="text-purple-100/80">
+                      <CardTitle className="text-white text-lg md:text-xl font-bold">Robotics Integration</CardTitle>
+                      <CardDescription className="text-purple-100 leading-relaxed text-sm md:text-base">
                         Creating robotics solutions tailored for African industries and infrastructure
                       </CardDescription>
                     </CardHeader>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-green-900/40 to-gray-800/50 border border-green-500/30">
+                  <Card className="bg-gradient-to-br from-purple-900/60 via-purple-800/50 to-fuchsia-900/40 border border-purple-400/50 hover:border-purple-300/70 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30">
                     <CardHeader>
-                      <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
-                        <TrendingUp className="w-6 h-6 text-green-400" />
+                      <div className="w-14 h-14 bg-gradient-to-br from-purple-500/40 to-fuchsia-500/40 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                        <TrendingUp className="w-7 h-7 text-purple-200" />
                       </div>
-                      <CardTitle className="text-white text-xl">Economic Impact</CardTitle>
-                      <CardDescription className="text-green-100/80">
+                      <CardTitle className="text-white text-lg md:text-xl font-bold">Economic Impact</CardTitle>
+                      <CardDescription className="text-purple-100 leading-relaxed text-sm md:text-base">
                         Studying AI's potential to drive economic growth and job creation across Africa
                       </CardDescription>
                     </CardHeader>
@@ -440,10 +433,10 @@ export default function DataPage() {
                         </div>
                         <Users className="w-8 h-8 text-blue-400" />
                       </div>
-                      <CardTitle className="text-white text-2xl font-bold mb-3">
+                      <CardTitle className="text-white text-xl md:text-2xl font-bold mb-3">
                         Personal Insights
                       </CardTitle>
-                      <CardDescription className="text-blue-100/80 text-base leading-relaxed">
+                      <CardDescription className="text-blue-100/80 text-sm md:text-base leading-relaxed">
                         Tailored data insights for individuals, entrepreneurs, and small businesses
                       </CardDescription>
                     </CardHeader>
@@ -482,7 +475,7 @@ export default function DataPage() {
                         </div>
                         <Building2 className="w-8 h-8 text-purple-400" />
                       </div>
-                      <CardTitle className="text-white text-2xl font-bold mb-3">
+                      <CardTitle className="text-white text-xl md:text-2xl font-bold mb-3">
                         Corporate Intelligence
                       </CardTitle>
                       <CardDescription className="text-purple-100/80 text-base leading-relaxed">
@@ -532,7 +525,7 @@ export default function DataPage() {
                         <Mail className="w-8 h-8 text-blue-400" />
                       </div>
                       <h4 className="text-white font-semibold mb-2">Email Us</h4>
-                      <p className="text-gray-400">data@navada.tech</p>
+                      <p className="text-gray-400">Lee@navada.info</p>
                     </div>
 
                     <div className="text-center">
@@ -540,22 +533,24 @@ export default function DataPage() {
                         <Phone className="w-8 h-8 text-green-400" />
                       </div>
                       <h4 className="text-white font-semibold mb-2">Call Us</h4>
-                      <p className="text-gray-400">+234 (0) 123 456 789</p>
+                      <p className="text-gray-400">+44 7953 523704</p>
                     </div>
 
                     <div className="text-center">
                       <div className="w-16 h-16 bg-purple-500/20 rounded-2xl mx-auto mb-4 flex items-center justify-center">
                         <Globe className="w-8 h-8 text-purple-400" />
                       </div>
-                      <h4 className="text-white font-semibold mb-2">Visit Us</h4>
-                      <p className="text-gray-400">navada.tech/contact</p>
+                      <h4 className="text-white font-semibold mb-2">Location</h4>
+                      <p className="text-gray-400">London, UK</p>
                     </div>
                   </div>
 
                   <div className="mt-8 text-center">
-                    <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/30">
-                      Contact for More Details
-                    </Button>
+                    <Link href="/contact">
+                      <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/30">
+                        Contact for More Details
+                      </Button>
+                    </Link>
                   </div>
                 </div>
 
@@ -589,10 +584,8 @@ export default function DataPage() {
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-green-400 mb-2">$500K+</div>
-                      <p className="text-gray-300 mb-4">Generated for participants to date</p>
-                      <div className="text-2xl font-bold text-blue-400 mb-2">25+</div>
-                      <p className="text-gray-300">Organizations served with insights</p>
+                      <div className="text-4xl md:text-5xl font-bold text-green-300 mb-2">£10,000</div>
+                      <p className="text-gray-300 mb-4">Target to be paid to participants</p>
                     </div>
                   </div>
                 </div>
