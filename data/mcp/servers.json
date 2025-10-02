@@ -12,8 +12,8 @@
         "name": "web_search",
         "description": "Search the web for current information",
         "enabled": true,
-        "usageCount": 35,
-        "lastUsed": "2025-09-17T05:37:42.213Z"
+        "usageCount": 37,
+        "lastUsed": "2025-10-02T21:09:56.750Z"
       },
       {
         "name": "news_search",
@@ -30,9 +30,9 @@
         "lastUsed": "2025-09-17T04:44:31.710Z"
       }
     ],
-    "lastHealthCheck": "2025-09-17T05:37:42.213Z",
+    "lastHealthCheck": "2025-10-02T21:09:56.750Z",
     "responseTime": 200,
-    "totalCalls": 70,
+    "totalCalls": 72,
     "successRate": 100,
     "errors": []
   },
@@ -107,7 +107,7 @@
         "usageCount": 0
       }
     ],
-    "lastHealthCheck": "2025-09-17T05:37:41.743Z",
+    "lastHealthCheck": "2025-10-02T21:09:56.710Z",
     "responseTime": 0,
     "totalCalls": 0,
     "successRate": 100,

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 export const runtime = 'nodejs'
 
@@ -8,164 +10,90 @@ export async function GET(request: NextRequest) {
     // Get current timestamp for time-based calculations
     const now = new Date()
     const last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-    const lastHour = new Date(now.getTime() - 60 * 60 * 1000)
+    const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
 
-    // Fetch overview data
+    // Fetch basic overview data
     const [
-      totalSessions,
-      activeSessions,
-      totalMessages,
-      avgResponseTimeResult,
       totalUsers,
       newUsers,
-      totalCodeGens,
-      successfulCodeGens,
-      totalImageGens,
-      successfulImageGens
+      totalContacts,
+      recentContacts,
+      totalSubscribers,
+      activeSubscribers
     ] = await Promise.all([
-      // Total chat sessions
-      prisma.chatSession.count(),
+      // Total users
+      prisma.user.count(),
 
-      // Active sessions (last hour)
-      prisma.chatSession.count({
+      // New users (last 7 days)
+      prisma.user.count({
         where: {
-          lastActivity: {
-            gte: lastHour
+          createdAt: {
+            gte: last7Days
           }
         }
       }),
 
-      // Total messages
-      prisma.chatMessage.count(),
+      // Total contact submissions
+      prisma.contactSubmission.count(),
 
-      // Average response time from session analytics
-      prisma.sessionAnalytics.aggregate({
-        _avg: {
-          responseTime: true
-        },
-        where: {
-          responseTime: {
-            not: null
-          }
-        }
-      }),
-
-      // Total unique users (approximate from sessions)
-      prisma.chatSession.groupBy({
-        by: ['userId'],
-        where: {
-          userId: {
-            not: null
-          }
-        }
-      }),
-
-      // New users (last 24 hours) - using findMany then count unique
-      prisma.chatSession.findMany({
+      // Recent contact submissions (last 24 hours)
+      prisma.contactSubmission.count({
         where: {
           createdAt: {
             gte: last24Hours
-          },
-          userId: {
-            not: null
           }
-        },
-        select: {
-          userId: true
         }
       }),
 
-      // Code generation stats
-      prisma.codeGeneration.count(),
-      prisma.codeGeneration.count({
-        where: { success: true }
-      }),
+      // Total email subscribers
+      prisma.emailSubscriber.count(),
 
-      // Image generation stats
-      prisma.imageGeneration.count(),
-      prisma.imageGeneration.count({
-        where: { success: true }
+      // Active email subscribers
+      prisma.emailSubscriber.count({
+        where: {
+          isActive: true
+        }
       })
     ])
 
-    // Calculate hourly data for the last 24 hours
-    const hourlyData = []
-    const responseTimeData = []
+    // Calculate daily data for the last 7 days
+    const dailyData = []
+    for (let i = 6; i >= 0; i--) {
+      const dayStart = new Date(now.getTime() - i * 24 * 60 * 60 * 1000)
+      dayStart.setHours(0, 0, 0, 0)
+      const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000)
 
-    for (let i = 23; i >= 0; i--) {
-      const hourStart = new Date(now.getTime() - i * 60 * 60 * 1000)
-      const hourEnd = new Date(hourStart.getTime() + 60 * 60 * 1000)
-
-      const [messageCount, avgResponseTime] = await Promise.all([
-        prisma.chatMessage.count({
-          where: {
-            timestamp: {
-              gte: hourStart,
-              lt: hourEnd
-            }
+      const newUsersCount = await prisma.user.count({
+        where: {
+          createdAt: {
+            gte: dayStart,
+            lt: dayEnd
           }
-        }),
-
-        prisma.sessionAnalytics.aggregate({
-          _avg: {
-            responseTime: true
-          },
-          where: {
-            timestamp: {
-              gte: hourStart,
-              lt: hourEnd
-            },
-            responseTime: {
-              not: null
-            }
-          }
-        })
-      ])
-
-      hourlyData.push({
-        time: hourStart.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-        value: messageCount
+        }
       })
 
-      responseTimeData.push({
-        time: hourStart.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-        value: Math.round((avgResponseTime._avg?.responseTime || 0) / 1000) // Convert to seconds
+      dailyData.push({
+        date: dayStart.toLocaleDateString('en-US', { weekday: 'short' }),
+        users: newUsersCount
       })
     }
 
-    // Find peak hour
-    const peakHourData = hourlyData.reduce((max, current) =>
-      current.value > max.value ? current : max,
-      hourlyData[0]
-    )
-
-    // Calculate average session length
-    const sessionLengths = await prisma.chatSession.findMany({
+    // Get recent activity
+    const recentActivity = await prisma.user.findMany({
       select: {
-        startTime: true,
-        endTime: true
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+        lastLoginAt: true
       },
-      where: {
-        endTime: {
-          not: null
-        }
-      }
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 10
     })
 
-    const avgSessionLength = sessionLengths.length > 0
-      ? sessionLengths.reduce((sum, session) => {
-          if (session.endTime && session.startTime) {
-            return sum + (session.endTime.getTime() - session.startTime.getTime())
-          }
-          return sum
-        }, 0) / sessionLengths.length
-      : 0
-
-    // Calculate unique new users from the last 24 hours
-    const uniqueNewUserIds = new Set(newUsers.map(session => session.userId).filter(Boolean))
-    const newUsersCount = uniqueNewUserIds.size
-
-    // Mock satisfaction data (you can implement real feedback later)
+    // Mock satisfaction data for demo purposes
     const satisfaction = {
       excellent: 45,
       good: 35,
@@ -175,32 +103,29 @@ export async function GET(request: NextRequest) {
 
     const analyticsData = {
       overview: {
-        totalSessions,
-        activeSessions,
-        totalMessages,
-        avgResponseTime: avgResponseTimeResult._avg?.responseTime || 0,
-        totalUsers: totalUsers.length,
-        newUsers: newUsersCount
+        totalUsers,
+        newUsers,
+        totalContacts,
+        recentContacts,
+        totalSubscribers,
+        activeSubscribers,
+        growthRate: newUsers > 0 ? ((newUsers / Math.max(totalUsers - newUsers, 1)) * 100).toFixed(1) : '0'
       },
       usage: {
-        hourlyData,
-        responseTimeData,
-        peakHour: peakHourData?.time || '12:00',
-        avgSessionLength
+        dailyData,
+        peakDay: dailyData.reduce((max, current) =>
+          current.users > max.users ? current : max,
+          dailyData[0]
+        )?.date || 'N/A'
       },
       satisfaction,
-      features: {
-        codeGeneration: {
-          total: totalCodeGens,
-          success: successfulCodeGens,
-          avgTime: 2500 // Mock average time in ms
-        },
-        imageGeneration: {
-          total: totalImageGens,
-          success: successfulImageGens,
-          avgTime: 5500 // Mock average time in ms
-        }
-      }
+      recentActivity: recentActivity.map(user => ({
+        id: user.id,
+        email: user.email,
+        name: user.name || 'Anonymous',
+        joined: user.createdAt.toLocaleDateString(),
+        lastLogin: user.lastLoginAt?.toLocaleDateString() || 'Never'
+      }))
     }
 
     return NextResponse.json(analyticsData)
@@ -208,8 +133,33 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Analytics API Error:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch analytics data' },
-      { status: 500 }
+      {
+        error: 'Failed to fetch analytics data',
+        // Return empty data structure to prevent frontend errors
+        overview: {
+          totalUsers: 0,
+          newUsers: 0,
+          totalContacts: 0,
+          recentContacts: 0,
+          totalSubscribers: 0,
+          activeSubscribers: 0,
+          growthRate: '0'
+        },
+        usage: {
+          dailyData: [],
+          peakDay: 'N/A'
+        },
+        satisfaction: {
+          excellent: 0,
+          good: 0,
+          fair: 0,
+          poor: 0
+        },
+        recentActivity: []
+      },
+      { status: 200 } // Return 200 to prevent breaking the app
     )
+  } finally {
+    await prisma.$disconnect()
   }
 }

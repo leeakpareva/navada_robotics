@@ -1,6 +1,7 @@
 import { test, expect, Page, BrowserContext } from '@playwright/test';
-import { AxePuppeteer } from '@axe-core/puppeteer';
-import lighthouse from 'playwright-lighthouse';
+// Temporarily disabled - uncomment when packages are installed
+// import { AxePuppeteer } from '@axe-core/puppeteer';
+// import lighthouse from 'playwright-lighthouse';
 
 // Comprehensive E2E Test Cases for Navada Robotics Application
 

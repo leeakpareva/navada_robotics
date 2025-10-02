@@ -18,7 +18,8 @@ const nextConfig = {
   experimental: {
     esmExternals: false,
   },
-  output: 'standalone',
+  // Only use standalone output in production
+  ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
   images: {
     remotePatterns: [
       {
@@ -61,6 +62,16 @@ const nextConfig = {
       { module: /node_modules\/@opentelemetry\/instrumentation/ },
       { module: /node_modules\/@prisma\/instrumentation/ },
     ];
+
+    // Speed up dev builds
+    if (dev) {
+      config.optimization = {
+        ...config.optimization,
+        removeAvailableModules: false,
+        removeEmptyChunks: false,
+        splitChunks: false,
+      };
+    }
 
     if (!dev && !isServer) {
       // Split chunks for better caching

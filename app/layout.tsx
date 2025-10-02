@@ -6,7 +6,8 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Suspense } from "react"
 import { SessionProvider } from "@/components/SessionProvider"
-import { PasswordProtection } from "@/components/password-protection"
+import { CookieConsentBanner } from "@/components/CookieConsentBanner"
+import { Toaster } from "sonner"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -39,11 +40,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//va.vercel-scripts.com" />
       </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} pb-safe md:pb-0 overflow-x-hidden`}>
-        <PasswordProtection>
-          <SessionProvider>
-            <Suspense fallback={null}>{children}</Suspense>
-          </SessionProvider>
-        </PasswordProtection>
+        <SessionProvider>
+          <Suspense fallback={null}>{children}</Suspense>
+          <CookieConsentBanner />
+          <Toaster position="top-right" />
+        </SessionProvider>
         <Analytics />
         <SpeedInsights />
       </body>

@@ -8,7 +8,7 @@ interface PasswordProtectionProps {
   children: React.ReactNode;
 }
 
-const CORRECT_PASSWORD = "270586";
+const CORRECT_PASSWORD = "369963";
 
 export function PasswordProtection({ children }: PasswordProtectionProps) {
   const [password, setPassword] = useState("");

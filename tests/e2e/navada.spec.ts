@@ -1,9 +1,19 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('NAVADA Robotics Homepage', () => {
-  test('homepage loads with correct title and main elements', async ({ page }) => {
-    // Navigate to homepage
+  // Helper function to bypass authentication
+  async function bypassAuth(page) {
     await page.goto('/');
+    await page.evaluate(() => {
+      sessionStorage.setItem('navada_token', 'test-token');
+      sessionStorage.setItem('navada_user', JSON.stringify({ email: 'test@example.com', name: 'Test User' }));
+    });
+    await page.reload();
+  }
+
+  test('homepage loads with correct title and main elements', async ({ page }) => {
+    // Bypass authentication
+    await bypassAuth(page);
 
     // Check page title
     await expect(page).toHaveTitle('NAVADA Robotics | AI & Robotics Innovation');
@@ -32,7 +42,7 @@ test.describe('NAVADA Robotics Homepage', () => {
   });
 
   test('innovation showcase section is visible', async ({ page }) => {
-    await page.goto('/');
+    await bypassAuth(page);
 
     // Check Innovation Showcase section
     const showcaseTitle = page.locator('h3:has-text("Innovation Showcase")');
@@ -52,7 +62,7 @@ test.describe('NAVADA Robotics Homepage', () => {
   });
 
   test('active projects section is visible', async ({ page }) => {
-    await page.goto('/');
+    await bypassAuth(page);
 
     // Check Active Projects section
     const projectsTitle = page.locator('h3:has-text("Active Projects")');
@@ -74,7 +84,7 @@ test.describe('NAVADA Robotics Homepage', () => {
   test('mobile menu toggle works', async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('/');
+    await bypassAuth(page);
 
     // Mobile menu should be hidden initially
     const mobileNav = page.locator('nav.flex.flex-col').first();
@@ -93,7 +103,7 @@ test.describe('NAVADA Robotics Homepage', () => {
   });
 
   test('footer contains correct information', async ({ page }) => {
-    await page.goto('/');
+    await bypassAuth(page);
 
     // Check footer text
     const footerText = page.locator('footer');
