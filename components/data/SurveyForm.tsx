@@ -255,8 +255,23 @@ export function SurveyForm({ group }: SurveyFormProps) {
       })
 
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.message || 'Failed to submit survey')
+        let errorMessage = 'Failed to submit survey'
+        try {
+          const error = await response.json()
+          errorMessage = error.message || error.error || errorMessage
+        } catch (jsonError) {
+          // If JSON parsing fails, use response status text
+          errorMessage = response.statusText || errorMessage
+        }
+        throw new Error(errorMessage)
+      }
+
+      // Parse successful response
+      let responseData = null
+      try {
+        responseData = await response.json()
+      } catch (jsonError) {
+        console.warn('Could not parse response JSON, but request was successful')
       }
 
       setCurrentStep('success')
