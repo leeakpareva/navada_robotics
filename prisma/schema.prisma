@@ -148,3 +148,145 @@ model PaymentLog {
   @@index([createdAt])
   @@map("payment_logs")
 }
+
+// Knowledge Base - For RAG (Retrieval-Augmented Generation)
+model KnowledgeBase {
+  id          String    @id @default(cuid())
+  title       String
+  content     String    @db.Text
+  summary     String?   @db.Text
+  source      String?
+  category    String    @default("general")
+  tags        String?   @db.Text  // JSON string array
+  embeddings  Json?     // Vector embeddings for semantic search
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([category])
+  @@index([isActive])
+  @@index([createdAt])
+  @@map("knowledge_base")
+}
+
+// Chat Session - Track Agent Lee conversations
+model ChatSession {
+  id           String    @id @default(cuid())
+  threadId     String    @unique
+  userId       String?
+  apiProvider  String    @default("openai")
+  messageCount Int       @default(0)
+  sessionData  String?   @db.Text  // JSON string
+  lastActivity DateTime  @default(now())
+  createdAt    DateTime  @default(now())
+
+  messages     ChatMessage[]
+
+  @@index([threadId])
+  @@index([userId])
+  @@index([lastActivity])
+  @@map("chat_sessions")
+}
+
+// Chat Message - Individual messages in conversations
+model ChatMessage {
+  id           String      @id @default(cuid())
+  sessionId    String
+  threadId     String
+  messageIndex Int
+  role         String      // user, assistant, system
+  content      String      @db.Text
+  imageData    String?     @db.Text
+  websiteData  String?     @db.Text  // JSON string
+  codeData     String?     @db.Text  // JSON string
+  metadata     String?     @db.Text  // JSON string
+  createdAt    DateTime    @default(now())
+
+  session      ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([threadId])
+  @@index([createdAt])
+  @@map("chat_messages")
+}
+
+// Session Analytics - Track analytics events
+model SessionAnalytics {
+  id           String    @id @default(cuid())
+  sessionId    String
+  eventType    String
+  eventData    String?   @db.Text  // JSON string
+  responseTime Int?
+  success      Boolean   @default(true)
+  errorDetails String?   @db.Text
+  createdAt    DateTime  @default(now())
+
+  @@index([sessionId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("session_analytics")
+}
+
+// Code Generation - Track code generation events
+model CodeGeneration {
+  id             String    @id @default(cuid())
+  sessionId      String?
+  threadId       String?
+  instruction    String    @db.Text
+  model          String    @default("claude-sonnet-4-20250514")
+  success        Boolean
+  filesCreated   Int
+  generationTime Int       // in milliseconds
+  errorDetails   String?   @db.Text
+  filesList      String?   @db.Text  // JSON string array
+  createdAt      DateTime  @default(now())
+
+  @@index([sessionId])
+  @@index([threadId])
+  @@index([success])
+  @@index([createdAt])
+  @@map("code_generations")
+}
+
+// Image Generation - Track image generation events
+model ImageGeneration {
+  id             String    @id @default(cuid())
+  sessionId      String?
+  threadId       String?
+  prompt         String    @db.Text
+  model          String    @default("dall-e-3")
+  success        Boolean
+  generationTime Int       // in milliseconds
+  imageUrl       String?
+  errorDetails   String?   @db.Text
+  createdAt      DateTime  @default(now())
+
+  @@index([sessionId])
+  @@index([threadId])
+  @@index([success])
+  @@index([createdAt])
+  @@map("image_generations")
+}
+
+// MCP Usage - Track Model Context Protocol tool usage
+model MCPUsage {
+  id           String    @id @default(cuid())
+  sessionId    String?
+  threadId     String?
+  serverId     String
+  toolName     String
+  success      Boolean
+  responseTime Int       // in milliseconds
+  inputData    String?   @db.Text  // JSON string
+  outputData   String?   @db.Text  // JSON string
+  errorDetails String?   @db.Text
+  createdAt    DateTime  @default(now())
+
+  @@index([sessionId])
+  @@index([threadId])
+  @@index([serverId])
+  @@index([toolName])
+  @@index([success])
+  @@index([createdAt])
+  @@map("mcp_usage")
+}
