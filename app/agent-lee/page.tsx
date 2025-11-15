@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -87,7 +87,7 @@ export default function AgentLeePage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
-  const toggleListening = () => {
+  const toggleListening = useCallback(() => {
     if (!speechSupported) return
 
     if (isListening) {
@@ -97,10 +97,10 @@ export default function AgentLeePage() {
       recognitionRef.current?.start()
       setIsListening(true)
     }
-  }
+  }, [speechSupported, isListening])
 
 
-  const sendMessage = async () => {
+  const sendMessage = useCallback(async () => {
     if (!inputMessage.trim()) return
 
     const userMessage: Message = {
@@ -179,14 +179,14 @@ export default function AgentLeePage() {
     } finally {
       setIsTyping(false)
     }
-  }
+  }, [inputMessage, threadId, apiProvider])
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
       sendMessage()
     }
-  }
+  }, [sendMessage])
 
   return (
     <div className="h-screen bg-black overflow-hidden">
