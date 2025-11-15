@@ -402,8 +402,9 @@ export function getCurrentAnalytics() {
 
   const metrics = getChatMetrics();
   const totalSessions = chatSessions.length;
-  const avgResponseTime = chatSessions.length > 0
-    ? chatSessions.filter(s => s.responseTime).reduce((sum, s) => sum + s.responseTime, 0) / chatSessions.filter(s => s.responseTime).length / 1000
+  const sessionsWithResponseTime = chatSessions.filter(s => s.responseTime);
+  const avgResponseTime = sessionsWithResponseTime.length > 0
+    ? sessionsWithResponseTime.reduce((sum, s) => sum + s.responseTime, 0) / sessionsWithResponseTime.length / 1000
     : 0;
 
   return {

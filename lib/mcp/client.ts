@@ -139,9 +139,10 @@ export class MCPClient {
 
   async getRecommendedTools(message: string): Promise<Array<{serverId: string, toolName: string, confidence: number}>> {
     const recommendations = []
+    const lowerMessage = message.toLowerCase()
 
     if (this.shouldUseWebSearch(message)) {
-      if (message.toLowerCase().includes('news')) {
+      if (lowerMessage.includes('news')) {
         recommendations.push({ serverId: 'brave-search', toolName: 'news_search', confidence: 0.9 })
       } else {
         recommendations.push({ serverId: 'brave-search', toolName: 'web_search', confidence: 0.8 })
@@ -149,21 +150,21 @@ export class MCPClient {
     }
 
     if (this.shouldUseGitHub(message)) {
-      if (message.toLowerCase().includes('create repo')) {
+      if (lowerMessage.includes('create repo')) {
         recommendations.push({ serverId: 'github', toolName: 'create_repo', confidence: 0.9 })
-      } else if (message.toLowerCase().includes('list repos')) {
+      } else if (lowerMessage.includes('list repos')) {
         recommendations.push({ serverId: 'github', toolName: 'list_repos', confidence: 0.9 })
-      } else if (message.toLowerCase().includes('issue')) {
+      } else if (lowerMessage.includes('issue')) {
         recommendations.push({ serverId: 'github', toolName: 'create_issue', confidence: 0.8 })
       }
     }
 
     if (this.shouldUseFileSystem(message)) {
-      if (message.toLowerCase().includes('read')) {
+      if (lowerMessage.includes('read')) {
         recommendations.push({ serverId: 'file-system', toolName: 'read_file', confidence: 0.8 })
-      } else if (message.toLowerCase().includes('write') || message.toLowerCase().includes('save')) {
+      } else if (lowerMessage.includes('write') || lowerMessage.includes('save')) {
         recommendations.push({ serverId: 'file-system', toolName: 'write_file', confidence: 0.8 })
-      } else if (message.toLowerCase().includes('list') || message.toLowerCase().includes('browse')) {
+      } else if (lowerMessage.includes('list') || lowerMessage.includes('browse')) {
         recommendations.push({ serverId: 'file-system', toolName: 'list_directory', confidence: 0.7 })
       }
     }
