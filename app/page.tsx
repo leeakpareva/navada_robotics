@@ -77,7 +77,7 @@ export default function NavadaRoboticsApp() {
         {/* Spline Background */}
         <div className="absolute inset-0 w-full h-full">
           <iframe
-            src='https://my.spline.design/squarechipsfallinginplace-UO2xpf3fdQZzFK32zpOZfsW0/'
+            src='https://my.spline.design/galaxyrollercoaster-UubfnPNkcpn15yoZy8gNcgB3/'
             frameBorder='0'
             width='100%'
             height='100%'
