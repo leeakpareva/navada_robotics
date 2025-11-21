@@ -40,12 +40,6 @@ export default function NavadaRoboticsApp() {
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
               </Link>
-              <Link href="/blog" className="text-white hover:text-purple-400 transition-all duration-200">
-                Engagement
-              </Link>
-              <Link href="/data" className="text-white hover:text-purple-400 transition-all duration-200">
-                Data Initiative
-              </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
               </Link>
@@ -63,12 +57,6 @@ export default function NavadaRoboticsApp() {
             <nav className="flex flex-col space-y-1">
               <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Solutions
-              </Link>
-              <Link href="/blog" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                Engagement
-              </Link>
-              <Link href="/data" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                Data Initiative
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
@@ -292,8 +280,6 @@ export default function NavadaRoboticsApp() {
         </div>
       </section>
 
-      {/* ElevenLabs AudioNative Widget - Bottom */}
-      <div id="elevenlabs-audionative-widget" data-height="90" data-width="100%" data-frameborder="no" data-scrolling="no" data-publicuserid="10625bb8c127d3203fcc18a3e7c3f84d7d1458e6e71b30cfd322d0fc62dc93b1" data-playerurl="https://elevenlabs.io/player/index.html" >Loading the <a href="https://elevenlabs.io/text-to-speech" target="_blank" rel="noopener">Elevenlabs Text to Speech</a> AudioNative Player...</div><script src="https://elevenlabs.io/player/audioNativeHelper.js" type="text/javascript"></script>
 
       {/* Footer */}
       <footer className="bg-black py-8 px-4">
