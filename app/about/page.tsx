@@ -107,9 +107,6 @@ export default function AboutPage() {
                     Learning
                   </Link>
                 )}
-                <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
-                  Agent Lee
-                </Link>
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
                 </Link>

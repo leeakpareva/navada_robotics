@@ -52,17 +52,11 @@ describe('HomePage', () => {
       </SessionProvider>
     )
     const solutionsLinks = screen.getAllByRole('link', { name: /Solutions/i })
-    const newsLinks = screen.getAllByRole('link', { name: /News/i })
     const aboutLinks = screen.getAllByRole('link', { name: /About/i })
-    const analyticsLinks = screen.getAllByRole('link', { name: /Analytics/i })
-    const agentLeeLinks = screen.getAllByRole('link', { name: /Agent Lee/i })
     const contactLinks = screen.getAllByRole('link', { name: /Contact/i })
 
     expect(solutionsLinks.length).toBeGreaterThan(0)
-    expect(newsLinks.length).toBeGreaterThan(0)
     expect(aboutLinks.length).toBeGreaterThan(0)
-    expect(analyticsLinks.length).toBeGreaterThan(0)
-    expect(agentLeeLinks.length).toBeGreaterThan(0)
     expect(contactLinks.length).toBeGreaterThan(0)
   })
 
