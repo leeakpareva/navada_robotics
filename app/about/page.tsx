@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { BeamsBackground } from "@/components/ui/beams-background"
 import { Menu, X, Microscope as Microchip, Shield, Phone } from "lucide-react"
 import Link from "next/link"
 import { isLearningHubEnabled } from "@/lib/feature-flags"
@@ -74,10 +73,7 @@ export default function AboutPage() {
       </header>
 
       {/* About Section */}
-      <BeamsBackground 
-        intensity="subtle" 
-        className="py-16 px-4"
-      >
+      <section className="py-16 px-4 bg-black">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">About NAVADA</h2>
@@ -86,28 +82,18 @@ export default function AboutPage() {
               Founded by Lee Akpareva MBA, MA, NAVADA explores the intersection of AI, robotics, and creative innovation.
             </p>
 
-            <div className="bg-black/30 backdrop-blur-sm rounded-lg p-8 mb-8 border border-purple-400/50">
-              <h3 className="text-2xl font-semibold text-white mb-4">Leadership</h3>
-              <div className="text-center">
-                <p className="text-xl font-medium text-white mb-2">Lee Akpareva MBA, MA</p>
-                <p className="text-purple-200 font-medium mb-4">Founder & CEO | Designer & Developer</p>
-                <p className="text-gray-200 max-w-xl mx-auto mb-4">
-                  Combining technical expertise with strategic vision to advance AI and robotics innovation.
-                </p>
-                <a
-                  href="https://www.linkedin.com/feed/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block text-purple-300 hover:text-purple-200 transition-colors duration-200 font-medium"
-                >
-                  Connect on LinkedIn →
-                </a>
-              </div>
-            </div>
 
+            {/* Continuous Learning Section */}
+            <div className="bg-gradient-to-r from-purple-900/30 via-purple-800/40 to-purple-900/30 backdrop-blur-sm rounded-lg p-8 border border-purple-400/50">
+              <h3 className="text-2xl font-semibold text-white mb-4">The Age of AI</h3>
+              <p className="text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                In this rapidly evolving landscape of artificial intelligence, continuous learning isn't just an advantage it's essential.
+                As AI reshapes industries and creates new possibilities daily, staying curious and adaptable becomes the cornerstone of innovation and growth.
+              </p>
+            </div>
           </div>
         </div>
-      </BeamsBackground>
+      </section>
 
       {/* Bottom Navigation for Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">

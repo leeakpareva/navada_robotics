@@ -3,10 +3,8 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { BeamsBackground } from "@/components/ui/beams-background"
 import { Menu, X, Phone, Microscope as Microchip, Shield } from "lucide-react"
 import Link from "next/link"
-import { OptimizedImage } from "@/components/ui/optimized-image"
 import { isLearningHubEnabled } from "@/lib/feature-flags"
 
 export default function ContactPage() {
@@ -155,10 +153,7 @@ export default function ContactPage() {
       </header>
 
       {/* Contact Section */}
-      <BeamsBackground
-        intensity="subtle"
-        className="py-16 px-4"
-      >
+      <section className="py-16 px-4 bg-black">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Get In Touch</h2>
@@ -318,7 +313,7 @@ export default function ContactPage() {
           </div>
 
         </div>
-      </BeamsBackground>
+      </section>
 
       {/* Bottom Navigation for Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">
