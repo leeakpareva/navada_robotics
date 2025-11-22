@@ -123,7 +123,8 @@ export default function EventsPage() {
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tight">
               AI UNLOCKED
             </h2>
-            <p className="text-xl md:text-2xl text-purple-300 mb-6">Learn & Network Day</p>
+            <p className="text-xl md:text-2xl text-purple-300 mb-2">Learn & Network Day</p>
+            <p className="text-gray-400 text-sm mb-6">NAVADA x Caffeine</p>
             <div className="flex flex-wrap justify-center gap-6 text-gray-300 mb-8">
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-purple-400" />
@@ -141,13 +142,13 @@ export default function EventsPage() {
           </div>
 
           {/* Event Image */}
-          <div className="max-w-4xl mx-auto mb-16">
-            <div className="relative rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20">
+          <div className="max-w-lg mx-auto mb-16">
+            <div className="relative rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20 p-4">
               <img
                 src="/event-2.png"
                 alt="AI UNLOCKED: Learn & Network Day"
-                className="w-full h-auto"
-                style={{ maxHeight: '600px', objectFit: 'cover' }}
+                className="w-full h-auto object-contain rounded-lg"
+                style={{ maxHeight: '400px' }}
               />
             </div>
           </div>

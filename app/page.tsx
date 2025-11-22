@@ -198,38 +198,49 @@ export default function NavadaRoboticsApp() {
           <div className="text-center mb-12">
             <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Upcoming Events</h3>
             <p className="text-gray-300 text-lg font-medium">1/12/2025</p>
+            <p className="text-gray-400 text-sm mt-2">NAVADA x Caffeine</p>
           </div>
 
-          <div className="max-w-sm mx-auto">
+          <div className="max-w-lg mx-auto">
             <Link
               href="https://caffeine.ai/"
               target="_blank"
               rel="noopener noreferrer"
               className="block group mb-6"
             >
-              <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 transition-all duration-300 touch-manipulation">
-                <OptimizedImage
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 transition-all duration-300 touch-manipulation p-4">
+                <img
                   src="/event-2.png"
                   alt="AI UNLOCKED: Learn & Network Day"
-                  width={320}
-                  height={240}
-                  className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300 rounded-lg"
+                  style={{ maxHeight: '300px' }}
                 />
               </div>
             </Link>
 
             <div className="text-center">
-              <Link
-                href="https://internetcomputer.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-xl transition-all duration-300 border border-purple-500/50 hover:border-purple-400 group"
-              >
-                <span>Explore Internet Computer</span>
-                <svg className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link
+                  href="/solutions/events"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium rounded-xl transition-all duration-300 border border-green-500/50 hover:border-green-400 group"
+                >
+                  <span>Register Now</span>
+                  <svg className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+                <Link
+                  href="https://internetcomputer.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-xl transition-all duration-300 border border-purple-500/50 hover:border-purple-400 group"
+                >
+                  <span>Explore Internet Computer</span>
+                  <svg className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
