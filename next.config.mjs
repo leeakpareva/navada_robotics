@@ -18,8 +18,7 @@ const nextConfig = {
   experimental: {
     esmExternals: false,
   },
-  // Only use standalone output in production
-  ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
+  // Optimize for Vercel static file serving
   images: {
     remotePatterns: [
       {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface ProjectVideoProps {
   src: string
@@ -12,9 +12,16 @@ interface ProjectVideoProps {
 export function ProjectVideo({ src, title, poster, className = "" }: ProjectVideoProps) {
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [videoSrc, setVideoSrc] = useState("")
 
-  const handleError = () => {
-    console.error(`Error loading video: ${src}`)
+  useEffect(() => {
+    // Ensure absolute path for Vercel
+    const absoluteSrc = src.startsWith('/') ? src : `/${src}`
+    setVideoSrc(absoluteSrc)
+  }, [src])
+
+  const handleError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    console.error(`Error loading video: ${videoSrc}`, e)
     setHasError(true)
     setIsLoading(false)
   }
@@ -38,6 +45,14 @@ export function ProjectVideo({ src, title, poster, className = "" }: ProjectVide
           </div>
           <p className="text-gray-400 mb-2">Video Preview Unavailable</p>
           <p className="text-gray-500 text-sm">{title}</p>
+          <a
+            href={videoSrc}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-purple-300 underline text-sm mt-3 inline-block hover:text-purple-200"
+          >
+            Download Video
+          </a>
         </div>
       </div>
     )
@@ -55,6 +70,7 @@ export function ProjectVideo({ src, title, poster, className = "" }: ProjectVide
       )}
 
       <video
+        key={videoSrc}
         controls
         preload="metadata"
         className="w-full h-auto rounded-2xl"
@@ -65,10 +81,12 @@ export function ProjectVideo({ src, title, poster, className = "" }: ProjectVide
         onCanPlay={handleCanPlay}
         onLoadStart={handleLoadStart}
         aria-label={title}
-        style={{ maxWidth: "100%" }}
+        style={{ maxWidth: "100%", maxHeight: "500px" }}
+        crossOrigin="anonymous"
       >
-        <source src={src} type="video/mp4" />
-        Your browser does not support the video tag.
+        <source src={videoSrc} type="video/mp4" />
+        <source src={videoSrc} type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />
+        <p>Your browser does not support the video tag. <a href={videoSrc} target="_blank" rel="noopener noreferrer">Download the video</a> instead.</p>
       </video>
     </div>
   )
