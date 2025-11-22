@@ -157,16 +157,16 @@ export default function SolutionsPage() {
           >
             <div className="min-h-screen bg-black relative">
               <div className="container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                   {/* Content Side */}
-                  <div className="space-y-8">
-                    <div className="flex items-center space-x-4 mb-6">
-                      <h2 className="text-5xl md:text-6xl font-bold text-white tracking-tight">
+                  <div className="space-y-6 lg:space-y-8 order-first lg:order-first">
+                    <div className="flex items-center space-x-4 mb-4">
+                      <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight">
                         {solution.title}
                       </h2>
                     </div>
 
-                    <p className="text-xl md:text-2xl text-gray-200 leading-relaxed max-w-2xl">
+                    <p className="text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed max-w-2xl">
                       {solution.description}
                     </p>
 
@@ -183,11 +183,11 @@ export default function SolutionsPage() {
                     </div>
 
                     {/* Explore CTA */}
-                    <div className="pt-8">
+                    <div className="pt-4 lg:pt-8">
                       <Link href={solution.link}>
                         <Button
                           size="lg"
-                          className="text-lg px-8 py-4 bg-purple-600 hover:bg-purple-700 transition-all duration-200 group"
+                          className="text-lg px-8 py-4 bg-purple-600 hover:bg-purple-700 transition-all duration-200 group w-full sm:w-auto touch-manipulation"
                         >
                           Explore {solution.title}
                           <ExternalLink className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -197,9 +197,9 @@ export default function SolutionsPage() {
                   </div>
 
                   {/* Visual Side */}
-                  <div className="order-first lg:order-last">
+                  <div className="order-last lg:order-last">
                     <div className="relative">
-                      <div className="w-full h-[400px] md:h-[500px] bg-black overflow-hidden">
+                      <div className="w-full h-[300px] md:h-[400px] lg:h-[500px] bg-black overflow-hidden">
                         {solution.iframe ? (
                           <>
                             {index === currentSection || Math.abs(index - currentSection) <= 1 ? (
