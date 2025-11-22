@@ -135,57 +135,64 @@ export default function NavadaRoboticsApp() {
       <section className="py-16 px-4 bg-black">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Innovation Showcase</h3>
+            <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Research and Education</h3>
             <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              Discover my latest breakthroughs in AI-powered robotics, creative technology, and digital assistance platforms
+              Explore cutting-edge research and educational resources in AI, robotics, and emerging technologies
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300 touch-manipulation">
-                  <OptimizedImage
-                    src="/AiCreative.png"
-                    alt="Artistic vision meets robotic precision"
-                    width={400}
-                    height={192}
-                    className="w-full h-32 sm:h-40 md:h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
+                  <div className="w-full h-40 sm:h-48 md:h-56 relative">
+                    <iframe
+                      src='https://my.spline.design/glassknotvortex-6ZrpDU6pkDweL8067vxDt4dT/'
+                      frameBorder='0'
+                      width='100%'
+                      height='100%'
+                      className="absolute inset-0 w-full h-full"
+                      style={{ transform: 'scale(0.8)', transformOrigin: 'center' }}
+                      preload="metadata"
+                      aria-label="Glass knot vortex animation"
+                    />
+                  </div>
                   <div className="p-3 md:p-4">
-                    <h4 className="text-purple-200 font-semibold mb-1 md:mb-2 text-sm md:text-base">AI Creative Assistant</h4>
-                    <p className="text-gray-200 text-xs md:text-sm">Artistic vision meets robotic precision</p>
+                    <h4 className="text-purple-200 font-semibold text-sm md:text-base">AI Creative Assistant</h4>
                   </div>
                 </div>
 
                 <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300 touch-manipulation">
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="auto"
-                    className="w-full h-32 sm:h-40 md:h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                    aria-label="Advanced digital assistance for the future"
-                  >
-                    <source src="/untitled video.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
+                  <div className="w-full h-40 sm:h-48 md:h-56 relative">
+                    <iframe
+                      src='https://my.spline.design/voiceinteractionanimation-1TOyQdninrfRgUR2qnihJv4z/'
+                      frameBorder='0'
+                      width='100%'
+                      height='100%'
+                      className="absolute inset-0 w-full h-full"
+                      style={{ transform: 'scale(0.8)', transformOrigin: 'center' }}
+                      preload="metadata"
+                      aria-label="Voice interaction animation"
+                    />
+                  </div>
                   <div className="p-3 md:p-4">
-                    <h4 className="text-purple-200 font-semibold mb-1 md:mb-2 text-sm md:text-base">Next-Gen Automation</h4>
-                    <p className="text-gray-200 text-xs md:text-sm">Advanced digital assistance for the future</p>
+                    <h4 className="text-purple-200 font-semibold text-sm md:text-base">Next-Gen Automation</h4>
                   </div>
                 </div>
 
                 <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300 touch-manipulation">
-                  <OptimizedImage
-                    src="/ManvsMachine.png"
-                    alt="Empowering the next generation of innovators"
-                    width={400}
-                    height={192}
-                    className="w-full h-32 sm:h-40 md:h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
+                  <div className="w-full h-40 sm:h-48 md:h-56 relative">
+                    <iframe
+                      src='https://my.spline.design/chatgptkeyboard-6XEeWqVgSY3OJQQA30XkzYlU/'
+                      frameBorder='0'
+                      width='100%'
+                      height='100%'
+                      className="absolute inset-0 w-full h-full"
+                      style={{ transform: 'scale(0.8)', transformOrigin: 'center' }}
+                      preload="metadata"
+                      aria-label="ChatGPT keyboard animation"
+                    />
+                  </div>
                   <div className="p-3 md:p-4">
-                    <h4 className="text-purple-200 font-semibold mb-1 md:mb-2 text-sm md:text-base">Research Platform</h4>
-                    <p className="text-gray-200 text-xs md:text-sm">Empowering the next generation of innovators</p>
+                    <h4 className="text-purple-200 font-semibold text-sm md:text-base">Research Platform</h4>
                   </div>
                 </div>
           </div>

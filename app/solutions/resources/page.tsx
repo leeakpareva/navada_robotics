@@ -2,32 +2,11 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X, Microscope as Microchip, Shield, Phone, ExternalLink } from "lucide-react"
+import { Menu, X, Microscope as Microchip, Shield, Phone, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
-export default function SolutionsPage() {
+export default function ResourcesPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const solutions = [
-    {
-      title: "Predictions",
-      description: "AI-driven forecasting and trend analysis for robotics and emerging technologies",
-      link: "/solutions/predictions",
-      status: "Coming Soon"
-    },
-    {
-      title: "Events",
-      description: "Stay updated with the latest robotics conferences and AI summits",
-      link: "/solutions/events",
-      status: "Available"
-    },
-    {
-      title: "Resources",
-      description: "Comprehensive tools, frameworks, and educational materials for robotics development",
-      link: "/solutions/resources",
-      status: "Coming Soon"
-    }
-  ]
 
   return (
     <div className="min-h-screen bg-black">
@@ -51,7 +30,7 @@ export default function SolutionsPage() {
 
             {/* Desktop navigation */}
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/solutions" className="text-purple-400 font-medium">
+              <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                 Solutions
               </Link>
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
@@ -67,7 +46,7 @@ export default function SolutionsPage() {
           {isMenuOpen && (
             <nav className="md:hidden mt-4 pb-4 border-t border-gray-800 pt-4">
               <div className="flex flex-col space-y-3">
-                <Link href="/solutions" className="text-purple-400 font-medium">
+                <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                   Solutions
                 </Link>
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
@@ -82,48 +61,28 @@ export default function SolutionsPage() {
         </div>
       </header>
 
-      {/* Solutions Section */}
-      <section className="py-16 px-4 bg-black">
+      {/* Coming Soon Section */}
+      <section className="py-16 px-4 bg-black min-h-[80vh] flex items-center">
         <div className="container mx-auto">
-          <div className="max-w-4xl mx-auto text-center mb-16">
+          <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">
-              Solutions
+              Coming Soon
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Explore our AI and robotics solutions designed to advance innovation and accelerate technological progress.
+            <h3 className="text-2xl md:text-3xl font-semibold text-purple-300 mb-8">
+              Resources
+            </h3>
+            <p className="text-lg text-gray-300 mb-12 leading-relaxed">
+              We're building a comprehensive collection of tools, frameworks, and educational materials for robotics development.
             </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {solutions.map((solution, index) => (
-              <div key={index} className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-purple-400/50 hover:border-purple-400 transition-all duration-300">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-bold text-white">{solution.title}</h3>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    solution.status === 'Available'
-                      ? 'bg-green-500/20 text-green-300 border border-green-500/50'
-                      : 'bg-purple-500/20 text-purple-300 border border-purple-500/50'
-                  }`}>
-                    {solution.status}
-                  </span>
-                </div>
-                <p className="text-gray-300 mb-6 leading-relaxed">
-                  {solution.description}
-                </p>
-                <Link href={solution.link}>
-                  <Button
-                    className={`w-full transition-all duration-300 ${
-                      solution.status === 'Available'
-                        ? 'bg-purple-600 hover:bg-purple-700'
-                        : 'bg-gray-600 hover:bg-gray-700'
-                    }`}
-                  >
-                    {solution.status === 'Available' ? 'Explore' : 'View Details'}
-                    <ExternalLink className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
-            ))}
+            <Link href="/solutions">
+              <Button
+                size="lg"
+                className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg transition-all duration-300"
+              >
+                <ArrowLeft className="mr-2 h-5 w-5" />
+                Back to Solutions
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
