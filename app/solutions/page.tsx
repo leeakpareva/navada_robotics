@@ -43,7 +43,7 @@ export default function SolutionsPage() {
         "Stay updated with the latest robotics conferences, AI summits, and innovation showcases. Connect with industry leaders and discover breakthrough technologies at premier events worldwide.",
       icon: <Zap className="h-8 w-8" />,
       features: ["Conferences", "Networking", "Industry Updates"],
-      image: "/Educa.png",
+      iframe: 'https://my.spline.design/particleshand-WaLUY9H9ik0nMpB8Elx3Hcjl/',
       link: "/solutions/events",
       gradient: "from-purple-900/20 to-pink-900/20",
     },
@@ -172,9 +172,6 @@ export default function SolutionsPage() {
                   {/* Content Side */}
                   <div className="space-y-8">
                     <div className="flex items-center space-x-4 mb-6">
-                      <div className="p-4 bg-purple-500/20 rounded-2xl text-purple-300 backdrop-blur-sm border border-purple-400/30">
-                        {solution.icon}
-                      </div>
                       <h2 className="text-5xl md:text-6xl font-bold text-white tracking-tight">
                         {solution.title}
                       </h2>
@@ -253,14 +250,6 @@ export default function SolutionsPage() {
                 </div>
               </div>
 
-              {/* Section Indicator */}
-              <div className="absolute top-8 right-8">
-                <div className="bg-black/20 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
-                  <span className="text-white text-sm font-medium">
-                    {index + 1} of {solutionCategories.length}
-                  </span>
-                </div>
-              </div>
             </BeamsBackground>
           </div>
         ))}
