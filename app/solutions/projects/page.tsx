@@ -82,8 +82,11 @@ export default function ProjectsPage() {
                   <div className="w-full bg-black rounded-2xl overflow-hidden">
                     <video
                       controls
+                      preload="metadata"
                       className="w-full h-auto"
                       poster="/project1-poster.jpg"
+                      playsInline
+                      muted
                     >
                       <source src="/project1.mp4" type="video/mp4" />
                       Your browser does not support the video tag.
@@ -120,17 +123,73 @@ export default function ProjectsPage() {
                   </div>
                 </div>
 
-                <Link href="/solutions">
-                  <Button
-                    size="lg"
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg transition-all duration-300"
-                  >
-                    <ArrowLeft className="mr-2 h-5 w-5" />
-                    Back to Solutions
-                  </Button>
-                </Link>
               </div>
             </div>
+
+            {/* BlueFin Project */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Content Side */}
+              <div className="space-y-6 order-last lg:order-first">
+                <h3 className="text-3xl md:text-4xl font-bold text-white">BlueFin Deck</h3>
+                <p className="text-blue-300 text-lg font-medium">Portable Raspberry Pi Command Center</p>
+
+                <p className="text-lg text-gray-200 leading-relaxed">
+                  BlueFin Deck is a portable Raspberry Pi-powered command center packed into a rugged case.
+                  It features an illuminated mini keyboard, built-in display, and internal Pi board, letting you
+                  code, hack, and monitor systems anywhere—from your desk to the field—just by flipping it open and powering on.
+                </p>
+
+                <div className="space-y-4">
+                  <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4 border border-blue-400/30">
+                    <h4 className="text-white font-semibold mb-2">Key Features</h4>
+                    <ul className="text-gray-300 space-y-2 text-sm">
+                      <li>• Illuminated mini keyboard for low-light operations</li>
+                      <li>• Built-in display with real-time system monitoring</li>
+                      <li>• Internal Raspberry Pi board for full computing power</li>
+                      <li>• Rugged portable case for field deployment</li>
+                      <li>• Instant-on capability for rapid response</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/40 backdrop-blur-sm rounded-lg p-4 border border-blue-400/50">
+                    <p className="text-blue-200 font-medium">Status: Development Phase</p>
+                    <p className="text-gray-300 text-sm mt-1">Designed by Lee Akpareva MBA, MA</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Video Side */}
+              <div className="order-first lg:order-last">
+                <div className="bg-black/20 backdrop-blur-sm rounded-3xl p-4 border border-white/10">
+                  <div className="w-full bg-black rounded-2xl overflow-hidden">
+                    <video
+                      controls
+                      preload="metadata"
+                      className="w-full h-auto"
+                      poster="/bluefin-poster.jpg"
+                      playsInline
+                      muted
+                    >
+                      <source src="/BluFin.MP4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Back to Solutions CTA */}
+          <div className="text-center mt-16">
+            <Link href="/solutions">
+              <Button
+                size="lg"
+                className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg transition-all duration-300"
+              >
+                <ArrowLeft className="mr-2 h-5 w-5" />
+                Back to Solutions
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
