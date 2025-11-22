@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Menu, X, Cog, Microscope as Microchip, Shield, Phone, Cpu, Sparkles, Folder } from "lucide-react";
 import Link from "next/link";
 import { OptimizedImage } from "@/components/ui/optimized-image";
@@ -13,6 +14,39 @@ import Script from "next/script";
 export default function NavadaRoboticsApp() {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [subscribeEmail, setSubscribeEmail] = useState('');
+  const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [subscribeMessage, setSubscribeMessage] = useState('');
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubscribeStatus('submitting');
+    setSubscribeMessage('');
+
+    try {
+      const response = await fetch('/api/emails/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: subscribeEmail, source: 'homepage' }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubscribeStatus('success');
+        setSubscribeMessage(data.message || 'Thank you for subscribing! Stay tuned for updates.');
+        setSubscribeEmail('');
+      } else {
+        setSubscribeStatus('error');
+        setSubscribeMessage(data.error || 'Failed to subscribe. Please try again.');
+      }
+    } catch (error) {
+      setSubscribeStatus('error');
+      setSubscribeMessage('An error occurred. Please try again later.');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
@@ -154,6 +188,53 @@ export default function NavadaRoboticsApp() {
                     <p className="text-gray-200 text-xs md:text-sm">Empowering the next generation of innovators</p>
                   </div>
                 </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Subscribe Section */}
+      <section className="py-16 px-4 bg-black">
+        <div className="container mx-auto">
+          <div className="max-w-2xl mx-auto">
+            <Card className="bg-gradient-to-br from-purple-600/40 to-purple-800/40 border-purple-400 backdrop-blur-sm shadow-xl shadow-purple-500/20">
+              <CardContent className="p-8 text-center">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Stay Updated</h3>
+                <p className="text-gray-100 mb-6 font-medium">
+                  Subscribe to our newsletter for the latest updates on AI, robotics, and technology innovations
+                </p>
+
+                {subscribeStatus === 'success' && (
+                  <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
+                    <p className="text-green-200">{subscribeMessage}</p>
+                  </div>
+                )}
+
+                {subscribeStatus === 'error' && (
+                  <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+                    <p className="text-red-200">{subscribeMessage}</p>
+                  </div>
+                )}
+
+                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
+                  <input
+                    type="email"
+                    value={subscribeEmail}
+                    onChange={(e) => setSubscribeEmail(e.target.value)}
+                    required
+                    placeholder="Enter your email address"
+                    className="flex-1 px-4 py-3 bg-black/40 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 transition-colors"
+                  />
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={subscribeStatus === 'submitting'}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-8"
+                  >
+                    {subscribeStatus === 'submitting' ? 'Subscribing...' : 'Subscribe'}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
