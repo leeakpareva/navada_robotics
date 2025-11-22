@@ -12,6 +12,7 @@ Complete documentation for all API endpoints in the NAVADA Robotics application.
 Most API endpoints require authentication via NextAuth.js session cookies or API keys.
 
 ### Authentication Methods
+
 - **Session Cookies**: For web application requests
 - **API Keys**: For external integrations (where applicable)
 
@@ -24,6 +25,7 @@ Most API endpoints require authentication via NextAuth.js session cookies or API
 **Description**: Main AI assistant endpoint for chat interactions
 
 **Request Body**:
+
 ```json
 {
   "message": "Your question or message",
@@ -33,6 +35,7 @@ Most API endpoints require authentication via NextAuth.js session cookies or API
 ```
 
 **Response**:
+
 ```json
 {
   "response": "AI assistant response",
@@ -42,6 +45,7 @@ Most API endpoints require authentication via NextAuth.js session cookies or API
 ```
 
 **Example**:
+
 ```javascript
 const response = await fetch('/api/agent-lee', {
   method: 'POST',
@@ -62,6 +66,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Convert text to speech audio
 
 **Request Body**:
+
 ```json
 {
   "text": "Text to convert to speech",
@@ -78,6 +83,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Initialize a new chat session
 
 **Response**:
+
 ```json
 {
   "threadId": "new-thread-id",
@@ -90,6 +96,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Get session details
 
 **Response**:
+
 ```json
 {
   "threadId": "thread-id",
@@ -104,6 +111,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Get chat history for a session
 
 **Response**:
+
 ```json
 {
   "messages": [
@@ -132,11 +140,13 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Get all available courses
 
 **Query Parameters**:
+
 - `category`: Filter by category
 - `difficulty`: Filter by difficulty level
 - `featured`: Show only featured courses
 
 **Response**:
+
 ```json
 {
   "courses": [
@@ -158,6 +168,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Get specific course details
 
 **Response**:
+
 ```json
 {
   "id": "course-id",
@@ -188,6 +199,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Generate a new course using AI
 
 **Request Body**:
+
 ```json
 {
   "title": "Course Title",
@@ -198,6 +210,7 @@ const response = await fetch('/api/agent-lee', {
 ```
 
 **Response**:
+
 ```json
 {
   "courseId": "generated-course-id",
@@ -214,6 +227,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Enroll user in a course
 
 **Request Body**:
+
 ```json
 {
   "courseId": "course-id",
@@ -222,6 +236,7 @@ const response = await fetch('/api/agent-lee', {
 ```
 
 **Response**:
+
 ```json
 {
   "enrollmentId": "enrollment-id",
@@ -237,10 +252,12 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Get user's learning progress
 
 **Query Parameters**:
+
 - `courseId`: Specific course progress
 - `userId`: User ID (optional if authenticated)
 
 **Response**:
+
 ```json
 {
   "userId": "user-id",
@@ -261,6 +278,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Update learning progress
 
 **Request Body**:
+
 ```json
 {
   "courseId": "course-id",
@@ -277,6 +295,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Get user's notes and bookmarks
 
 **Response**:
+
 ```json
 {
   "notes": [
@@ -296,6 +315,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Create a new note
 
 **Request Body**:
+
 ```json
 {
   "courseId": "course-id",
@@ -314,6 +334,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Create Stripe checkout session
 
 **Request Body**:
+
 ```json
 {
   "lookup_key": "product-lookup-key",
@@ -322,6 +343,7 @@ const response = await fetch('/api/agent-lee', {
 ```
 
 **Response**:
+
 ```json
 {
   "url": "https://checkout.stripe.com/c/pay/..."
@@ -335,6 +357,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Create customer portal session
 
 **Request Body**:
+
 ```json
 {
   "customer_id": "stripe-customer-id"
@@ -348,6 +371,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Handle Stripe webhooks (internal use)
 
 **Events Handled**:
+
 - `payment_intent.succeeded`
 - `invoice.payment_succeeded`
 - `customer.subscription.updated`
@@ -362,6 +386,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Register a new user
 
 **Request Body**:
+
 ```json
 {
   "name": "User Name",
@@ -371,6 +396,7 @@ const response = await fetch('/api/agent-lee', {
 ```
 
 **Response**:
+
 ```json
 {
   "user": {
@@ -389,6 +415,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: NextAuth.js authentication handlers
 
 **Supported Providers**:
+
 - Credentials (email/password)
 - OAuth providers (configurable)
 
@@ -399,6 +426,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Track analytics events
 
 **Request Body**:
+
 ```json
 {
   "event": "page_view|user_action|course_completion",
@@ -415,6 +443,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Get learning analytics
 
 **Response**:
+
 ```json
 {
   "totalUsers": 1250,
@@ -437,6 +466,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Create/update courses
 
 **Request Body**:
+
 ```json
 {
   "title": "Course Title",
@@ -453,6 +483,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Get MCP server status
 
 **Response**:
+
 ```json
 {
   "servers": [
@@ -470,6 +501,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Control MCP servers
 
 **Request Body**:
+
 ```json
 {
   "action": "start|stop|restart",
@@ -486,6 +518,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Subscribe to newsletter
 
 **Request Body**:
+
 ```json
 {
   "email": "user@example.com",
@@ -500,6 +533,7 @@ const response = await fetch('/api/agent-lee', {
 **Description**: Generate website with AI
 
 **Request Body**:
+
 ```json
 {
   "description": "Website description",
@@ -532,6 +566,7 @@ All APIs return consistent error responses:
 ```
 
 ### Common HTTP Status Codes
+
 - `200`: Success
 - `201`: Created
 - `400`: Bad Request
@@ -550,6 +585,7 @@ All APIs return consistent error responses:
 ## 📚 SDK Examples
 
 ### JavaScript/TypeScript
+
 ```typescript
 import { NavadaAPI } from '@navada/sdk';
 

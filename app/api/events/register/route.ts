@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { sendEventRegistrationConfirmation } from '@/lib/email-service'
 
 export async function POST(request: NextRequest) {
   try {
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
     if (existingRegistration) {
       if (existingRegistration.status === 'cancelled') {
         // Reactivate cancelled registration
-        await prisma.eventRegistration.update({
+        const updatedRegistration = await prisma.eventRegistration.update({
           where: { id: existingRegistration.id },
           data: {
             status: 'registered',
@@ -58,8 +59,24 @@ export async function POST(request: NextRequest) {
             updatedAt: new Date()
           }
         })
+
+        // Send confirmation email for reactivated registration
+        try {
+          await sendEventRegistrationConfirmation({
+            name: updatedRegistration.name,
+            email: updatedRegistration.email,
+            eventName: updatedRegistration.eventName,
+            eventId: updatedRegistration.eventId,
+            phone: updatedRegistration.phone || undefined,
+            company: updatedRegistration.company || undefined,
+            jobTitle: updatedRegistration.jobTitle || undefined
+          })
+        } catch (emailError) {
+          console.warn('Failed to send reactivation email:', emailError)
+        }
+
         return NextResponse.json(
-          { message: 'Welcome back! Your registration has been reactivated.' },
+          { message: 'Welcome back! Your registration has been reactivated. Check your email for confirmation.' },
           { status: 200 }
         )
       } else {
@@ -87,6 +104,29 @@ export async function POST(request: NextRequest) {
     })
 
     console.log(`New event registration: ${newRegistration.email} for ${newRegistration.eventName}`)
+
+    // Send confirmation email
+    try {
+      const emailResult = await sendEventRegistrationConfirmation({
+        name: newRegistration.name,
+        email: newRegistration.email,
+        eventName: newRegistration.eventName,
+        eventId: newRegistration.eventId,
+        phone: newRegistration.phone || undefined,
+        company: newRegistration.company || undefined,
+        jobTitle: newRegistration.jobTitle || undefined
+      })
+
+      if (!emailResult.success) {
+        console.warn('Failed to send confirmation email:', emailResult.error)
+        // Continue with registration success even if email fails
+      } else {
+        console.log(`Confirmation email sent to ${newRegistration.email}`)
+      }
+    } catch (emailError) {
+      console.warn('Email service error:', emailError)
+      // Continue with registration success even if email fails
+    }
 
     return NextResponse.json(
       {

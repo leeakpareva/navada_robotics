@@ -50,7 +50,7 @@ const nextConfig = {
       ],
     },
     {
-      source: '/(.*\\.(?:mp4|MP4|mov|avi|webm|mkv))',
+      source: '/videos/(.*\\.(?:mp4|MP4|mov|avi|webm|mkv))',
       headers: [
         {
           key: 'Content-Type',

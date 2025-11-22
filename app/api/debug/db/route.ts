@@ -9,13 +9,15 @@ export async function GET() {
     await prisma.$connect()
 
     // Test a simple query
-    const userCount = await prisma.users.count()
+    const userCount = await prisma.user.count()
+    const eventRegistrationCount = await prisma.eventRegistration.count()
 
     await prisma.$disconnect()
 
     return NextResponse.json({
       status: 'Database connection successful',
       userCount,
+      eventRegistrationCount,
       timestamp: new Date().toISOString()
     })
   } catch (error) {

@@ -17,7 +17,7 @@
   "regions": ["iad1"],
   "headers": [
     {
-      "source": "/(.*\\.(mp4|MP4|avi|mov|wmv|flv|webm|mkv))",
+      "source": "/videos/(.*\\.(mp4|MP4|avi|mov|wmv|flv|webm|mkv))",
       "headers": [
         {
           "key": "Cache-Control",

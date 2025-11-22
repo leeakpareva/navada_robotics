@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     }
 
     // Create or find a test user
-    const testUser = await prisma.users.upsert({
+    const testUser = await prisma.user.upsert({
       where: { email: 'test@tutors.ai' },
       update: {
         name: 'Test User',
@@ -35,8 +35,7 @@ export async function POST(request: Request) {
         email: 'test@tutors.ai',
         name: 'Test User',
         role: 'student',
-        subscriptionTier: 'premium',
-        subscriptionStatus: 'active',
+        password: 'test-password',
         updatedAt: new Date()
       }
     });
@@ -46,7 +45,7 @@ export async function POST(request: Request) {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 30); // 30 days
 
-    await prisma.sessions.create({
+    await prisma.session.create({
       data: {
         id: `session-${Date.now()}`,
         sessionToken,
