@@ -58,7 +58,6 @@ function ProjectVideo({ src, title, className = "" }: { src: string; title: stri
         aria-label={title}
       >
         <source src={src} type="video/mp4" />
-        <source src={src.toLowerCase()} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
     </div>
@@ -140,7 +139,7 @@ export default function ProjectsPage() {
               <div className="order-first lg:order-first">
                 <div className="bg-black/20 backdrop-blur-sm rounded-3xl p-4 border border-white/10">
                   <ProjectVideo
-                    src="/project1.MP4"
+                    src="/project1.mp4"
                     title="Purple Pie - Raspberry Pi Powered AI Device"
                     className="w-full bg-black overflow-hidden"
                   />
@@ -214,7 +213,7 @@ export default function ProjectsPage() {
               <div className="order-first lg:order-last">
                 <div className="bg-black/20 backdrop-blur-sm rounded-3xl p-4 border border-white/10">
                   <ProjectVideo
-                    src="/BluFin.MP4"
+                    src="/blufin.mp4"
                     title="BlueFin Deck - Portable Raspberry Pi Command Center"
                     className="w-full bg-black overflow-hidden"
                   />
