@@ -60,7 +60,13 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
-              <h1 className="text-2xl font-bold text-white">NAVADA</h1>
+              <OptimizedImage
+                src="/logo.PNG"
+                alt="NAVADA"
+                width={120}
+                height={40}
+                className="h-8 w-auto filter brightness-0 invert"
+              />
             </Link>
 
             {/* Mobile menu button */}
@@ -86,9 +92,6 @@ export default function AboutPage() {
                   Learning
                 </Link>
               )}
-              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
-                Agent Lee
-              </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>

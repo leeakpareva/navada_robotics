@@ -53,7 +53,7 @@ export default function SolutionsPage() {
         "Comprehensive collection of tools, frameworks, and educational materials for robotics development. Access documentation, tutorials, and open-source projects to accelerate your innovation journey.",
       icon: <CircuitBoard className="h-8 w-8" />,
       features: ["Documentation", "Tutorials", "Open Source"],
-      iframe: 'https://my.spline.design/voidspiral-5AEFysnY1qMRjM3vDGfbR7yt/',
+      iframe: 'https://my.spline.design/liquidgradientabstractbackground-FSdsz0zfxoZD3XkOK0mpniNS/',
       link: "/solutions/resources",
       gradient: "from-green-900/20 to-blue-900/20",
     },
@@ -93,7 +93,13 @@ export default function SolutionsPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
-              <h1 className="text-2xl font-bold text-white">NAVADA</h1>
+              <OptimizedImage
+                src="/logo.PNG"
+                alt="NAVADA"
+                width={120}
+                height={40}
+                className="h-8 w-auto filter brightness-0 invert"
+              />
             </Link>
 
             {/* Mobile menu button */}
@@ -119,9 +125,6 @@ export default function SolutionsPage() {
                   Learning
                 </Link>
               )}
-              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
-                Agent Lee
-              </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
@@ -140,9 +143,6 @@ export default function SolutionsPage() {
                 </Link>
                 <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
                   Learning
-                </Link>
-                <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-colors">
-                  Agent Lee
                 </Link>
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
@@ -163,10 +163,7 @@ export default function SolutionsPage() {
               index < currentSection ? '-translate-x-full' : 'translate-x-full'
             }`}
           >
-            <BeamsBackground
-              intensity="subtle"
-              className={`min-h-screen bg-gradient-to-br ${solution.gradient} relative`}
-            >
+            <div className="min-h-screen bg-black relative">
               <div className="container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                   {/* Content Side */}
@@ -210,9 +207,9 @@ export default function SolutionsPage() {
                   {/* Visual Side */}
                   <div className="order-first lg:order-last">
                     <div className="relative">
-                      <div className="bg-black/20 backdrop-blur-sm rounded-3xl p-4 border border-white/10">
+                      <div className="w-full h-[400px] md:h-[500px] bg-black overflow-hidden">
                         {solution.iframe ? (
-                          <div className="w-full h-[400px] md:h-[500px] bg-black rounded-2xl overflow-hidden">
+                          <>
                             {index === currentSection || Math.abs(index - currentSection) <= 1 ? (
                               <iframe
                                 src={solution.iframe}
@@ -220,20 +217,19 @@ export default function SolutionsPage() {
                                 width="100%"
                                 height="100%"
                                 className="w-full h-full"
-                                style={solution.splineStyle ? { transform: 'scale(0.8)', transformOrigin: 'center' } : {}}
                                 loading="lazy"
                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                 sandbox="allow-scripts allow-same-origin allow-presentation"
                               />
                             ) : (
-                              <div className="w-full h-full bg-gray-800 flex items-center justify-center text-gray-400">
+                              <div className="w-full h-full bg-black flex items-center justify-center text-gray-400">
                                 <div className="text-center">
                                   <div className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                                   <p>Loading 3D Experience...</p>
                                 </div>
                               </div>
                             )}
-                          </div>
+                          </>
                         ) : (
                           <OptimizedImage
                             src={solution.image || `/placeholder.svg?height=500&width=600&text=${encodeURIComponent(solution.title)}`}
@@ -241,7 +237,7 @@ export default function SolutionsPage() {
                             width={600}
                             height={500}
                             quality={90}
-                            className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl"
+                            className="w-full h-[400px] md:h-[500px] object-cover"
                           />
                         )}
                       </div>
@@ -250,7 +246,7 @@ export default function SolutionsPage() {
                 </div>
               </div>
 
-            </BeamsBackground>
+            </div>
           </div>
         ))}
 

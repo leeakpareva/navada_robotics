@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Menu, X, Cog, Microscope as Microchip, Shield, Phone, Brain, Cpu, Sparkles, Folder } from "lucide-react";
+import { Menu, X, Cog, Microscope as Microchip, Shield, Phone, Cpu, Sparkles, Folder } from "lucide-react";
 import Link from "next/link";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import { AnimatedGridBackground } from "@/components/ui/animated-grid-background";
@@ -15,13 +15,19 @@ export default function NavadaRoboticsApp() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-black overflow-hidden">
+    <div className="min-h-screen bg-black overflow-x-hidden">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2 group">
-              <h1 className="text-2xl font-bold text-white">NAVADA</h1>
+              <OptimizedImage
+                src="/logo.PNG"
+                alt="NAVADA"
+                width={120}
+                height={40}
+                className="h-8 w-auto filter brightness-0 invert"
+              />
             </Link>
 
             {/* Mobile menu button */}
@@ -43,9 +49,6 @@ export default function NavadaRoboticsApp() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
               </Link>
-              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200">
-                Agent Lee
-              </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200">
                 Contact
               </Link>
@@ -61,9 +64,6 @@ export default function NavadaRoboticsApp() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
               </Link>
-              <Link href="/agent-lee" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                Agent Lee
-              </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Contact
               </Link>
@@ -75,13 +75,15 @@ export default function NavadaRoboticsApp() {
       {/* Hero Section */}
       <section className="relative min-h-screen">
         {/* Spline Background */}
-        <div className="absolute inset-0 w-full h-full">
+        <div className="absolute inset-0 w-full h-full pointer-events-none">
           <iframe
             src='https://my.spline.design/galaxyrollercoaster-UubfnPNkcpn15yoZy8gNcgB3/'
             frameBorder='0'
             width='100%'
             height='100%'
             className="absolute inset-0"
+            style={{ pointerEvents: 'auto' }}
+            loading="lazy"
           />
         </div>
 
@@ -97,18 +99,6 @@ export default function NavadaRoboticsApp() {
               robotics and automation for the next generation.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
-              <Link href="/solutions" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 bg-purple-600 hover:bg-purple-700 transition-all duration-200 min-h-12">
-                  Explore Innovation
-                </Button>
-              </Link>
-              <Link href="/about" className="w-full sm:w-auto">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 bg-transparent border-purple-400 text-purple-400 hover:bg-purple-900 transition-all duration-200 min-h-12">
-                  My Vision
-                </Button>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
@@ -123,60 +113,68 @@ export default function NavadaRoboticsApp() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300 touch-manipulation">
                   <OptimizedImage
                     src="/AiCreative.png"
                     alt="Artistic vision meets robotic precision"
                     width={400}
                     height={192}
-                    className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-32 sm:h-40 md:h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                   />
-                  <div className="p-4">
-                    <h4 className="text-purple-200 font-semibold mb-2">AI Creative Assistant</h4>
-                    <p className="text-gray-200 text-sm">Artistic vision meets robotic precision</p>
+                  <div className="p-3 md:p-4">
+                    <h4 className="text-purple-200 font-semibold mb-1 md:mb-2 text-sm md:text-base">AI Creative Assistant</h4>
+                    <p className="text-gray-200 text-xs md:text-sm">Artistic vision meets robotic precision</p>
                   </div>
                 </div>
 
-                <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
-                  <OptimizedImage
-                    src="/NextGenAuto.png"
-                    alt="Advanced digital assistance for the future"
-                    width={400}
-                    height={192}
-                    className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="p-4">
-                    <h4 className="text-purple-200 font-semibold mb-2">Next-Gen Automation</h4>
-                    <p className="text-gray-200 text-sm">Advanced digital assistance for the future</p>
+                <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300 touch-manipulation">
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
+                    className="w-full h-32 sm:h-40 md:h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                    aria-label="Advanced digital assistance for the future"
+                  >
+                    <source src="/untitled video.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  <div className="p-3 md:p-4">
+                    <h4 className="text-purple-200 font-semibold mb-1 md:mb-2 text-sm md:text-base">Next-Gen Automation</h4>
+                    <p className="text-gray-200 text-xs md:text-sm">Advanced digital assistance for the future</p>
                   </div>
                 </div>
 
-                <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300">
+                <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300 touch-manipulation">
                   <OptimizedImage
                     src="/ManvsMachine.png"
                     alt="Empowering the next generation of innovators"
                     width={400}
                     height={192}
-                    className="w-full h-48 group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-32 sm:h-40 md:h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                   />
-                  <div className="p-4">
-                    <h4 className="text-purple-200 font-semibold mb-2">Research Platform</h4>
-                    <p className="text-gray-200 text-sm">Empowering the next generation of innovators</p>
+                  <div className="p-3 md:p-4">
+                    <h4 className="text-purple-200 font-semibold mb-1 md:mb-2 text-sm md:text-base">Research Platform</h4>
+                    <p className="text-gray-200 text-xs md:text-sm">Empowering the next generation of innovators</p>
                   </div>
                 </div>
           </div>
         </div>
       </section>
 
-
-
-
       {/* Footer */}
       <footer className="bg-black py-8 px-4">
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <span className="text-xl font-bold text-white">NAVADA</span>
+            <OptimizedImage
+              src="/logo.PNG"
+              alt="NAVADA"
+              width={100}
+              height={33}
+              className="h-6 w-auto filter brightness-0 invert"
+            />
           </div>
           <p className="text-gray-300 mb-2">© 2024 NAVADA. All rights reserved.</p>
           <p className="text-gray-400 text-sm mb-2">Navigating Artistic Vision with Advanced Digital Assistance</p>
@@ -190,10 +188,6 @@ export default function NavadaRoboticsApp() {
           <Link href="/solutions" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Microchip className="h-5 w-5 text-gray-400 mb-1" />
             <span className="text-gray-400">Research</span>
-          </Link>
-          <Link href="/agent-lee" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
-            <Brain className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Agent Lee</span>
           </Link>
           <Link href="/about" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Shield className="h-5 w-5 text-gray-400 mb-1" />
