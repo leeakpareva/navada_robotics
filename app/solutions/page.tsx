@@ -1,33 +1,88 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X, Microscope as Microchip, Shield, Phone, ExternalLink } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import {
+  Cpu,
+  Zap,
+  Shield,
+  Menu,
+  X,
+  ChevronRight,
+  ChevronLeft,
+  CircuitBoard,
+  Cog,
+  Microscope as Microchip,
+  Phone,
+  ExternalLink,
+} from "lucide-react"
 import Link from "next/link"
+import { isLearningHubEnabled } from "@/lib/feature-flags"
 
 export default function SolutionsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [currentSection, setCurrentSection] = useState(0)
 
-  const solutions = [
+  const solutionCategories = [
     {
       title: "Predictions",
-      description: "AI-driven forecasting and trend analysis for robotics and emerging technologies",
+      description:
+        "AI-driven forecasting and trend analysis for robotics, automation, and emerging technologies. Leverage machine learning models to predict market trends, technology adoption, and innovation opportunities.",
+      icon: <Cpu className="h-8 w-8" />,
+      features: ["Market Analysis", "Technology Trends", "Future Insights"],
+      iframe: 'https://my.spline.design/dotwaves-JIuaTJuTmw3YGtM3cBu9kHPg/',
       link: "/solutions/predictions",
-      status: "Coming Soon"
+      gradient: "from-blue-900/20 to-purple-900/20",
     },
     {
       title: "Events",
-      description: "Stay updated with the latest robotics conferences and AI summits",
+      description:
+        "Stay updated with the latest robotics conferences, AI summits, and innovation showcases. Connect with industry leaders and discover breakthrough technologies at premier events worldwide.",
+      icon: <Zap className="h-8 w-8" />,
+      features: ["Conferences", "Networking", "Industry Updates"],
+      iframe: 'https://my.spline.design/particleshand-WaLUY9H9ik0nMpB8Elx3Hcjl/',
       link: "/solutions/events",
-      status: "Available"
+      gradient: "from-purple-900/20 to-pink-900/20",
     },
     {
       title: "Resources",
-      description: "Comprehensive tools, frameworks, and educational materials for robotics development",
+      description:
+        "Comprehensive collection of tools, frameworks, and educational materials for robotics development. Access documentation, tutorials, and open-source projects to accelerate your innovation journey.",
+      icon: <CircuitBoard className="h-8 w-8" />,
+      features: ["Documentation", "Tutorials", "Open Source"],
+      iframe: 'https://my.spline.design/liquidgradientabstractbackground-FSdsz0zfxoZD3XkOK0mpniNS/',
       link: "/solutions/resources",
-      status: "Coming Soon"
-    }
+      gradient: "from-green-900/20 to-blue-900/20",
+    },
+    {
+      title: "Projects",
+      description:
+        "Explore cutting-edge robotics and AI projects from research labs and innovation centers. Discover real-world applications, prototypes, and breakthrough technologies shaping the future.",
+      icon: <Shield className="h-8 w-8" />,
+      features: ["Innovation", "Prototypes", "Research Labs"],
+      iframe: 'https://my.spline.design/blackbotfuturisticrobotconcept-LUNh1H421N6ObaaU6aZYPU9R/',
+      link: "/solutions/projects",
+      gradient: "from-orange-900/20 to-red-900/20",
+    },
   ]
+
+  const nextSection = () => {
+    setCurrentSection((prev) => (prev + 1) % solutionCategories.length)
+  }
+
+  const prevSection = () => {
+    setCurrentSection((prev) => (prev - 1 + solutionCategories.length) % solutionCategories.length)
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') nextSection()
+      if (e.key === 'ArrowLeft') prevSection()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [nextSection, prevSection])
 
   return (
     <div className="min-h-screen bg-black">
@@ -57,6 +112,11 @@ export default function SolutionsPage() {
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
+              {isLearningHubEnabled() && (
+                <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                  Learning
+                </Link>
+              )}
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                 Contact
               </Link>
@@ -73,6 +133,9 @@ export default function SolutionsPage() {
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
                 </Link>
+                <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
+                  Learning
+                </Link>
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
                   Contact
                 </Link>
@@ -82,51 +145,138 @@ export default function SolutionsPage() {
         </div>
       </header>
 
-      {/* Solutions Section */}
-      <section className="py-16 px-4 bg-black">
-        <div className="container mx-auto">
-          <div className="max-w-4xl mx-auto text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">
-              Solutions
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Explore our AI and robotics solutions designed to advance innovation and accelerate technological progress.
-            </p>
-          </div>
+      {/* Full-Page Solution Sections */}
+      <div className="relative min-h-screen overflow-hidden">
+        {solutionCategories.map((solution, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-transform duration-700 ease-in-out ${
+              index === currentSection ? 'translate-x-0' :
+              index < currentSection ? '-translate-x-full' : 'translate-x-full'
+            }`}
+          >
+            <div className="min-h-screen bg-black relative">
+              <div className="container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                  {/* Content Side */}
+                  <div className="space-y-8">
+                    <div className="flex items-center space-x-4 mb-6">
+                      <h2 className="text-5xl md:text-6xl font-bold text-white tracking-tight">
+                        {solution.title}
+                      </h2>
+                    </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {solutions.map((solution, index) => (
-              <div key={index} className="bg-black/40 backdrop-blur-sm rounded-lg p-8 border border-purple-400/50 hover:border-purple-400 transition-all duration-300">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-bold text-white">{solution.title}</h3>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    solution.status === 'Available'
-                      ? 'bg-green-500/20 text-green-300 border border-green-500/50'
-                      : 'bg-purple-500/20 text-purple-300 border border-purple-500/50'
-                  }`}>
-                    {solution.status}
-                  </span>
+                    <p className="text-xl md:text-2xl text-gray-200 leading-relaxed max-w-2xl">
+                      {solution.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-3">
+                      {solution.features.map((feature, featureIndex) => (
+                        <Badge
+                          key={featureIndex}
+                          variant="outline"
+                          className="text-sm px-4 py-2 border-purple-400/50 text-purple-200 bg-purple-500/20 backdrop-blur-sm hover:bg-purple-500/30 transition-colors"
+                        >
+                          {feature}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    {/* Explore CTA */}
+                    <div className="pt-8">
+                      <Link href={solution.link}>
+                        <Button
+                          size="lg"
+                          className="text-lg px-8 py-4 bg-purple-600 hover:bg-purple-700 transition-all duration-200 group"
+                        >
+                          Explore {solution.title}
+                          <ExternalLink className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Visual Side */}
+                  <div className="order-first lg:order-last">
+                    <div className="relative">
+                      <div className="w-full h-[400px] md:h-[500px] bg-black overflow-hidden">
+                        {solution.iframe ? (
+                          <>
+                            {index === currentSection || Math.abs(index - currentSection) <= 1 ? (
+                              <iframe
+                                src={solution.iframe}
+                                frameBorder="0"
+                                width="100%"
+                                height="100%"
+                                className="w-full h-full"
+                                loading="lazy"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                sandbox="allow-scripts allow-same-origin allow-presentation"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-black flex items-center justify-center text-gray-400">
+                                <div className="text-center">
+                                  <div className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                                  <p>Loading 3D Experience...</p>
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div className="w-full h-[400px] md:h-[500px] bg-gray-800 flex items-center justify-center">
+                            <span className="text-white text-lg">{solution.title}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-gray-300 mb-6 leading-relaxed">
-                  {solution.description}
-                </p>
-                <Link href={solution.link}>
-                  <Button
-                    className={`w-full transition-all duration-300 ${
-                      solution.status === 'Available'
-                        ? 'bg-purple-600 hover:bg-purple-700'
-                        : 'bg-gray-600 hover:bg-gray-700'
-                    }`}
-                  >
-                    {solution.status === 'Available' ? 'Explore' : 'View Details'}
-                    <ExternalLink className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
               </div>
+
+            </div>
+          </div>
+        ))}
+
+        {/* Navigation Arrows */}
+        {currentSection > 0 && (
+          <Button
+            onClick={prevSection}
+            variant="outline"
+            size="icon"
+            className="fixed bottom-8 left-8 z-50 w-14 h-14 rounded-full bg-black/20 backdrop-blur-sm border-white/20 text-white hover:bg-purple-600/20 hover:border-purple-400/50 transition-all duration-200"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </Button>
+        )}
+
+        {currentSection < solutionCategories.length - 1 && (
+          <Button
+            onClick={nextSection}
+            variant="outline"
+            size="icon"
+            className="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-black/20 backdrop-blur-sm border-white/20 text-white hover:bg-purple-600/20 hover:border-purple-400/50 transition-all duration-200"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </Button>
+        )}
+
+        {/* Progress Dots */}
+        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="flex space-x-3">
+            {solutionCategories.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSection(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                  index === currentSection
+                    ? 'bg-purple-400 scale-125'
+                    : 'bg-white/30 hover:bg-white/50'
+                }`}
+              />
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Bottom Navigation for Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">

@@ -131,71 +131,32 @@ export default function NavadaRoboticsApp() {
         </div>
       </section>
 
-      {/* Innovation Showcase Section */}
+      {/* Research and Education Text Section */}
       <section className="py-16 px-4 bg-black">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center">
             <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Research and Education</h3>
             <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
               Explore cutting-edge research and educational resources in AI, robotics, and emerging technologies
             </p>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300 touch-manipulation">
-                  <div className="w-full h-40 sm:h-48 md:h-56 relative">
-                    <iframe
-                      src='https://my.spline.design/glassknotvortex-6ZrpDU6pkDweL8067vxDt4dT/'
-                      frameBorder='0'
-                      width='100%'
-                      height='100%'
-                      className="absolute inset-0 w-full h-full"
-                      style={{ transform: 'scale(0.8)', transformOrigin: 'center' }}
-                      preload="metadata"
-                      aria-label="Glass knot vortex animation"
-                    />
-                  </div>
-                  <div className="p-3 md:p-4">
-                    <h4 className="text-purple-200 font-semibold text-sm md:text-base">AI Creative Assistant</h4>
-                  </div>
-                </div>
-
-                <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300 touch-manipulation">
-                  <div className="w-full h-40 sm:h-48 md:h-56 relative">
-                    <iframe
-                      src='https://my.spline.design/voiceinteractionanimation-1TOyQdninrfRgUR2qnihJv4z/'
-                      frameBorder='0'
-                      width='100%'
-                      height='100%'
-                      className="absolute inset-0 w-full h-full"
-                      style={{ transform: 'scale(0.8)', transformOrigin: 'center' }}
-                      preload="metadata"
-                      aria-label="Voice interaction animation"
-                    />
-                  </div>
-                  <div className="p-3 md:p-4">
-                    <h4 className="text-purple-200 font-semibold text-sm md:text-base">Next-Gen Automation</h4>
-                  </div>
-                </div>
-
-                <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 group hover:bg-black/60 transition-all duration-300 touch-manipulation">
-                  <div className="w-full h-40 sm:h-48 md:h-56 relative">
-                    <iframe
-                      src='https://my.spline.design/chatgptkeyboard-6XEeWqVgSY3OJQQA30XkzYlU/'
-                      frameBorder='0'
-                      width='100%'
-                      height='100%'
-                      className="absolute inset-0 w-full h-full"
-                      style={{ transform: 'scale(0.8)', transformOrigin: 'center' }}
-                      preload="metadata"
-                      aria-label="ChatGPT keyboard animation"
-                    />
-                  </div>
-                  <div className="p-3 md:p-4">
-                    <h4 className="text-purple-200 font-semibold text-sm md:text-base">Research Platform</h4>
-                  </div>
-                </div>
-          </div>
+      {/* Research and Education Spline Section */}
+      <section className="relative min-h-screen">
+        {/* Spline Background */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none">
+          <iframe
+            src='https://my.spline.design/cutecomputerfollowcursor-ODH6EdF9MB2MdROkRNY7yU3n/'
+            frameBorder='0'
+            width='100%'
+            height='100%'
+            className="absolute inset-0"
+            style={{ pointerEvents: 'auto' }}
+            loading="lazy"
+            aria-label="Cute computer follow cursor animation"
+          />
         </div>
       </section>
 
