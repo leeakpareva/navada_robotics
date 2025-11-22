@@ -53,8 +53,9 @@ function shouldUseBraveSearch(message: string): boolean {
     'recent news', 'latest updates', 'search online', 'find online'
   ]
 
+  const lowerMessage = message.toLowerCase()
   return searchTriggers.some(trigger =>
-    message.toLowerCase().includes(trigger.toLowerCase())
+    lowerMessage.includes(trigger)
   )
 }
 
@@ -64,8 +65,9 @@ function shouldUseFileSystem(message: string): boolean {
     'folder', 'save to file', 'file system', 'local file'
   ]
 
+  const lowerMessage = message.toLowerCase()
   return fileTriggers.some(trigger =>
-    message.toLowerCase().includes(trigger.toLowerCase())
+    lowerMessage.includes(trigger)
   )
 }
 
@@ -75,8 +77,9 @@ function shouldUseGitHub(message: string): boolean {
     'github issue', 'pull request', 'commit', 'git'
   ]
 
+  const lowerMessage = message.toLowerCase()
   return githubTriggers.some(trigger =>
-    message.toLowerCase().includes(trigger.toLowerCase())
+    lowerMessage.includes(trigger)
   )
 }
 
@@ -387,7 +390,8 @@ function shouldUseWebSearch(message: string): boolean {
     'today', 'this year', 'new developments', 'breaking'
   ]
 
-  return searchKeywords.some(keyword => message.toLowerCase().includes(keyword))
+  const lowerMessage = message.toLowerCase()
+  return searchKeywords.some(keyword => lowerMessage.includes(keyword))
 }
 
 async function generateImage(prompt: string, openai: OpenAI): Promise<string> {
