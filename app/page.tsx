@@ -21,13 +21,7 @@ export default function NavadaRoboticsApp() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2 group">
-              <OptimizedImage
-                src="/logo.PNG"
-                alt="NAVADA"
-                width={120}
-                height={40}
-                className="h-8 w-auto filter brightness-0 invert"
-              />
+              <h1 className="text-2xl font-bold text-white">NAVADA</h1>
             </Link>
 
             {/* Mobile menu button */}
@@ -168,13 +162,7 @@ export default function NavadaRoboticsApp() {
       <footer className="bg-black py-8 px-4">
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <OptimizedImage
-              src="/logo.PNG"
-              alt="NAVADA"
-              width={100}
-              height={33}
-              className="h-6 w-auto filter brightness-0 invert"
-            />
+            <span className="text-xl font-bold text-white">NAVADA</span>
           </div>
           <p className="text-gray-300 mb-2">© 2024 NAVADA. All rights reserved.</p>
           <p className="text-gray-400 text-sm mb-2">Navigating Artistic Vision with Advanced Digital Assistance</p>
