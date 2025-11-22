@@ -196,7 +196,8 @@ export default function NavadaRoboticsApp() {
       <section className="py-16 px-4 bg-black">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Events</h3>
+            <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Upcoming Events</h3>
+            <p className="text-gray-300 text-lg font-medium">1/12/2025</p>
           </div>
 
           <div className="max-w-md mx-auto">
