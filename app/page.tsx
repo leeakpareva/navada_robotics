@@ -193,48 +193,49 @@ export default function NavadaRoboticsApp() {
       </section>
 
       {/* Subscribe Section */}
-      <section className="py-16 px-4 bg-black">
+      <section className="py-20 px-4 bg-black">
         <div className="container mx-auto">
-          <div className="max-w-2xl mx-auto">
-            <Card className="bg-gradient-to-br from-purple-600/40 to-purple-800/40 border-purple-400 backdrop-blur-sm shadow-xl shadow-purple-500/20">
-              <CardContent className="p-8 text-center">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Stay Updated</h3>
-                <p className="text-gray-100 mb-6 font-medium">
-                  Subscribe to our newsletter for the latest updates on AI, robotics, and technology innovations
-                </p>
+          <div className="max-w-4xl mx-auto">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-900/30 via-purple-800/40 to-purple-900/30 border border-purple-500/30 backdrop-blur-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-500/5 to-transparent"></div>
+              <div className="relative p-8 md:p-12">
+                <div className="text-center mb-8">
+                  <h3 className="text-3xl md:text-4xl font-bold text-white mb-3 tracking-tight">Stay Ahead</h3>
+                  <p className="text-gray-300 text-lg">Get exclusive updates</p>
+                </div>
 
                 {subscribeStatus === 'success' && (
-                  <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
-                    <p className="text-green-200">{subscribeMessage}</p>
+                  <div className="mb-6 p-3 bg-green-500/10 border border-green-500/30 rounded-xl backdrop-blur-sm">
+                    <p className="text-green-300 text-center text-sm">{subscribeMessage}</p>
                   </div>
                 )}
 
                 {subscribeStatus === 'error' && (
-                  <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
-                    <p className="text-red-200">{subscribeMessage}</p>
+                  <div className="mb-6 p-3 bg-red-500/10 border border-red-500/30 rounded-xl backdrop-blur-sm">
+                    <p className="text-red-300 text-center text-sm">{subscribeMessage}</p>
                   </div>
                 )}
 
-                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
+                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
                   <input
                     type="email"
                     value={subscribeEmail}
                     onChange={(e) => setSubscribeEmail(e.target.value)}
                     required
-                    placeholder="Enter your email address"
-                    className="flex-1 px-4 py-3 bg-black/40 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 transition-colors"
+                    placeholder="your@email.com"
+                    className="flex-1 px-5 py-4 bg-black/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-400/50 focus:bg-black/60 transition-all duration-300 backdrop-blur-sm"
                   />
                   <Button
                     type="submit"
                     size="lg"
                     disabled={subscribeStatus === 'submitting'}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8"
+                    className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 border border-purple-500/50 hover:border-purple-400"
                   >
-                    {subscribeStatus === 'submitting' ? 'Subscribing...' : 'Subscribe'}
+                    {subscribeStatus === 'submitting' ? '...' : 'Subscribe'}
                   </Button>
                 </form>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>
