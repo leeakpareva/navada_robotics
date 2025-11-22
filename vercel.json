@@ -1,27 +1,9 @@
 {
-  "env": {
-    "NEXTAUTH_URL": "https://navada-robotics.vercel.app"
-  },
-  "build": {
-    "env": {
-      "NEXTAUTH_URL": "https://navada-robotics.vercel.app"
-    }
-  },
-  "buildCommand": "npm run build",
-  "installCommand": "npm install",
-  "public": true,
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 30
     }
   },
-  "regions": ["iad1"],
-  "rewrites": [
-    {
-      "source": "/videos/(.*)",
-      "destination": "/videos/$1"
-    }
-  ],
   "headers": [
     {
       "source": "/videos/(.*\\.(mp4|MP4|avi|mov|wmv|flv|webm|mkv))",

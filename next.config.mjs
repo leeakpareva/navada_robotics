@@ -15,9 +15,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    esmExternals: false,
-  },
   // Optimize for Vercel static file serving
   images: {
     remotePatterns: [
