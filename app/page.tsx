@@ -200,7 +200,7 @@ export default function NavadaRoboticsApp() {
             <p className="text-gray-300 text-lg font-medium">1/12/2025</p>
           </div>
 
-          <div className="max-w-md mx-auto">
+          <div className="max-w-sm mx-auto">
             <Link
               href="https://caffeine.ai/"
               target="_blank"
@@ -211,9 +211,9 @@ export default function NavadaRoboticsApp() {
                 <OptimizedImage
                   src="/event-2.png"
                   alt="AI UNLOCKED: Learn & Network Day"
-                  width={400}
-                  height={300}
-                  className="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                  width={320}
+                  height={240}
+                  className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
             </Link>
