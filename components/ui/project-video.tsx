@@ -55,7 +55,6 @@ export function ProjectVideo({ src, title, poster, className = "" }: ProjectVide
       )}
 
       <video
-        src={src}
         controls
         preload="metadata"
         className="w-full h-auto rounded-2xl"
@@ -68,6 +67,7 @@ export function ProjectVideo({ src, title, poster, className = "" }: ProjectVide
         aria-label={title}
         style={{ maxWidth: "100%" }}
       >
+        <source src={src} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
     </div>
