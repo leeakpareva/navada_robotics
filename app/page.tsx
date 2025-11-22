@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,6 +17,50 @@ export default function NavadaRoboticsApp() {
   const [subscribeEmail, setSubscribeEmail] = useState('');
   const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [subscribeMessage, setSubscribeMessage] = useState('');
+
+  const [showTitle, setShowTitle] = useState(false);
+  const [titleText, setTitleText] = useState('');
+  const [showDescription, setShowDescription] = useState(false);
+  const [descriptionText, setDescriptionText] = useState('');
+
+  const fullTitle = "Navigating Artistic Vision with Advanced Digital Assistance";
+  const fullDescription = "NAVADA explores how technology advances our future through the intersection of AI, robotics, and creative innovation. I support the growth and adoption of AI tools focused on pioneering research and products in robotics and automation for the next generation.";
+
+  useEffect(() => {
+    // Start title animation after 2 seconds
+    const titleTimer = setTimeout(() => {
+      setShowTitle(true);
+
+      // Typewriter effect for title
+      let titleIndex = 0;
+      const titleInterval = setInterval(() => {
+        if (titleIndex < fullTitle.length) {
+          setTitleText(fullTitle.slice(0, titleIndex + 1));
+          titleIndex++;
+        } else {
+          clearInterval(titleInterval);
+
+          // Start description after 1 second delay
+          setTimeout(() => {
+            setShowDescription(true);
+
+            // Typewriter effect for description
+            let descIndex = 0;
+            const descInterval = setInterval(() => {
+              if (descIndex < fullDescription.length) {
+                setDescriptionText(fullDescription.slice(0, descIndex + 1));
+                descIndex++;
+              } else {
+                clearInterval(descInterval);
+              }
+            }, 20);
+          }, 1000);
+        }
+      }, 50);
+    }, 2000);
+
+    return () => clearTimeout(titleTimer);
+  }, []);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,14 +162,22 @@ export default function NavadaRoboticsApp() {
         {/* Content Overlay */}
         <div className="relative z-10 flex items-center justify-center px-4 py-16 min-h-screen">
           <div className="container mx-auto text-center">
-            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-6 text-balance tracking-tighter leading-tight md:leading-none text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 px-4">
-              Navigating Artistic Vision with Advanced Digital Assistance
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-6 text-balance tracking-tighter leading-tight md:leading-none text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 px-4 min-h-[1.2em]">
+              {showTitle && (
+                <>
+                  {titleText}
+                  <span className="animate-pulse">|</span>
+                </>
+              )}
             </h2>
-            <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-3xl mx-auto px-4 leading-relaxed">
-              NAVADA explores how technology advances our future through the intersection of AI, robotics, and creative
-              innovation. I support the growth and adoption of AI tools focused on pioneering research and products in
-              robotics and automation for the next generation.
-            </p>
+            <div className="text-lg sm:text-xl text-gray-300 mb-8 max-w-3xl mx-auto px-4 leading-relaxed min-h-[6em]">
+              {showDescription && (
+                <p>
+                  {descriptionText}
+                  <span className="animate-pulse">|</span>
+                </p>
+              )}
+            </div>
 
           </div>
         </div>
