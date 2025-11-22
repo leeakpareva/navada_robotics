@@ -45,6 +45,29 @@ model EmailSubscriber {
   @@map("email_subscribers")
 }
 
+// Event Registrations - For event sign-ups
+model EventRegistration {
+  id          String   @id @default(cuid())
+  eventId     String   // Event identifier (e.g., "ai-unlocked-2024")
+  eventName   String   // Event name for reference
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  jobTitle    String?
+  interests   String?  // JSON string of interests/goals
+  status      String   @default("registered") // registered, confirmed, attended, cancelled
+  source      String?  // How they found the event
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([eventId])
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+  @@map("event_registrations")
+}
+
 // Contact Submissions - For contact form
 model ContactSubmission {
   id        String   @id @default(cuid())
