@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, X, Microscope as Microchip, Shield, Phone, ArrowLeft } from "lucide-react"
 import Link from "next/link"
@@ -9,6 +9,36 @@ function ProjectVideo({ src, title, className = "" }: { src: string; title: stri
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
+  useEffect(() => {
+    let isCancelled = false
+    const controller = new AbortController()
+
+    const validateAsset = async () => {
+      try {
+        const response = await fetch(src, { method: "HEAD", cache: "no-store", signal: controller.signal })
+
+        if (!response.ok && !isCancelled) {
+          console.error(`Video asset returned ${response.status} for: ${src}`)
+          setHasError(true)
+          setIsLoading(false)
+        }
+      } catch (error) {
+        if (!isCancelled && (error as Error).name !== "AbortError") {
+          console.error(`Error validating video asset: ${src}`, error)
+          setHasError(true)
+          setIsLoading(false)
+        }
+      }
+    }
+
+    validateAsset()
+
+    return () => {
+      isCancelled = true
+      controller.abort()
+    }
+  }, [src])
+
   const handleError = () => {
     console.error(`Error loading video: ${src}`)
     setHasError(true)
@@ -16,6 +46,10 @@ function ProjectVideo({ src, title, className = "" }: { src: string; title: stri
   }
 
   const handleCanPlay = () => {
+    setIsLoading(false)
+  }
+
+  const handleLoadedData = () => {
     setIsLoading(false)
   }
 
@@ -30,6 +64,13 @@ function ProjectVideo({ src, title, className = "" }: { src: string; title: stri
           </div>
           <p className="text-gray-400 mb-2">Video Preview Unavailable</p>
           <p className="text-gray-500 text-sm">{title}</p>
+          <a
+            href={src}
+            className="text-purple-300 underline text-sm mt-3 inline-block"
+            rel="noopener noreferrer"
+          >
+            Download video
+          </a>
         </div>
       </div>
     )
@@ -55,6 +96,7 @@ function ProjectVideo({ src, title, className = "" }: { src: string; title: stri
         muted
         onError={handleError}
         onCanPlay={handleCanPlay}
+        onLoadedData={handleLoadedData}
         aria-label={title}
       >
         <source src={src} type="video/mp4" />
