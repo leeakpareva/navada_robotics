@@ -95,23 +95,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Bottom Navigation for Mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur border-t border-gray-800 md:hidden">
-        <div className="flex justify-around py-2">
-          <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Microchip className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Solutions</span>
-          </Link>
-          <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Shield className="h-5 w-5 text-purple-400 mb-1" />
-            <span className="text-purple-400">About</span>
-          </Link>
-          <Link href="/contact" className="flex flex-col items-center py-2 px-3 text-xs">
-            <Phone className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Contact</span>
-          </Link>
-        </div>
-      </nav>
     </div>
   )
 }
