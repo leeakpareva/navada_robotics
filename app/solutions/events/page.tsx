@@ -142,15 +142,12 @@ export default function EventsPage() {
 
           {/* Event Image */}
           <div className="max-w-4xl mx-auto mb-16">
-            <div className="relative rounded-2xl overflow-hidden">
-              <OptimizedImage
+            <div className="relative rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20">
+              <img
                 src="/event-2.png"
                 alt="AI UNLOCKED: Learn & Network Day"
-                width={800}
-                height={450}
-                quality={95}
-                priority
                 className="w-full h-auto"
+                style={{ maxHeight: '600px', objectFit: 'cover' }}
               />
             </div>
           </div>
