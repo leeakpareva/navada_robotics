@@ -89,7 +89,7 @@ export default function SolutionsPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60 border-b border-gray-800">
+      <header className="sticky top-0 z-50 bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/60">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
@@ -285,7 +285,7 @@ export default function SolutionsPage() {
         <div className="flex justify-around py-2">
           <Link href="/solutions" className="flex flex-col items-center py-2 px-3 text-xs">
             <Microchip className="h-5 w-5 text-purple-400 mb-1" />
-            <span className="text-purple-400">Research</span>
+            <span className="text-purple-400">Solutions</span>
           </Link>
           <Link href="/about" className="flex flex-col items-center py-2 px-3 text-xs">
             <Shield className="h-5 w-5 text-gray-400 mb-1" />

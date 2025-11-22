@@ -175,7 +175,7 @@ export default function NavadaRoboticsApp() {
         <div className="flex justify-around py-2">
           <Link href="/solutions" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Microchip className="h-5 w-5 text-gray-400 mb-1" />
-            <span className="text-gray-400">Research</span>
+            <span className="text-gray-400">Solutions</span>
           </Link>
           <Link href="/about" className="flex flex-col items-center py-2 px-1 text-xs transition-all duration-200">
             <Shield className="h-5 w-5 text-gray-400 mb-1" />
