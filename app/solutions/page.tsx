@@ -61,7 +61,7 @@ export default function SolutionsPage() {
         "Explore cutting-edge robotics and AI projects from research labs and innovation centers. Discover real-world applications, prototypes, and breakthrough technologies shaping the future.",
       icon: <Shield className="h-8 w-8" />,
       features: ["Innovation", "Prototypes", "Research Labs"],
-      iframe: 'https://my.spline.design/blackbotfuturisticrobotconcept-LUNh1H421N6ObaaU6aZYPU9R/',
+      iframe: 'https://my.spline.design/droid-geZEO9SbAowPYgxI5USKyOpd/',
       link: "/solutions/projects",
       gradient: "from-orange-900/20 to-red-900/20",
     },
