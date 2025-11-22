@@ -192,6 +192,34 @@ export default function NavadaRoboticsApp() {
         </div>
       </section>
 
+      {/* Events Section */}
+      <section className="py-16 px-4 bg-black">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Events</h3>
+          </div>
+
+          <div className="max-w-md mx-auto">
+            <Link
+              href="https://caffeine.ai/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block group"
+            >
+              <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 transition-all duration-300 touch-manipulation">
+                <OptimizedImage
+                  src="/Event 2.png"
+                  alt="AI UNLOCKED: Learn & Network Day"
+                  width={400}
+                  height={300}
+                  className="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Subscribe Section */}
       <section className="py-20 px-4 bg-black">
         <div className="container mx-auto">
