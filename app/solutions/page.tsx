@@ -33,10 +33,9 @@ export default function SolutionsPage() {
         "AI-driven forecasting and trend analysis for robotics, automation, and emerging technologies. Leverage machine learning models to predict market trends, technology adoption, and innovation opportunities.",
       icon: <Cpu className="h-8 w-8" />,
       features: ["Market Analysis", "Technology Trends", "Future Insights"],
-      iframe: 'https://my.spline.design/worldplanet-tDsXYOCAPDyy0U5uQIrbNWh0/',
+      iframe: 'https://my.spline.design/dotwaves-JIuaTJuTmw3YGtM3cBu9kHPg/',
       link: "/solutions/predictions",
       gradient: "from-blue-900/20 to-purple-900/20",
-      splineStyle: "transform: scale(0.8); transform-origin: center;",
     },
     {
       title: "Events",
