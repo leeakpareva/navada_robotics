@@ -208,7 +208,7 @@ export default function NavadaRoboticsApp() {
             >
               <div className="bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/20 hover:border-purple-500/50 transition-all duration-300 touch-manipulation">
                 <OptimizedImage
-                  src="/Event 2.png"
+                  src="/event-2.png"
                   alt="AI UNLOCKED: Learn & Network Day"
                   width={400}
                   height={300}

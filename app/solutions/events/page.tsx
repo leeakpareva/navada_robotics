@@ -144,7 +144,7 @@ export default function EventsPage() {
           <div className="max-w-4xl mx-auto mb-16">
             <div className="relative rounded-2xl overflow-hidden">
               <OptimizedImage
-                src="/Event 2.png"
+                src="/event-2.png"
                 alt="AI UNLOCKED: Learn & Network Day"
                 width={800}
                 height={450}
