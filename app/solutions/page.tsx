@@ -84,7 +84,7 @@ export default function SolutionsPage() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [nextSection, prevSection])
 
   return (
     <div className="min-h-screen bg-black">
@@ -225,14 +225,9 @@ export default function SolutionsPage() {
                             )}
                           </>
                         ) : (
-                          <OptimizedImage
-                            src={solution.image || `/placeholder.svg?height=500&width=600&text=${encodeURIComponent(solution.title)}`}
-                            alt={solution.title}
-                            width={600}
-                            height={500}
-                            quality={90}
-                            className="w-full h-[400px] md:h-[500px] object-cover"
-                          />
+                          <div className="w-full h-[400px] md:h-[500px] bg-gray-800 flex items-center justify-center">
+                            <span className="text-white text-lg">{solution.title}</span>
+                          </div>
                         )}
                       </div>
                     </div>
