@@ -73,9 +73,9 @@ export default function NavadaRoboticsApp() {
 
             {/* Desktop navigation */}
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
+              {/* <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200">
                 Solutions
-              </Link>
+              </Link> */}
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
                 About
               </Link>
@@ -88,9 +88,9 @@ export default function NavadaRoboticsApp() {
           {/* Mobile navigation */}
           <div className={`md:hidden mt-4 pb-4 border-t border-gray-800 pt-4 transition-all duration-300 ${isMenuOpen ? 'block' : 'hidden'}`}>
             <nav className="flex flex-col space-y-1">
-              <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
+              {/* <Link href="/solutions" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 Solutions
-              </Link>
+              </Link> */}
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
                 About
               </Link>

@@ -111,9 +111,9 @@ export default function ContactPage() {
 
             {/* Desktop navigation */}
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
+              {/* <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                 Solutions
-              </Link>
+              </Link> */}
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                 About
               </Link>
@@ -132,9 +132,9 @@ export default function ContactPage() {
           {isMenuOpen && (
             <nav className="md:hidden mt-4 pb-4 border-t border-gray-800 pt-4">
               <div className="flex flex-col space-y-3">
-                <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
+                {/* <Link href="/solutions" className="text-white hover:text-purple-400 transition-colors">
                   Solutions
-                </Link>
+                </Link> */}
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
                   About
                 </Link>
