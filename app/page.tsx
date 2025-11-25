@@ -189,7 +189,9 @@ export default function NavadaRoboticsApp() {
             <div className="text-center">
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
-                  href="/solutions/events"
+                  href="https://lu.ma/3pv5y80j"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium rounded-xl transition-all duration-300 border border-green-500/50 hover:border-green-400 group"
                 >
                   <span>Register Now</span>
