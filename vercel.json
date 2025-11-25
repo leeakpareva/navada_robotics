@@ -6,7 +6,7 @@
   },
   "headers": [
     {
-      "source": "/videos/(.*\\.(mp4|MP4|avi|mov|wmv|flv|webm|mkv))",
+      "source": "/videos/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
