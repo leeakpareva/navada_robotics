@@ -198,12 +198,12 @@ export default function NavadaRoboticsApp() {
                   </svg>
                 </Link>
                 <Link
-                  href="https://internetcomputer.org/"
+                  href="https://caffeine.ai/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-xl transition-all duration-300 border border-purple-500/50 hover:border-purple-400 group"
                 >
-                  <span>Explore Internet Computer</span>
+                  <span>Explore Caffeine</span>
                   <svg className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
