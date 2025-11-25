@@ -115,7 +115,7 @@ export default function ContactPage() {
                 Solutions
               </Link> */}
               <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
-                About
+                Mission
               </Link>
 {isLearningHubEnabled() && (
                 <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
@@ -123,7 +123,7 @@ export default function ContactPage() {
                 </Link>
               )}
               <Link href="/contact" className="text-purple-400 font-medium">
-                Contact
+                Engage
               </Link>
             </nav>
           </div>
@@ -136,7 +136,7 @@ export default function ContactPage() {
                   Solutions
                 </Link> */}
                 <Link href="/about" className="text-white hover:text-purple-400 transition-colors">
-                  About
+                  Mission
                 </Link>
                 {isLearningHubEnabled() && (
                   <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
@@ -144,7 +144,7 @@ export default function ContactPage() {
                   </Link>
                 )}
                 <Link href="/contact" className="text-purple-400 font-medium">
-                  Contact
+                  Engage
                 </Link>
               </div>
             </nav>
@@ -156,7 +156,7 @@ export default function ContactPage() {
       <section className="py-16 px-4 bg-black">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Get In Touch</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Engage With NAVADA</h2>
           </div>
 
           {/* Centered Spline Animation */}

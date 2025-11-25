@@ -35,7 +35,7 @@ export default function AboutPage() {
                 Solutions
               </Link> */}
               <Link href="/about" className="text-purple-400 font-medium">
-                About
+                Mission
               </Link>
 {isLearningHubEnabled() && (
                 <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
@@ -43,7 +43,7 @@ export default function AboutPage() {
                 </Link>
               )}
               <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
-                Contact
+                Engage
               </Link>
             </nav>
           </div>
@@ -56,7 +56,7 @@ export default function AboutPage() {
                   Solutions
                 </Link> */}
                 <Link href="/about" className="text-purple-400 font-medium">
-                  About
+                  Mission
                 </Link>
                 {isLearningHubEnabled() && (
                   <Link href="/learning" className="text-white hover:text-purple-400 transition-colors">
@@ -64,7 +64,7 @@ export default function AboutPage() {
                   </Link>
                 )}
                 <Link href="/contact" className="text-white hover:text-purple-400 transition-colors">
-                  Contact
+                  Engage
                 </Link>
               </div>
             </nav>

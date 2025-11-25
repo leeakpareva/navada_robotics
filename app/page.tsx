@@ -77,10 +77,10 @@ export default function NavadaRoboticsApp() {
                 Solutions
               </Link> */}
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200">
-                About
+                Mission
               </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200">
-                Contact
+                Engage
               </Link>
             </nav>
           </div>
@@ -92,10 +92,10 @@ export default function NavadaRoboticsApp() {
                 Solutions
               </Link> */}
               <Link href="/about" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                About
+                Mission
               </Link>
               <Link href="/contact" className="text-white hover:text-purple-400 transition-all duration-200 py-3 px-2 rounded-lg hover:bg-gray-800/50 min-h-12 flex items-center">
-                Contact
+                Engage
               </Link>
             </nav>
           </div>
@@ -131,19 +131,19 @@ export default function NavadaRoboticsApp() {
         </div>
       </section>
 
-      {/* Research and Education Text Section */}
+      {/* Future Thinking Text Section */}
       <section className="py-16 px-4 bg-black">
         <div className="container mx-auto">
           <div className="text-center">
-            <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Research and Education</h3>
+            <h3 className="text-3xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-purple-400 tracking-tighter">Future Thinking</h3>
             <p className="text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              Explore cutting-edge research and educational resources in AI, robotics, and emerging technologies
+              Envision tomorrow's possibilities today. We explore emerging technologies, anticipate paradigm shifts, and prepare minds for the convergence of AI, robotics, and human creativity
             </p>
           </div>
         </div>
       </section>
 
-      {/* Research and Education Spline Section */}
+      {/* Future Thinking Spline Section */}
       <section className="relative min-h-screen">
         {/* Spline Background */}
         <div className="absolute inset-0 w-full h-full pointer-events-none">
