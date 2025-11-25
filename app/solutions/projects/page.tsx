@@ -112,7 +112,17 @@ export default function ProjectsPage() {
 
                   <div className="bg-gradient-to-r from-purple-900/30 to-purple-800/40 backdrop-blur-sm rounded-lg p-4 border border-purple-400/50">
                     <p className="text-purple-200 font-medium">Production Timeline: Summer 2026</p>
-                    <p className="text-gray-300 text-sm mt-1">Designed by Lee Akpareva MBA, MA</p>
+                    <p className="text-gray-300 text-sm mt-1">
+                      Designed by{' '}
+                      <a
+                        href="https://www.linkedin.com/in/leslie-akpareva-mba-ma-56a888182/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:text-gray-200 transition-colors"
+                      >
+                        Lee Akpareva MBA, MA
+                      </a>
+                    </p>
                   </div>
                 </div>
 
@@ -146,7 +156,17 @@ export default function ProjectsPage() {
 
                   <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/40 backdrop-blur-sm rounded-lg p-4 border border-blue-400/50">
                     <p className="text-blue-200 font-medium">Status: Development Phase</p>
-                    <p className="text-gray-300 text-sm mt-1">Designed by Lee Akpareva MBA, MA</p>
+                    <p className="text-gray-300 text-sm mt-1">
+                      Designed by{' '}
+                      <a
+                        href="https://www.linkedin.com/in/leslie-akpareva-mba-ma-56a888182/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:text-gray-200 transition-colors"
+                      >
+                        Lee Akpareva MBA, MA
+                      </a>
+                    </p>
                   </div>
                 </div>
               </div>

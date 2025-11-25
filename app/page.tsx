@@ -272,7 +272,17 @@ export default function NavadaRoboticsApp() {
           </div>
           <p className="text-gray-300 mb-2">© 2024 NAVADA. All rights reserved.</p>
           <p className="text-gray-400 text-sm mb-2">Navigating Artistic Vision with Advanced Digital Assistance</p>
-          <p className="text-purple-400 text-sm">Designed & Developed by Lee Akpareva MBA, MA</p>
+          <p className="text-purple-400 text-sm">
+            Designed & Developed by{' '}
+            <a
+              href="https://www.linkedin.com/in/leslie-akpareva-mba-ma-56a888182/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-purple-300 transition-colors"
+            >
+              Lee Akpareva MBA, MA
+            </a>
+          </p>
         </div>
       </footer>
 
