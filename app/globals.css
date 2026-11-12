@@ -43,3 +43,15 @@ body { background: var(--background); color: var(--foreground); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes pulse-ring { 0%, 100% { opacity: 0.35; transform: scale(0.96); } 50% { opacity: 0.9; transform: scale(1.04); } }
+.marquee-track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+.orbit-a { transform-origin: center; animation: spin-slow 14s linear infinite; }
+.orbit-b { transform-origin: center; animation: spin-slow 22s linear infinite reverse; }
+.orbit-c { transform-origin: center; animation: pulse-ring 4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .orbit-a, .orbit-b, .orbit-c { animation: none; }
+}
